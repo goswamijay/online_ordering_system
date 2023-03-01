@@ -54,7 +54,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                   TextButton(
                                       child: const Text('Okay'),
                                       onPressed: () {
-                                        Navigator.pushNamed(context, Routes_Name.HomePage);
+                                        Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage,(route) => false);
                                       }),
                                 ],
                               );

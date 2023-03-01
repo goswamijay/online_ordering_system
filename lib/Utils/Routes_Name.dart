@@ -5,4 +5,11 @@ class Routes_Name {
   static String LoginScreen = "LoginScreen";
   static String SignUpScreen = 'Signup';
   static String OTPScreen = 'OPTScreen';
+  static String ProductMainScreen = 'ProductMainScreen';
+  static String CartMainScreen = 'CartMainScreen';
+  static String FavoriteMainScreen = 'FavoriteMainScreen';
+  static String AccountMainScreen = 'AccountMainScreen';
+  static String AccountResetPassword = 'AccountResetPassword';
+  static String OrderPlaceMainScreen = 'OrderPlaceMainScreen';
+  static String DrawerWidget = 'DrawerWidget';
 }

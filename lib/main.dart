@@ -4,11 +4,18 @@ import 'package:online_ordering_system/HomePage.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:online_ordering_system/Sparce_Screen.dart';
 import 'package:online_ordering_system/Views/Authentication/LoginPage.dart';
+import 'package:online_ordering_system/Views/Cart%20Screen/Cart%20Main%20Screen.dart';
 
 
+import 'Utils/Drawer.dart';
+import 'Views/Account Screen/Account Main Screen.dart';
+import 'Views/Account Screen/AccountResetPassword.dart';
 import 'Views/Authentication/OTPScreen.dart';
 import 'Views/Authentication/SignupPage.dart';
 import 'Views/Authentication/WelcomeScreen.dart';
+import 'Views/Favorite Screen/Favorite Main Screen.dart';
+import 'Views/Order Place Screen/Order Place Main Screen.dart';
+import 'Views/Product Screen/Product Main Screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +39,13 @@ class MyApp extends StatelessWidget {
         Routes_Name.LoginScreen : (context) => const LoginPage(),
         Routes_Name.SignUpScreen : (context) => const SignUPPage(),
         Routes_Name.OTPScreen : (context) => const OTPScreen(),
+        Routes_Name.ProductMainScreen : (context) => const ProductMainScreen(),
+        Routes_Name.CartMainScreen : (context) => const CartMainScreen(),
+        Routes_Name.FavoriteMainScreen : (context) => const FavoriteMainScreen(),
+        Routes_Name.AccountMainScreen : (context) => const AccountMainScreen(),
+        Routes_Name.AccountResetPassword : (context) => const AccountResetPassword(),
+        Routes_Name.OrderPlaceMainScreen : (context) => const OrderPlaceMainScreen(),
+       // Routes_Name.DrawerWidget : (context) => const DrawerWidget(),
       },
     );
   }
