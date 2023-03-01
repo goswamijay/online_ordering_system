@@ -65,7 +65,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
-                // onTap: (){Navigator.pushNamed(context, Routes.SignUP);},
+                 onTap: (){Navigator.pushNamed(context, Routes_Name.SignUpScreen);},
 
                 child: AnimatedContainer(
                   duration: const Duration(seconds: 1),

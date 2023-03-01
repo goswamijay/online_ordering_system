@@ -19,6 +19,7 @@ class _SignUPPageState extends State<SignUPPage> {
       setState(() {
         changeButton = true;
       });
+      _formKey.currentState!.save();
 
       await Future.delayed(const Duration(seconds: 1));
       await Navigator.pushNamed(context, Routes_Name.OTPScreen);

@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         changeButton = true;
       });
-
+      _formKey.currentState!.save();
       await Future.delayed(const Duration(seconds: 1));
       await Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage,(route) => false);
 

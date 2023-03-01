@@ -15,9 +15,16 @@ class _ProductMainScreenState extends State<ProductMainScreen> {
   bool SearchButton = false;
   bool ListIsEmpty = false;
   TextEditingController search = TextEditingController();
-  Icon CustomSearch = const Icon(Icons.search,color: Colors.indigo,);
-  Widget CustomText = const Text("Search",style: TextStyle(color: Colors.indigo),);
+  Icon CustomSearch = const Icon(
+    Icons.search,
+    color: Colors.indigo,
+  );
+  Widget CustomText = const Text(
+    "Search",
+    style: TextStyle(color: Colors.indigo),
+  );
   List<dynamic> SearchItems = [];
+  List<dynamic> FavoriteItems = [];
 
   @override
   void initState() {
@@ -91,45 +98,56 @@ class _ProductMainScreenState extends State<ProductMainScreen> {
       appBar: AppBar(
           leading: SearchButton
               ? IconButton(
-              onPressed: () {
-                setState(() {
-                  SearchButton = false;
-                  CustomSearch = const Icon(Icons.search,color: Colors.indigo,);
-                  CustomText = const Text("Search");
-                });
-              },
-              icon: const Icon(Icons.arrow_back_outlined,color: Colors.indigo,))
+                  onPressed: () {
+                    setState(() {
+                      SearchButton = false;
+                      CustomSearch = const Icon(
+                        Icons.search,
+                        color: Colors.indigo,
+                      );
+                      CustomText = const Text("Search");
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back_outlined,
+                    color: Colors.indigo,
+                  ))
               : Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(
-                  Icons.menu,
-                  color: Colors.indigo, // Change Custom Drawer Icon Color
+                  builder: (BuildContext context) {
+                    return IconButton(
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.indigo, // Change Custom Drawer Icon Color
+                      ),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      tooltip: MaterialLocalizations.of(context)
+                          .openAppDrawerTooltip,
+                    );
+                  },
                 ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              );
-            },
-          ),
-          title:SearchButton
-              ? CustomText : const Text(
-            "Product Screen",
-            style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
-          ),
+          title: SearchButton
+              ? CustomText
+              : const Text(
+                  "Product Screen",
+                  style: TextStyle(
+                      color: Colors.indigo, fontWeight: FontWeight.bold),
+                ),
           centerTitle: true,
           elevation: 0,
           backgroundColor: Colors.white,
           actions: [
-
             IconButton(
                 icon: CustomSearch,
                 onPressed: () {
                   setState(() {
                     if (CustomSearch.icon == Icons.search) {
                       SearchButton = true;
-                      CustomSearch = const Icon(Icons.clear,color: Colors.indigo,);
+                      CustomSearch = const Icon(
+                        Icons.clear,
+                        color: Colors.indigo,
+                      );
                       CustomText = TextField(
                         textInputAction: TextInputAction.go,
                         controller: search,
@@ -139,9 +157,9 @@ class _ProductMainScreenState extends State<ProductMainScreen> {
                             hintText: "Search....",
                             hintStyle: TextStyle(color: Colors.indigo),
                             //
-                            border: UnderlineInputBorder()
-                        ),
-                        style: const TextStyle(color: Colors.indigo, fontSize: 20),
+                            border: UnderlineInputBorder()),
+                        style:
+                            const TextStyle(color: Colors.indigo, fontSize: 20),
                       );
                     } else {
                       // CustomSearch = const Icon(Icons.search);
@@ -157,13 +175,12 @@ class _ProductMainScreenState extends State<ProductMainScreen> {
                   CupertinoIcons.option,
                   color: Colors.indigo,
                 )),
-          /*  IconButton(
+            /*  IconButton(
                 onPressed: () {},
                 icon: const Icon(
                   CupertinoIcons.square_arrow_left,
                   color: Colors.indigo,
                 )),*/
-
           ]),
       backgroundColor: Colors.white,
       body: Padding(
@@ -180,120 +197,142 @@ class _ProductMainScreenState extends State<ProductMainScreen> {
 
     return ListIsEmpty
         ? Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset("oops.png"),
-          const Text(
-            "Search Item is not available ....!",
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-        ],
-      ),
-    )
-        : ListView.builder(
-        itemCount: SearchItems.length,
-        itemBuilder: (context, index) {
-          return Card(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
+                Image.asset("oops.png"),
+                const Text(
+                  "Search Item is not available ....!",
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+              ],
+            ),
+          )
+        : ListView.builder(
+            itemCount: SearchItems.length,
+            itemBuilder: (context, index) {
+              bool isSaved = FavoriteItems.contains(SearchItems[index]);
+              return Card(
+                child: Column(
                   children: [
-                    Expanded(
-                      child: Image(
-                        image: AssetImage(SearchItems[index].ImageURL),
-                        /* width: size.width / 2,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Image(
+                            image: AssetImage(SearchItems[index].ImageURL),
+                            /* width: size.width / 2,
                               height: size.height / 4,*/
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  CupertinoIcons.heart,
-                                  size: 15,
-                                ),
-                                tooltip: "Add to Favorite",
-                              ),
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: AutoSizeText(
-                                SearchItems[index].Name,
-                                maxLines: 2,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 30),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 70,
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  '₹${SearchItems[index].Price}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 70,
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: AutoSizeText(
-                                SearchItems[index].ShortDescription,
-                                maxLines: 2,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 30),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 50,
-                            ),
-                            Row(
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: Container(
-                                    width: size.width,
-                                    height: size.height / 20,
-                                    decoration: BoxDecoration(
-                                        color: Colors.indigo,
-                                        borderRadius:
-                                        BorderRadius.circular(5.0)),
-                                    child: const Center(
-                                        child: Text(
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: isSaved
+                                      ? IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              FavoriteItems.remove(
+                                                  SearchItems[index]);
+                                              print(FavoriteItems.toString());
+                                            });
+                                          },
+                                          icon: const Icon(
+                                            CupertinoIcons.heart_solid,
+                                            size: 15,
+                                          ),
+                                          tooltip: "Remove to Favorite",
+                                        )
+                                      : IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              FavoriteItems.add(
+                                                  SearchItems[index]);
+                                              print(FavoriteItems.toString());
+                                            });
+                                          },
+                                          icon: const Icon(
+                                            CupertinoIcons.heart,
+                                            size: 15,
+                                          ),
+                                          tooltip: "Add to Favorite",
+                                        ),
+                                ),
+                                SizedBox(
+                                  width: size.width,
+                                  child: AutoSizeText(
+                                    SearchItems[index].Name,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 30),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: size.height / 70,
+                                ),
+                                SizedBox(
+                                  width: size.width,
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      '₹${SearchItems[index].Price}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: size.height / 70,
+                                ),
+                                SizedBox(
+                                  width: size.width,
+                                  child: AutoSizeText(
+                                    SearchItems[index].ShortDescription,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 30),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: size.height / 50,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        width: size.width,
+                                        height: size.height / 20,
+                                        decoration: BoxDecoration(
+                                            color: Colors.indigo,
+                                            borderRadius:
+                                                BorderRadius.circular(5.0)),
+                                        child: const Center(
+                                            child: Text(
                                           "Add to Cart",
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold),
                                         )),
-                                  ),
-                                ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
-                            )
-                          ],
-                        ),
-                      ),
+                            ),
+                          ),
+                        )
+                      ],
                     )
                   ],
-                )
-              ],
-            ),
-          );
-        });
+                ),
+              );
+            });
   }
 
   ListView FullList1(BuildContext context) {
@@ -302,6 +341,8 @@ class _ProductMainScreenState extends State<ProductMainScreen> {
     return ListView.builder(
         itemCount: MainData.length,
         itemBuilder: (context, index) {
+          bool isSaved = FavoriteItems.contains(MainData[index]);
+
           return Card(
             child: Column(
               children: [
@@ -321,14 +362,33 @@ class _ProductMainScreenState extends State<ProductMainScreen> {
                           children: [
                             Align(
                               alignment: Alignment.topRight,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  CupertinoIcons.heart,
-                                  size: 15,
-                                ),
-                                tooltip: "Add to Favorite",
-                              ),
+                              child: isSaved
+                                  ? IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          FavoriteItems.remove(MainData[index]);
+                                          print(FavoriteItems.toString());
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        CupertinoIcons.heart_solid,
+                                        size: 15,
+                                      ),
+                                      tooltip: "Remove to Favorite",
+                                    )
+                                  : IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          FavoriteItems.add(MainData[index]);
+                                          print(FavoriteItems.toString());
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        CupertinoIcons.heart,
+                                        size: 15,
+                                      ),
+                                      tooltip: "Add to Favorite",
+                                    ),
                             ),
                             SizedBox(
                               width: size.width,
@@ -378,14 +438,14 @@ class _ProductMainScreenState extends State<ProductMainScreen> {
                                     decoration: BoxDecoration(
                                         color: Colors.indigo,
                                         borderRadius:
-                                        BorderRadius.circular(5.0)),
+                                            BorderRadius.circular(5.0)),
                                     child: const Center(
                                         child: Text(
-                                          "Add to Cart",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        )),
+                                      "Add to Cart",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )),
                                   ),
                                 ),
                               ],
