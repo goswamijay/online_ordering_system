@@ -20,7 +20,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Image(
                 height: size.height/2 ,
                 width: size.width,
-                image: const AssetImage('first.jpg')),
+                image: const AssetImage('assets/first.jpg')),
             const Text(
               "Online Ordering System",
               style: TextStyle(

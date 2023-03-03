@@ -22,13 +22,13 @@ class _Space_ScreenState extends State<Space_Screen> {
   void navigation() {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushNamedAndRemoveUntil(
-          context, Routes_Name.WelcomeScreen, (route) => false);
+          context, Routes_Name.LoginScreen, (route) => false);
     });
   }
 
   void animation() {
     Future.delayed(
-        const Duration(seconds: 3),
+        const Duration(seconds: 2),
         () => setState(() {
               _shouldFade = false;
             }));
@@ -47,7 +47,7 @@ class _Space_ScreenState extends State<Space_Screen> {
       child: Scaffold(
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Center(
@@ -55,14 +55,14 @@ class _Space_ScreenState extends State<Space_Screen> {
                   opacity: _shouldFade ? 1 : 0,
                   duration: const Duration(seconds: 1),
                   child: Image(
-                      height: size.height / 2,
-                      width: size.width / 2,
-                      image: const AssetImage('logo1.png')),
+                      height: size.height / 1.5,
+                      width: size.width / 1.5,
+                      image: const AssetImage('assets/logo1.png')),
                 ),
               ),
-              SizedBox(
-                height: size.height / 40,
-              ),
+            /*  SizedBox(
+                height: size.height / 80,
+              ),*/
               Center(
                 child: AnimatedOpacity(
                   opacity: _shouldFade ? 1 : 0,
@@ -78,9 +78,9 @@ class _Space_ScreenState extends State<Space_Screen> {
               ),
 
 
-              SizedBox(
+              /*SizedBox(
                 height: size.height / 30,
-              ),
+              ),*/
               Center(
                 child:  AnimatedOpacity(
                     opacity: _shouldFade ? 1 : 0,
@@ -88,6 +88,7 @@ class _Space_ScreenState extends State<Space_Screen> {
                     child: SpinKitThreeBounce(
                       color: Colors.black,
                       size: size.height / 30,
+
                     )),
               ),
             ],

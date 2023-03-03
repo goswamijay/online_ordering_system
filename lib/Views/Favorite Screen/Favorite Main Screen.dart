@@ -15,9 +15,11 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
   bool SearchButton = false;
   bool ListIsEmpty = false;
   TextEditingController search = TextEditingController();
-  Icon CustomSearch =  Icon(Icons.search,color: Colors.lightGreen[900],);
-  Widget CustomText =  Text("Search",style: TextStyle(color: Colors.lightGreen[900]),);
+  Icon CustomSearch =  const Icon(Icons.search,color: Colors.indigo,);
+  Widget CustomText =  const Text("Search",style: TextStyle(color: Colors.indigo),);
   List<dynamic> SearchItems = [];
+  List<dynamic> FavoriteItems = [];
+
 
   @override
   void initState() {
@@ -53,60 +55,61 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
       Price: 120000,
       ShortDescription:
       'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "first.jpg",
+      ImageURL: "assets/first.jpg",
     ),
     ProductList(
       Name: 'iPhone 12 pro',
       Price: 140000,
       ShortDescription:
       'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "first.jpg",
+      ImageURL: "assets/first.jpg",
     ),
     ProductList(
       Name: 'iPhone 13 pro',
       Price: 160000,
       ShortDescription:
       'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "first.jpg",
+      ImageURL: "assets/first.jpg",
     ),
     ProductList(
       Name: 'iPhone 14 pro',
       Price: 180000,
       ShortDescription:
       'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "first.jpg",
+      ImageURL: "assets/first.jpg",
     ),
     ProductList(
       Name: 'iPhone 15 pro',
       Price: 200000,
       ShortDescription:
       'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "first.jpg",
+      ImageURL: "assets/first.jpg",
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: DrawerWidget(context,Colors.lightGreen[900]!),
+      drawer: DrawerWidget(context,Colors.indigo),
       appBar: AppBar(
           leading: SearchButton
               ? IconButton(
               onPressed: () {
                 setState(() {
                   SearchButton = false;
-                  CustomSearch =  Icon(Icons.search,color: Colors.lightGreen[900],);
+                  CustomSearch =  const Icon(Icons.search,color: Colors.indigo,);
                   CustomText = const Text("Search");
                 });
               },
-              icon:  Icon(Icons.arrow_back_outlined,color: Colors.lightGreen[900],))
+              icon:  const Icon(Icons.arrow_back_outlined,color: Colors.indigo,))
               : Builder(
             builder: (BuildContext context) {
               return IconButton(
-                icon:  Icon(
+                icon:  const Icon(
                   Icons.menu,
-                  color: Colors.lightGreen[900], // Change Custom Drawer Icon Color
+                  color: Colors.indigo // Change Custom Drawer Icon Color
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -116,9 +119,9 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
             },
           ),
           title:SearchButton
-              ? CustomText :  Text(
-            "Favorite Screen",
-            style: TextStyle(color: Colors.lightGreen[900], fontWeight: FontWeight.bold),
+              ? CustomText :  const Text(
+            "Favourite Screen",
+            style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           elevation: 0,
@@ -131,19 +134,19 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                   setState(() {
                     if (CustomSearch.icon == Icons.search) {
                       SearchButton = true;
-                      CustomSearch =  Icon(Icons.clear,color: Colors.lightGreen[900],);
+                      CustomSearch =  const Icon(Icons.clear,color: Colors.indigo);
                       CustomText = TextField(
                         textInputAction: TextInputAction.go,
                         controller: search,
                         onChanged: (value) => onSearchTextChanged(value),
                         //onChanged: (Value) => updateList(Value),
-                        decoration:  InputDecoration(
+                        decoration:  const InputDecoration(
                             hintText: "Search....",
-                            hintStyle: TextStyle(color: Colors.lightGreen[900]),
+                            hintStyle: TextStyle(color: Colors.indigo),
                             //
-                            border: const UnderlineInputBorder()
+                            border: UnderlineInputBorder()
                         ),
-                        style:  TextStyle(color: Colors.lightGreen[900], fontSize: 20),
+                        style:  const TextStyle(color: Colors.indigo, fontSize: 20),
                       );
                     } else {
                       // CustomSearch = const Icon(Icons.search);
@@ -155,9 +158,9 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
             //!SearchButton ? IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert,color: Colors.lightGreen[900],)) : const SizedBox(),
             IconButton(
                 onPressed: () {},
-                icon:  Icon(
+                icon:  const Icon(
                   CupertinoIcons.option,
-                  color: Colors.lightGreen[900],
+                  color: Colors.indigo,
                 )),
             /*  IconButton(
                 onPressed: () {},
@@ -184,7 +187,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("oops.png"),
+          Image.asset("assets/oops.png"),
           const Text(
             "Search Item is not available ....!",
             style: TextStyle(color: Colors.black, fontSize: 20),
@@ -195,6 +198,8 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
         : ListView.builder(
         itemCount: SearchItems.length,
         itemBuilder: (context, index) {
+          bool isSaved = FavoriteItems.contains(SearchItems[index]);
+
           return Card(
             child: Column(
               children: [
@@ -214,20 +219,37 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                           children: [
                             Align(
                               alignment: Alignment.topRight,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
+                              child: isSaved
+                                  ? InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    FavoriteItems.remove(MainData[index]);
+                                    print(FavoriteItems.toString());
+                                  });
+                                },
+                                child: const Icon(
                                   CupertinoIcons.heart_solid,
-                                  size: 15,
+                                  size: 16,
                                 ),
-                                tooltip: "Add to Favorite",
+                              )
+                                  : InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    FavoriteItems.add(MainData[index]);
+                                    print(FavoriteItems.toString());
+                                  });
+                                },
+                                child: const Icon(
+                                  CupertinoIcons.heart,
+                                  size: 16,
+                                ),
                               ),
                             ),
                             SizedBox(
                               width: size.width,
                               child: AutoSizeText(
                                 SearchItems[index].Name,
-                                maxLines: 2,
+                                maxLines: 1,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300,
                                     fontSize: 30),
@@ -266,26 +288,12 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                             ),
                             Row(
                               children: [
-                                /* Expanded(
-                                        child: Container(
-                                          width: size.width,
-                                          height: size.height/20,
-                                          decoration: BoxDecoration(
-                                            color: Colors.deepOrange,
-                                            borderRadius: BorderRadius.circular(5.0)
-                                          ),
-                                          child: const Center(child: Text("Add to Favorite",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: size.width/70,
-                                      ),*/
                                 Expanded(
                                   child: Container(
                                     width: size.width,
                                     height: size.height / 20,
                                     decoration: BoxDecoration(
-                                        color: Colors.lightGreen[900],
+                                        color: Colors.indigo,
                                         borderRadius:
                                         BorderRadius.circular(5.0)),
                                     child: const Center(
@@ -317,6 +325,8 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
     return ListView.builder(
         itemCount: MainData.length,
         itemBuilder: (context, index) {
+          bool isSaved = FavoriteItems.contains(MainData[index]);
+
           return Card(
             child: Column(
               children: [
@@ -336,20 +346,37 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                           children: [
                             Align(
                               alignment: Alignment.topRight,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  CupertinoIcons.heart,
-                                  size: 15,
+                              child: isSaved
+                                  ? InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    FavoriteItems.remove(MainData[index]);
+                                    print(FavoriteItems.toString());
+                                  });
+                                },
+                                child: const Icon(
+                                  CupertinoIcons.heart_solid,
+                                  size: 16,
                                 ),
-                                tooltip: "Add to Favorite",
+                              )
+                                  : InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    FavoriteItems.add(MainData[index]);
+                                    print(FavoriteItems.toString());
+                                  });
+                                },
+                                child: const Icon(
+                                  CupertinoIcons.heart,
+                                  size: 16,
+                                ),
                               ),
                             ),
                             SizedBox(
                               width: size.width,
                               child: AutoSizeText(
                                 MainData[index].Name,
-                                maxLines: 2,
+                                maxLines: 1,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300, fontSize: 30),
                               ),
@@ -405,7 +432,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                     width: size.width,
                                     height: size.height / 20,
                                     decoration: BoxDecoration(
-                                        color: Colors.lightGreen[900],
+                                        color: Colors.indigo,
                                         borderRadius:
                                         BorderRadius.circular(5.0)),
                                     child: const Center(

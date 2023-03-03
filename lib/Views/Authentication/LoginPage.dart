@@ -39,11 +39,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               Image(
-                  height: size.height / 2,
+                  height: size.height / 2.5,
                   width: size.width,
-                  image: const AssetImage("hey.png")),
+                  image: const AssetImage("assets/hey.png")),
               const Text(
-                "Welcome",
+                "Welcome Back",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
                           hintText: "User Name",
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         obscureText: !_passwordVisible,
                         decoration: InputDecoration(
@@ -155,8 +155,8 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.pushNamed(
                                 context, Routes_Name.SignUpScreen);
                           },
-                          child: const Text("SignUP",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: const Text("SignUp",
+                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.pink,)),
                         ),
                       ],
                     )

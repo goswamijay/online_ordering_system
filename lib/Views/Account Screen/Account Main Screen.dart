@@ -44,7 +44,7 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
               Image(
                   height: size.height / 2,
                   width: size.width,
-                  image: const AssetImage("account.gif")),
+                  image: const AssetImage("assets/account.gif")),
               const Text(
                 "Account Details",
                 style: TextStyle(
@@ -57,7 +57,7 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         initialValue: "Jay Goswami",
                         readOnly: true,
@@ -68,7 +68,7 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         initialValue: "goswamijay07@gmail.com",
                         readOnly: true,
@@ -79,7 +79,7 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -100,7 +100,7 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
                           hintText: "Address of user",

@@ -10,6 +10,9 @@ class SignUPPage extends StatefulWidget {
 
 class _SignUPPageState extends State<SignUPPage> {
   static String name = "";
+  static String Email = "";
+  static String Password1 = "";
+  static String Confirm_Password = "";
   bool changeButton = false;
   bool _passwordVisible = false;
   final _formKey = GlobalKey<FormState>();
@@ -20,10 +23,11 @@ class _SignUPPageState extends State<SignUPPage> {
         changeButton = true;
       });
       _formKey.currentState!.save();
+      print(Email);
 
       await Future.delayed(const Duration(seconds: 1));
-      await Navigator.pushNamed(context, Routes_Name.OTPScreen);
-      //await Navigator.pushNamed(context, Routes_Name.OTPScreen, arguments: {'email_id': name.toString()});
+      //await Navigator.pushNamed(context, Routes_Name.OTPScreen);
+      Navigator.pushNamed(context, Routes_Name.OTPScreen, arguments: {'email_id': Email.toString()});
 
       setState(() {
         changeButton = false;
@@ -41,9 +45,9 @@ class _SignUPPageState extends State<SignUPPage> {
           child: Column(
             children: [
               Image(
-                  height: size.height / 2,
+                  height: size.height / 2.7,
                   width: size.width,
-                  image: const AssetImage("signup.png")),
+                  image: const AssetImage("assets/signup.png")),
               const Text(
                 "Welcome",
                 style: TextStyle(
@@ -56,7 +60,7 @@ class _SignUPPageState extends State<SignUPPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
                           hintText: "User Name",
@@ -74,7 +78,7 @@ class _SignUPPageState extends State<SignUPPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
                           hintText: "Email Id",
@@ -86,13 +90,13 @@ class _SignUPPageState extends State<SignUPPage> {
                           }
                         },
                         onChanged: (value) {
-                          name = value;
-                          print(name);
+                          Email = value;
+                          print(Email);
                         },
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         obscureText: true,
                         decoration: const InputDecoration(
@@ -107,13 +111,13 @@ class _SignUPPageState extends State<SignUPPage> {
                           }
                         },
                         onChanged: (value) {
-                          name = value;
-                          print(name);
+                          Password1 = value;
+                          print(Password1);
                         },
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         obscureText: !_passwordVisible,
                         decoration: InputDecoration(
@@ -137,13 +141,13 @@ class _SignUPPageState extends State<SignUPPage> {
                             return "Password can't empty";
                           } else if (value.length < 6) {
                             return "Password is less than 6 letter";
-                          } else if (value != name) {
+                          } else if (value != Password1) {
                             return "Password not matched";
                           }
                         },
                         onChanged: (value) {
-                          name = value;
-                          print(name);
+                          Confirm_Password = value;
+                          print(Confirm_Password);
                         },
                       ),
                     ),
@@ -187,7 +191,7 @@ class _SignUPPageState extends State<SignUPPage> {
                             Navigator.pushNamed(context, Routes_Name.LoginScreen);
                           },
                           child: const Text("LogIn",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.pink)),
                         ),
                       ],
                     ),

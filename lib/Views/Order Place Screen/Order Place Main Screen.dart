@@ -16,8 +16,8 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
   bool SearchButton = false;
   bool ListIsEmpty = false;
   TextEditingController search = TextEditingController();
-  Icon CustomSearch =  Icon(Icons.search,color: Colors.pink[900],);
-  Widget CustomText =  Text("Search",style: TextStyle(color: Colors.pink[900]),);
+  Icon CustomSearch =  const Icon(Icons.search,color: Colors.indigo,);
+  Widget CustomText =  const Text("Search",style: TextStyle(color: Colors.indigo),);
   List<dynamic> SearchItems = [];
 
   @override
@@ -54,14 +54,14 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
       Price: 120000,
       ShortDescription:
       'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powepink by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powepink by a 3046mAh non-removable battery. ',
-      ImageURL: "first.jpg", LastOrder: '22-02-2023',
+      ImageURL: "assets/first.jpg", LastOrder: '22-02-2023',
     ),
     ProductList(
       Name: 'iPhone 12 pro',
       Price: 140000,
       ShortDescription:
       'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powepink by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powepink by a 3046mAh non-removable battery. ',
-      ImageURL: "first.jpg", LastOrder: '24-02-2023',
+      ImageURL: "assets/first.jpg", LastOrder: '24-02-2023',
     ),
 
   ];
@@ -71,24 +71,24 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: DrawerWidget(context,Colors.pink[900]!),
+      drawer: DrawerWidget(context,Colors.indigo!),
       appBar: AppBar(
           leading: SearchButton
               ? IconButton(
               onPressed: () {
                 setState(() {
                   SearchButton = false;
-                  CustomSearch =  Icon(Icons.search,color: Colors.pink[900],);
+                  CustomSearch = const Icon(Icons.search,color: Colors.indigo,);
                   CustomText = const Text("Search");
                 });
               },
-              icon:  Icon(Icons.arrow_back_outlined,color: Colors.pink[900],))
+              icon: const Icon(Icons.arrow_back_outlined,color: Colors.indigo,))
               : Builder(
             builder: (BuildContext context) {
               return IconButton(
-                icon:  Icon(
+                icon:  const Icon(
                   Icons.menu,
-                  color: Colors.pink[900], // Change Custom Drawer Icon Color
+                  color: Colors.indigo, // Change Custom Drawer Icon Color
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -98,9 +98,9 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
             },
           ),
           title:SearchButton
-              ? CustomText :  Text(
+              ? CustomText : const Text(
             "Order Place Screen",
-            style: TextStyle(color: Colors.pink[900], fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           elevation: 0,
@@ -113,19 +113,19 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                   setState(() {
                     if (CustomSearch.icon == Icons.search) {
                       SearchButton = true;
-                      CustomSearch =  Icon(Icons.clear,color: Colors.pink[900],);
+                      CustomSearch = const Icon(Icons.clear,color: Colors.indigo,);
                       CustomText = TextField(
                         textInputAction: TextInputAction.go,
                         controller: search,
                         onChanged: (value) => onSearchTextChanged(value),
                         //onChanged: (Value) => updateList(Value),
-                        decoration:  InputDecoration(
+                        decoration: const InputDecoration(
                             hintText: "Search....",
-                            hintStyle: TextStyle(color: Colors.pink[900]),
+                            hintStyle: TextStyle(color: Colors.indigo),
                             //
-                            border: const UnderlineInputBorder()
+                            border: UnderlineInputBorder()
                         ),
-                        style:  TextStyle(color: Colors.pink[900], fontSize: 20),
+                        style: const  TextStyle(color: Colors.indigo, fontSize: 20),
                       );
                     } else {
                       // CustomSearch = const Icon(Icons.search);
@@ -134,12 +134,12 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                     }
                   });
                 }),
-            //!SearchButton ? IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert,color: Colors.pink[900],)) : const SizedBox(),
+            //!SearchButton ? IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert,color: Colors.indigo,)) : const SizedBox(),
             IconButton(
                 onPressed: () {},
-                icon:  Icon(
+                icon: const Icon(
                   CupertinoIcons.option,
-                  color: Colors.pink[900],
+                  color: Colors.indigo,
                 )),
           ]),
       backgroundColor: Colors.white,
@@ -159,7 +159,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("oops.png"),
+          Image.asset("assets/oops.png"),
           const Text(
             "Search Item is not available ....!",
             style: TextStyle(color: Colors.black, fontSize: 20),
@@ -189,15 +189,18 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                           children: [
                             Align(
                               alignment: Alignment.topRight,
-                              child: Text("Order Place Date:- ${SearchItems[index].LastOrder}"),                            ),
+                              child: AutoSizeText(
+                                  "Order Place Date:- ${SearchItems[index].LastOrder}",
+                              maxLines: 1,)),
+
                             SizedBox(
-                              height: size.height / 50,
+                              height: size.height / 70,
                             ),
                             SizedBox(
                               width: size.width,
                               child: AutoSizeText(
                                 SearchItems[index].Name,
-                                maxLines: 2,
+                                maxLines: 1,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300,
                                     fontSize: 30),
@@ -232,7 +235,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height / 50,
+                              height: size.height / 70,
                             ),
                             Row(
                               children: [
@@ -241,7 +244,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                                     width: size.width,
                                     height: size.height / 20,
                                     decoration: BoxDecoration(
-                                        color: Colors.pink[900],
+                                        color: Colors.indigo,
                                         borderRadius:
                                         BorderRadius.circular(5.0)),
                                     child: const Center(
@@ -291,17 +294,19 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                         child: Column(
                           children: [
                             Align(
-                              alignment: Alignment.topRight,
-                              child: Text("Order Place Date:- ${MainData[index].LastOrder}"),
-                            ),
+                                alignment: Alignment.topRight,
+                                child: AutoSizeText(
+                                  "Order Place Date:- ${SearchItems[index].LastOrder}",
+                                  maxLines: 1,)),
+
                             SizedBox(
-                              height: size.height / 50,
+                              height: size.height / 70,
                             ),
                             SizedBox(
                               width: size.width,
                               child: AutoSizeText(
                                 MainData[index].Name,
-                                maxLines: 2,
+                                maxLines: 1,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300, fontSize: 30),
                               ),
@@ -334,7 +339,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height / 50,
+                              height: size.height / 70,
                             ),
                             Row(
                               children: [
@@ -343,7 +348,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                                     width: size.width,
                                     height: size.height / 20,
                                     decoration: BoxDecoration(
-                                        color: Colors.pink[900],
+                                        color: Colors.indigo,
                                         borderRadius:
                                         BorderRadius.circular(5.0)),
                                     child: const Center(

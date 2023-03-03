@@ -28,7 +28,7 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
               Image(
                   height: size.height / 2,
                   width: size.width,
-                  image: const AssetImage("forget_password.gif")),
+                  image: const AssetImage("assets/forget_password.gif")),
               const Text(
                 "Reset Password",
                 style: TextStyle(
@@ -42,7 +42,7 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -63,7 +63,7 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         obscureText: true,
                         decoration: const InputDecoration(
@@ -84,7 +84,7 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
                         obscureText: !_passwordVisible,
                         decoration: InputDecoration(
