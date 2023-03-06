@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../Controller/Favorite_add_provider.dart';
 import '../../Utils/Drawer.dart';
 
 class FavoriteMainScreen extends StatefulWidget {
@@ -19,6 +21,8 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
   Widget CustomText =  const Text("Search",style: TextStyle(color: Colors.indigo),);
   List<dynamic> SearchItems = [];
   List<dynamic> FavoriteItems = [];
+
+
 
 
   @override
@@ -89,6 +93,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -162,25 +167,22 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                   CupertinoIcons.option,
                   color: Colors.indigo,
                 )),
-            /*  IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  CupertinoIcons.square_arrow_left,
-                  color: Colors.lightGreen[900],
-                )),*/
 
           ]),
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: !SearchButton ? FullList1(context) : customlist1(context),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: !SearchButton ? FullList1(context) : customlist1(context),
+          ),
         ),
       ),
     );
   }
   Widget customlist1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+ //   final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
 
     return ListIsEmpty
         ? Center(
@@ -196,7 +198,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
       ),
     )
         : ListView.builder(
-        itemCount: SearchItems.length,
+        itemCount: FavoriteItems.length,
         itemBuilder: (context, index) {
           bool isSaved = FavoriteItems.contains(SearchItems[index]);
 
@@ -321,11 +323,15 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
 
   ListView FullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
 
     return ListView.builder(
-        itemCount: MainData.length,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: FavoriteProvider.FavoriteList.length,
         itemBuilder: (context, index) {
-          bool isSaved = FavoriteItems.contains(MainData[index]);
+          bool isSaved = FavoriteProvider.FavoriteList.contains(index);
+          List<dynamic> FavoriteItem = FavoriteProvider.FavoriteList;
 
           return Card(
             child: Column(
@@ -334,9 +340,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                   children: [
                     Expanded(
                       child: Image(
-                        image: AssetImage(MainData[index].ImageURL),
-                        /* width: size.width / 2,
-                              height: size.height / 4,*/
+                        image: AssetImage(FavoriteItem[index].ImageURL),
                       ),
                     ),
                     Expanded(
@@ -346,25 +350,58 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                           children: [
                             Align(
                               alignment: Alignment.topRight,
-                              child: isSaved
-                                  ? InkWell(
+                              child:
+                              isSaved ? InkWell(
                                 onTap: () {
                                   setState(() {
-                                    FavoriteItems.remove(MainData[index]);
-                                    print(FavoriteItems.toString());
+                                    /*  FavoriteItems.remove(MainData[index]);
+                                          print(FavoriteItems.toString());*/
+                                  /*  FavoriteProvider.RemoveFavoriteItems(index);*/
                                   });
+
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentSnackBar();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Product Remove From Favorite!",
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      backgroundColor: Colors.indigo,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
                                 },
-                                child: const Icon(
+                                child:  const Icon(
                                   CupertinoIcons.heart_solid,
+                                  color: Colors.red,
                                   size: 16,
                                 ),
                               )
                                   : InkWell(
                                 onTap: () {
                                   setState(() {
-                                    FavoriteItems.add(MainData[index]);
-                                    print(FavoriteItems.toString());
+                                    print(FavoriteProvider.FavoriteList.toList().contains(MainData[index].Name));
+                                    /* FavoriteItems.add(MainData[index]);
+                                          print(FavoriteItems.toString());*/
+                                    /*FavoriteProvider.AddFavoriteItems(index);
+*/
                                   });
+
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentSnackBar();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Product Added To Favorite!",
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      backgroundColor: Colors.indigo,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
                                 },
                                 child: const Icon(
                                   CupertinoIcons.heart,
@@ -375,21 +412,21 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                             SizedBox(
                               width: size.width,
                               child: AutoSizeText(
-                                MainData[index].Name,
+                                FavoriteItem[index].Name,
                                 maxLines: 1,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300, fontSize: 30),
                               ),
                             ),
                             SizedBox(
-                              height: size.height / 70,
+                              height: size.height / 80,
                             ),
                             SizedBox(
                               width: size.width,
                               child: Align(
                                 alignment: Alignment.topLeft,
                                 child: Text(
-                                  '₹${MainData[index].Price}',
+                                  '₹${FavoriteItem[index].Price}',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 25),
@@ -397,12 +434,12 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height / 70,
+                              height: size.height / 80,
                             ),
                             SizedBox(
                               width: size.width,
                               child: AutoSizeText(
-                                MainData[index].ShortDescription,
+                                FavoriteItem[index].ShortDescription,
                                 maxLines: 2,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300, fontSize: 30),
@@ -413,20 +450,6 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                             ),
                             Row(
                               children: [
-                                /* Expanded(
-                                        child: Container(
-                                          width: size.width,
-                                          height: size.height/20,
-                                          decoration: BoxDecoration(
-                                            color: Colors.deepOrange,
-                                            borderRadius: BorderRadius.circular(5.0)
-                                          ),
-                                          child: const Center(child: Text("Add to Favorite",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: size.width/70,
-                                      ),*/
                                 Expanded(
                                   child: Container(
                                     width: size.width,

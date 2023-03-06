@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:online_ordering_system/HomePage.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:online_ordering_system/Sparce_Screen.dart';
 import 'package:online_ordering_system/Views/Authentication/LoginPage.dart';
 import 'package:online_ordering_system/Views/Cart%20Screen/Cart%20Main%20Screen.dart';
+import 'package:provider/provider.dart';
 
-
+import 'Controller/Purchase_items_provider.dart';
 import 'Utils/Drawer.dart';
 import 'Views/Account Screen/Account Main Screen.dart';
 import 'Views/Account Screen/AccountResetPassword.dart';
@@ -26,27 +28,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          fontFamily: GoogleFonts.lato().fontFamily,
-          primaryTextTheme: GoogleFonts.latoTextTheme()),
-      initialRoute: Routes_Name.SparceScreen,
-      routes: {
-        Routes_Name.SparceScreen: (context) => const Space_Screen(),
-        Routes_Name.HomePage : (context) => const HomePage(),
-        Routes_Name.WelcomeScreen : (context) => const WelcomeScreen(),
-        Routes_Name.LoginScreen : (context) => const LoginPage(),
-        Routes_Name.SignUpScreen : (context) => const SignUPPage(),
-        Routes_Name.OTPScreen : (context) => const OTPScreen(),
-        Routes_Name.ProductMainScreen : (context) => const ProductMainScreen(),
-        Routes_Name.CartMainScreen : (context) => const CartMainScreen(),
-        Routes_Name.FavoriteMainScreen : (context) => const FavoriteMainScreen(),
-        Routes_Name.AccountMainScreen : (context) => const AccountMainScreen(),
-        Routes_Name.AccountResetPassword : (context) => const AccountResetPassword(),
-        Routes_Name.OrderPlaceMainScreen : (context) => const OrderPlaceMainScreen(),
-       // Routes_Name.DrawerWidget : (context) => const DrawerWidget(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Favorite_add_provider()),
+        ChangeNotifierProvider(create: (_) => Purchase_items_provider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            fontFamily: GoogleFonts.lato().fontFamily,
+            primaryTextTheme: GoogleFonts.latoTextTheme()),
+        initialRoute: Routes_Name.SparceScreen,
+        routes: {
+          Routes_Name.SparceScreen: (context) => const Space_Screen(),
+          Routes_Name.HomePage: (context) => const HomePage(),
+          Routes_Name.WelcomeScreen: (context) => const WelcomeScreen(),
+          Routes_Name.LoginScreen: (context) => const LoginPage(),
+          Routes_Name.SignUpScreen: (context) => const SignUPPage(),
+          Routes_Name.OTPScreen: (context) => const OTPScreen(),
+          Routes_Name.ProductMainScreen: (context) => const ProductMainScreen(),
+          Routes_Name.CartMainScreen: (context) => const CartMainScreen(),
+          Routes_Name.FavoriteMainScreen: (context) =>
+              const FavoriteMainScreen(),
+          Routes_Name.AccountMainScreen: (context) => const AccountMainScreen(),
+          Routes_Name.AccountResetPassword: (context) =>
+              const AccountResetPassword(),
+          Routes_Name.OrderPlaceMainScreen: (context) =>
+              const OrderPlaceMainScreen(),
+          // Routes_Name.DrawerWidget : (context) => const DrawerWidget(),
+        },
+      ),
     );
   }
 }

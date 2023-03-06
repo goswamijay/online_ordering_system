@@ -2,8 +2,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
+import 'package:online_ordering_system/Controller/Purchase_items_provider.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
+import 'package:provider/provider.dart';
 
+import '../../Controller/FavoriteListModelClass.dart';
 import '../../Utils/Drawer.dart';
 
 class ProductMainScreen extends StatefulWidget {
@@ -17,6 +21,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
     with TickerProviderStateMixin {
   bool SearchButton = false;
   bool ListIsEmpty = false;
+  bool isSaved = false;
   TextEditingController search = TextEditingController();
   Icon CustomSearch = const Icon(
     Icons.search,
@@ -179,47 +184,46 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         SizedBox(
                           height: size.height / 50,
                         ),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CupertinoSearchTextField(
-                            backgroundColor: Colors.white,
-                            itemSize: size.height / 33,
-                            controller: controller,
-                            onChanged: (value) {
-                              setState(() {
-                                SearchButton = true;
-                              });
-                              onSearchTextChanged(value);
-                            },
-                            onSuffixTap: () {
-                              setState(() {
-                                SearchButton = false;
-                                controller.clear();
-                              });
-                            },
-                            onSubmitted: (value) {},
-                            autocorrect: true,
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CupertinoSearchTextField(
+                                backgroundColor: Colors.white,
+                                itemSize: size.height / 33,
+                                controller: controller,
+                                onChanged: (value) {
+                                  setState(() {
+                                    SearchButton = true;
+                                  });
+                                  onSearchTextChanged(value);
+                                },
+                                onSuffixTap: () {
+                                  setState(() {
+                                    SearchButton = false;
+                                    controller.clear();
+                                  });
+                                },
+                                onSubmitted: (value) {},
+                                autocorrect: true,
+                              ),
+                            ),
+                            SizedBox(
+                              width: size.width / 60,
+                            ),
+                            Container(
+                              height: size.height / 25,
+                              width: size.width / 16,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.black),
+                              child: const Icon(
+                                CupertinoIcons.line_horizontal_3_decrease,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            )
+                          ],
                         ),
-                        SizedBox(
-                          width: size.width / 60,
-                        ),
-                        Container(
-                          height: size.height / 25,
-                          width: size.width / 16,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.black),
-                          child: const Icon(
-                            CupertinoIcons.line_horizontal_3_decrease,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        )
-                      ],
-                    ),
                         SizedBox(
                           height: size.height / 50,
                         ),
@@ -233,8 +237,9 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                           ),
                           items: imgList
                               .map((item) => Center(
-                              child: Image.network(item,
-                                  fit: BoxFit.cover, width: size.width / 1.1)))
+                                  child: Image.network(item,
+                                      fit: BoxFit.cover,
+                                      width: size.width / 1.1)))
                               .toList(),
                         ),
                         SizedBox(
@@ -246,8 +251,8 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "Categories",
-                                style:
-                                TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
                               )),
                         ),
                         SizedBox(
@@ -256,17 +261,17 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         TabBar(
                           controller: _tabController,
                           tabs: [
-                            TabItemWidget1('apple.png', "Apple"),
-                            TabItemWidget1('samsung.png', "Samsung"),
-                            TabItemWidget1('realme.png', "Realme"),
-                            TabItemWidget1('one_plus.png', "One Plus"),
-                            TabItemWidget1('mi.png', "Mi"),
-                            TabItemWidget1('apple.png', "Apple"),
-                            TabItemWidget1('samsung.png', "Samsung"),
-                            TabItemWidget1('realme.png', "Realme"),
-                            TabItemWidget1('one_plus.png', "One Plus"),
-                            TabItemWidget1('mi.png', "Mi"),
-                            TabItemWidget1('apple.png', "Apple"),
+                            TabItemWidget1('assets/apple.png', "Apple"),
+                            TabItemWidget1('assets/samsung.png', "Samsung"),
+                            TabItemWidget1('assets/realme.png', "Realme"),
+                            TabItemWidget1('assets/one_plus.png', "One Plus"),
+                            TabItemWidget1('assets/mi.png', "Mi"),
+                            TabItemWidget1('assets/apple.png', "Apple"),
+                            TabItemWidget1('assets/samsung.png', "Samsung"),
+                            TabItemWidget1('assets/realme.png', "Realme"),
+                            TabItemWidget1('assets/one_plus.png', "One Plus"),
+                            TabItemWidget1('assets/mi.png', "Mi"),
+                            TabItemWidget1('assets/apple.png', "Apple"),
                           ],
                           indicatorColor: Colors.blue,
                           indicatorSize: TabBarIndicatorSize.label,
@@ -274,7 +279,6 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                           unselectedLabelColor: Colors.black87,
                           isScrollable: true,
                         ),
-
                         SizedBox(
                           height: size.height / 80,
                         ),
@@ -284,14 +288,13 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                               alignment: Alignment.topLeft,
                               child: Text(
                                 "Best Selling",
-                                style:
-                                TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
                               )),
                         ),
                         SizedBox(
                           height: size.height / 80,
                         ),
-
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: Center(
@@ -300,11 +303,8 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                 : customlist1(context),
                           ),
                         ),
-
                       ],
-                  ),
-
-
+                    ),
                   ),
                 ],
               ),
@@ -331,11 +331,12 @@ class _ProductMainScreenState extends State<ProductMainScreen>
             ),
           )
         : ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-            itemCount: FavoriteItems.length,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: SearchItems.length,
             itemBuilder: (context, index) {
-              bool isSaved = FavoriteItems.contains(FavoriteItems[index]);
+              // bool isSaved = FavoriteItems.contains(FavoriteItems[index]);
+
               return Card(
                 child: Column(
                   children: [
@@ -343,7 +344,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                       children: [
                         Expanded(
                           child: Image(
-                            image: AssetImage(FavoriteItems[index].ImageURL),
+                            image: AssetImage(SearchItems[index].ImageURL),
                             /* width: size.width / 2,
                               height: size.height / 4,*/
                           ),
@@ -359,9 +360,11 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                       ? InkWell(
                                           onTap: () {
                                             setState(() {
-                                              FavoriteItems.remove(
+                                              isSaved = false;
+
+                                              /* FavoriteItems.remove(
                                                   FavoriteItems[index]);
-                                              print(FavoriteItems.toString());
+                                              print(FavoriteItems.toString());*/
                                             });
 
                                             ScaffoldMessenger.of(context)
@@ -389,9 +392,10 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                       : InkWell(
                                           onTap: () {
                                             setState(() {
-                                              FavoriteItems.add(
+                                              isSaved = true;
+                                              /*     FavoriteItems.add(
                                                   MainData[index]);
-                                              print(FavoriteItems.toString());
+                                              print(FavoriteItems.toString());*/
                                             });
 
                                             ScaffoldMessenger.of(context)
@@ -418,7 +422,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                 SizedBox(
                                   width: size.width,
                                   child: AutoSizeText(
-                                    FavoriteItems[index].Name,
+                                    SearchItems[index].Name,
                                     maxLines: 1,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
@@ -433,7 +437,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      '₹${FavoriteItems[index].Price}',
+                                      '₹${SearchItems[index].Price}',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 25),
@@ -446,7 +450,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                 SizedBox(
                                   width: size.width,
                                   child: AutoSizeText(
-                                    FavoriteItems[index].ShortDescription,
+                                    SearchItems[index].ShortDescription,
                                     maxLines: 2,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
@@ -513,13 +517,17 @@ class _ProductMainScreenState extends State<ProductMainScreen>
 
   ListView FullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final CartProvider = Provider.of<Purchase_items_provider>(context);
 
     return ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: MainData.length,
         itemBuilder: (context, index) {
-          bool isSaved = FavoriteItems.contains(MainData[index]);
+          // bool isSaved = FavoriteProvider.FavoriteList1.contains(FavoriteProvider.FavoriteList1);
+          bool isSaved =
+              FavoriteProvider.FavoriteList.contains(MainData[index]);
 
           return Card(
             child: Column(
@@ -529,8 +537,6 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                     Expanded(
                       child: Image(
                         image: AssetImage(MainData[index].ImageURL),
-                        /* width: size.width / 2,
-                              height: size.height / 4,*/
                       ),
                     ),
                     Expanded(
@@ -544,8 +550,13 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   ? InkWell(
                                       onTap: () {
                                         setState(() {
-                                          FavoriteItems.remove(MainData[index]);
-                                          print(FavoriteItems.toString());
+                                          /*  FavoriteItems.remove(MainData[index]);
+                                          print(FavoriteItems.toString());*/
+                                          /*  FavoriteProvider.RemoveFavoriteItems(
+                                              index);*/
+
+                                          FavoriteProvider.RemoveFavoriteItems(
+                                            FavoriteProvider.FavoriteList[index]);
                                         });
 
                                         ScaffoldMessenger.of(context)
@@ -571,8 +582,22 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   : InkWell(
                                       onTap: () {
                                         setState(() {
-                                          FavoriteItems.add(MainData[index]);
-                                          print(FavoriteItems.toString());
+                                          /* FavoriteItems.add(MainData[index]);*/
+                                          // print(FavoriteProvider.FavoriteList1.toList());
+                                          FavoriteProvider.AddFavoriteItems(
+
+                                             FavoriteListModelClass(
+                                                  Price: MainData[index].Price,
+                                                  Name: MainData[index].Name,
+                                                  ShortDescription:
+                                                      MainData[index]
+                                                          .ShortDescription,
+                                                  ImageURL: MainData[index]
+                                                      .ImageURL));
+
+                                          // print(FavoriteProvider.FavoriteList1[index].Name.contains(FavoriteProvider.FavoriteList1[index].Name));
+                                          print(FavoriteProvider
+                                              .FavoriteList.length);
                                         });
 
                                         ScaffoldMessenger.of(context)
@@ -637,20 +662,33 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                             Row(
                               children: [
                                 Expanded(
-                                  child: Container(
-                                    width: size.width,
-                                    height: size.height / 20,
-                                    decoration: BoxDecoration(
-                                        color: Colors.indigo,
-                                        borderRadius:
-                                            BorderRadius.circular(5.0)),
-                                    child: const Center(
-                                        child: Text(
-                                      "Add to Cart",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    )),
+                                  child: InkWell(
+                                    onTap: (){
+                                      CartProvider.AddItemToCart(
+                                          FavoriteListModelClass(
+                                              Price: MainData[index].Price,
+                                              Name: MainData[index].Name,
+                                              ShortDescription:
+                                              MainData[index]
+                                                  .ShortDescription,
+                                              ImageURL: MainData[index]
+                                                  .ImageURL));
+                                    },
+                                    child: Container(
+                                      width: size.width,
+                                      height: size.height / 20,
+                                      decoration: BoxDecoration(
+                                          color: Colors.indigo,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0)),
+                                      child: const Center(
+                                          child: Text(
+                                        "Add to Cart",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                    ),
                                   ),
                                 ),
                               ],

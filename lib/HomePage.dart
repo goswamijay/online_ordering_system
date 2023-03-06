@@ -63,8 +63,6 @@ class _HomePageState extends State<HomePage> {
             )  /*Center(
               child: _widgetOption.elementAt(_selectedIndex),
             ),*/
-
-
            // _widgetOption.elementAt(_selectedIndex),
           ),
           Container(

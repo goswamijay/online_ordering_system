@@ -1,7 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../Controller/FavoriteListModelClass.dart';
+import '../../Controller/Purchase_items_provider.dart';
 import '../../Utils/Drawer.dart';
 
 class CartMainScreen extends StatefulWidget {
@@ -12,21 +15,6 @@ class CartMainScreen extends StatefulWidget {
 }
 
 class _CartMainScreenState extends State<CartMainScreen> {
-  int counter = 1;
-
-  void increment() {
-    setState(() {
-      counter++;
-    });
-  }
-
-  void decrement() {
-    if (counter > 1) {
-      setState(() {
-        counter--;
-      });
-    }
-  }
 
   bool SearchButton = false;
   bool ListIsEmpty = false;
@@ -108,6 +96,8 @@ class _CartMainScreenState extends State<CartMainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final CartProvider = Provider.of<Purchase_items_provider>(context);
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: DrawerWidget(context, Colors.indigo),
@@ -216,10 +206,12 @@ class _CartMainScreenState extends State<CartMainScreen> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
+           /* SizedBox(
               height: size.height / 50,
-            ),
+            ),*/
             Container(
               height: size.height,
               width: size.width,
@@ -230,12 +222,10 @@ class _CartMainScreenState extends State<CartMainScreen> {
                       topLeft: Radius.circular(16.0))),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child:
-                      !SearchButton ? FullList1(context) : customlist1(context),
-                ),
+                child: !SearchButton ? FullList1(context) : customlist1(context),
               ),
             ),
+            SizedBox(height: size.height/20,)
           ],
         ),
       ),
@@ -269,6 +259,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
 
   Widget customlist1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final CartProvider = Provider.of<Purchase_items_provider>(context);
 
     return ListIsEmpty
         ? Center(
@@ -313,17 +304,17 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                     width: size.width / 50,
                                   ),
                                   IconButton(
-                                    onPressed: decrement,
+                                    onPressed: CartProvider.decrement,
                                     icon: const Icon(Icons.remove),
                                     tooltip: "Item Remove",
                                   ),
                                   Text(
-                                    '$counter',
+                                    CartProvider.counter.toString(),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
                                   IconButton(
-                                    onPressed: increment,
+                                    onPressed: CartProvider.increment,
                                     icon: const Icon(Icons.add),
                                     tooltip: "Item added",
                                   ),
@@ -388,7 +379,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      '₹${counter * SearchItems[index].Price}',
+                                      '₹${CartProvider.counter * SearchItems[index].Price}',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 25),
@@ -454,6 +445,8 @@ class _CartMainScreenState extends State<CartMainScreen> {
   }
 
   Widget FullList1(BuildContext context) {
+    final CartProvider = Provider.of<Purchase_items_provider>(context);
+
     Size size = MediaQuery.of(context).size;
     return ListIsEmpty
         ? Center(
@@ -471,7 +464,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
         : ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: MainData.length,
+            itemCount: CartProvider.PurchaseList.length,
             itemBuilder: (context, index) {
               bool isSaved = FavoriteItems.contains(MainData[index]);
 
@@ -486,7 +479,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 12.0),
                                 child: Image(
-                                  image: AssetImage(MainData[index].ImageURL),
+                                  image: AssetImage( CartProvider.PurchaseList[index].ImageURL),
                                   // image: AssetImage('first.jpg'),
                                   width: size.width / 4,
                                     height: size.height / 4,
@@ -511,9 +504,9 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                           ? InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  FavoriteItems.remove(
+                                                  CartProvider.PurchaseList.remove(
                                                       MainData[index]);
-                                                  print(FavoriteItems.toString());
+                                                  print( CartProvider.PurchaseList.toString());
                                                 });
                                               },
                                               child: const Icon(
@@ -524,9 +517,9 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                           : InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  FavoriteItems.add(
+                                                  CartProvider.PurchaseList.add(
                                                       MainData[index]);
-                                                  print(FavoriteItems.toString());
+                                                  print( CartProvider.PurchaseList.toString());
                                                 });
                                               },
                                               child: const Icon(
@@ -540,7 +533,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                 SizedBox(
                                   width: size.width,
                                   child: AutoSizeText(
-                                    MainData[index].Name,
+                                    CartProvider.PurchaseList[index].Name,
                                     maxLines: 1,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
@@ -552,7 +545,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                 SizedBox(
                                   width: size.width,
                                   child: AutoSizeText(
-                                    MainData[index].ShortDescription,
+                                    CartProvider.PurchaseList[index].ShortDescription,
                                     maxLines: 2,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
@@ -570,7 +563,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                         child: Align(
                                           alignment: Alignment.topLeft,
                                           child: AutoSizeText(
-                                              '₹${counter * MainData[index].Price}',
+                                              '₹${CartProvider.counter *  CartProvider.PurchaseList[index].Price}',
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 25),
@@ -581,7 +574,9 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                     ),
                                     Expanded(
                                       child: IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                          CartProvider.RemoveToCart(CartProvider.PurchaseList[index]);
+                                          },
                                           icon: const Icon(
                                               CupertinoIcons.delete)),
                                     ),
@@ -593,7 +588,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                         children: [
 
                                           InkWell(
-                                            onTap: decrement,
+                                            onTap: CartProvider.decrement,
                                             child:  CircleAvatar(
                                               backgroundColor: Colors.grey[200],
                                               radius: 14,
@@ -601,13 +596,13 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                             ),
                                           ),
                                           Text(
-                                            '$counter',
+                                            CartProvider.counter.toString(),
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
 
                                           InkWell(
-                                            onTap: increment,
+                                            onTap: CartProvider.increment,
                                             child: CircleAvatar(
                                               backgroundColor: Colors.grey[200],
                                               radius: 14,
