@@ -14,19 +14,20 @@ import 'Views/Tesr1.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  int selectedIndex = 0;
   Map<String,List<dynamic>> FavoriteData = {};
   List<dynamic>? FavoriteItems = [];
   PageController controller = PageController();
   int _curr = 0;
   void _onItemTapped(index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
 
 
     });
@@ -54,10 +55,10 @@ class _HomePageState extends State<HomePage> {
               controller: controller,
               onPageChanged: (num) {
                 setState(() {
-                  _selectedIndex = num;
+                  selectedIndex = num;
                 });
               },
-              children:[_widgetOption.elementAt(_selectedIndex)]
+              children:[_widgetOption.elementAt(selectedIndex)]
 
               ,
             )  /*Center(
@@ -71,7 +72,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
+          currentIndex: selectedIndex,
           selectedItemColor: Colors.pink,
           unselectedItemColor: Colors.black,
           onTap: _onItemTapped,

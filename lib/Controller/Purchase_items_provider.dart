@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:online_ordering_system/Models/ConfirmListModelClass.dart';
+import 'package:collection/collection.dart';
 
-import 'FavoriteListModelClass.dart';
+import '../Models/FavoriteListModelClass.dart';
 
 class Purchase_items_provider with ChangeNotifier {
   List<FavoriteListModelClass> _PurchaseList = [];
@@ -21,16 +23,31 @@ class Purchase_items_provider with ChangeNotifier {
     notifyListeners();
   }
 
-  void decrement() {
-    if (_counter > 1) {
-      _counter--;
+   decrement(int x) {
+
+
+    if (x > 1) {
+      x--;
       notifyListeners();
     }
   }
 
-  void increment() {
-    _counter++;
+   void increment(int x) {
+    x++;
     notifyListeners();
+  }
+
+  void cleanCartItem() {
+    _PurchaseList.clear();
+    notifyListeners();
+  }
+
+
+  int AllItemPrice(){
+   Iterable<int> TotalPrice = _PurchaseList.map((e) => e.Price * counter);
+   TotalPrice.toString();
+   final sum = TotalPrice.sum;
+   return sum;
   }
 }
 

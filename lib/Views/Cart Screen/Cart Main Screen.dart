@@ -1,11 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
+import 'package:online_ordering_system/Controller/Confirm_Order_Items.dart';
 import 'package:provider/provider.dart';
 
-import '../../Controller/FavoriteListModelClass.dart';
+import '../../Models/ConfirmListModelClass.dart';
+import '../../Models/FavoriteListModelClass.dart';
 import '../../Controller/Purchase_items_provider.dart';
 import '../../Utils/Drawer.dart';
+import '../../Utils/Routes_Name.dart';
 
 class CartMainScreen extends StatefulWidget {
   const CartMainScreen({Key? key}) : super(key: key);
@@ -15,170 +19,23 @@ class CartMainScreen extends StatefulWidget {
 }
 
 class _CartMainScreenState extends State<CartMainScreen> {
-
-  bool SearchButton = false;
-  bool ListIsEmpty = false;
-  TextEditingController search = TextEditingController();
-  Icon CustomSearch = const Icon(
-    Icons.search,
-    color: Colors.indigo,
-  );
-  Widget CustomText = const Text(
-    "Search",
-    style: TextStyle(color: Colors.indigo),
-  );
-  List<dynamic> SearchItems = [];
-  List<dynamic> FavoriteItems = [];
-  @override
-  void initState() {
-    // TODO: implement initState
-    SearchItems = MainData;
-    super.initState();
-  }
-
-  List<dynamic> MainData = [
-    ProductList(
-      Name: 'iPhone 11 pro',
-      Price: 120000,
-      ShortDescription:
-          'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/realme.png",
-    ),
-    ProductList(
-      Name: 'iPhone 12 pro',
-      Price: 140000,
-      ShortDescription:
-          'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
-    ),
-    ProductList(
-      Name: 'iPhone 13 pro',
-      Price: 160000,
-      ShortDescription:
-          'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
-    ),
-    ProductList(
-      Name: 'iPhone 14 pro',
-      Price: 180000,
-      ShortDescription:
-          'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
-    ),
-    ProductList(
-      Name: 'iPhone 15 pro',
-      Price: 200000,
-      ShortDescription:
-          'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
-    ),
-  ];
-
-  void onSearchTextChanged(String text) {
-    List<dynamic>? Result = [];
-    if (text.isEmpty) {
-      Result = MainData;
-    } else {
-      Result = MainData.where((element) => element.Name.toString()
-          .toLowerCase()
-          .contains(text.toLowerCase())).toList();
-    }
-
-    setState(() {
-      if (Result!.isEmpty) {
-        ListIsEmpty = true;
-      } else {
-        ListIsEmpty = false;
-      }
-      SearchItems = Result!;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final CartProvider = Provider.of<Purchase_items_provider>(context);
+    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final ConfirmProvider = Provider.of<Place_order_Provider>(context);
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: DrawerWidget(context, Colors.indigo),
-
-      /*   appBar: AppBar(
-
-          leading: SearchButton
-              ? IconButton(
-              onPressed: () {
-                setState(() {
-                  SearchButton = false;
-                  CustomSearch = const Icon(Icons.search,color: Colors.indigo,);
-                  CustomText = const Text("Search");
-                });
-              },
-              icon: const Icon(Icons.arrow_back_outlined,color: Colors.indigo,))
-              : Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(
-                  Icons.menu,
-                  color: Colors.indigo, // Change Custom Drawer Icon Color
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              );
-            },
-          ),
-          title:SearchButton
-              ? CustomText : const Text(
-            "Cart Screen",
-            style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          actions: [
-
-            IconButton(
-                icon: CustomSearch,
-                onPressed: () {
-                  setState(() {
-                    if (CustomSearch.icon == Icons.search) {
-                      SearchButton = true;
-                      CustomSearch = const Icon(Icons.clear,color: Colors.indigo,);
-                      CustomText = TextField(
-                        textInputAction: TextInputAction.go,
-                        controller: search,
-                        onChanged: (value) => onSearchTextChanged(value),
-                        //onChanged: (Value) => updateList(Value),
-                        decoration: const InputDecoration(
-                            hintText: "Search....",
-                            hintStyle: TextStyle(color: Colors.indigo),
-                            //
-                            border: UnderlineInputBorder()
-                        ),
-                        style: const TextStyle(color: Colors.indigo, fontSize: 20),
-                      );
-                    } else {
-                      // CustomSearch = const Icon(Icons.search);
-                      search.clear();
-                      onSearchTextChanged("");
-                    }
-                  });
-                }),
-            //!SearchButton ? IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert,color: Colors.indigo,)) : const SizedBox(),
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  CupertinoIcons.option,
-                  color: Colors.indigo,
-                )),
-
-          ]),*/
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12.0, top: 12.0),
           child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(Routes_Name.HomePage);
+              },
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
@@ -201,6 +58,52 @@ class _CartMainScreenState extends State<CartMainScreen> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0, top: 12.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, Routes_Name.FavoriteMainScreen);
+              },
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(20),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: FittedBox(
+                        child: Icon(
+                          CupertinoIcons.heart_solid,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      child: Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.red[900]),
+                          width: 34 / 2,
+                          height: 34 / 2,
+                          child: Text(
+                            FavoriteProvider.FavoriteList.length.toString(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       // backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
       backgroundColor: Colors.white,
@@ -209,23 +112,18 @@ class _CartMainScreenState extends State<CartMainScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-           /* SizedBox(
-              height: size.height / 50,
-            ),*/
             Container(
               height: size.height,
-              width: size.width,
               decoration: const BoxDecoration(
                   color: Color.fromRGBO(246, 244, 244, 1),
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(16.0),
                       topLeft: Radius.circular(16.0))),
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: !SearchButton ? FullList1(context) : customlist1(context),
+                padding: const EdgeInsets.all(8.0),
+                child: FullList1(context),
               ),
             ),
-            SizedBox(height: size.height/20,)
           ],
         ),
       ),
@@ -233,230 +131,75 @@ class _CartMainScreenState extends State<CartMainScreen> {
         children: [
           Expanded(
             child: InkWell(
-              onTap: (){},
+              onTap: () {},
               child: Container(
-                height: size.height/20,
+                height: size.height / 20,
                 color: Colors.orange,
-                child: const Center(child: Text("Total Price-100000",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),)),
+                child: Center(
+                    child: Text(
+                  "Total Price :- ${CartProvider.AllItemPrice().toString()}",
+                  style: const TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                )),
               ),
             ),
           ),
           Expanded(
             child: InkWell(
-              onTap: (){},
-              child: Container(
-                height: size.height/20,
+              onTap: () {
+                print(CartProvider.PurchaseList.length);
+                setState(() {
+                  for (int index = 0;
+                      index < CartProvider.PurchaseList.length;
+                      index++) {
+                    ConfirmProvider.AddItems(ConfirmListModelClass(
+                        Price: CartProvider.PurchaseList[index].Price,
+                        Name: CartProvider.PurchaseList[index].Name,
+                        ShortDescription:
+                            CartProvider.PurchaseList[index].ShortDescription,
+                        ImageURL: CartProvider.PurchaseList[index].ImageURL,
+                        Count: CartProvider.PurchaseList[index].Count,
+                        dateTime: DateTime.now()));
 
+                    print(ConfirmProvider.ConfirmList[index].Name);
+                  }
+                  CartProvider.cleanCartItem();
+                }); // ConfirmProvider.AddItems()
+              },
+              child: Container(
+                height: size.height / 20,
                 color: Colors.indigo,
-                child: const Center(child: Text("Place Order",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
+                child: const Center(
+                    child: Text(
+                  "Place Order",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                )),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget customlist1(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
-
-    return ListIsEmpty
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("assets/oops.png"),
-                const Text(
-                  "Search Item is not available ....!",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
-                ),
-              ],
-            ),
-          )
-        : ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: SearchItems.length,
-            itemBuilder: (context, index) {
-              bool isSaved = FavoriteItems.contains(SearchItems[index]);
-
-              return Card(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Image(
-                                image: AssetImage(SearchItems[index].ImageURL),
-                                // image: AssetImage('first.jpg'),
-                                /* width: size.width / 2,
-                                  height: size.height / 4,*/
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: size.width / 50,
-                                  ),
-                                  IconButton(
-                                    onPressed: CartProvider.decrement,
-                                    icon: const Icon(Icons.remove),
-                                    tooltip: "Item Remove",
-                                  ),
-                                  Text(
-                                    CartProvider.counter.toString(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  IconButton(
-                                    onPressed: CartProvider.increment,
-                                    icon: const Icon(Icons.add),
-                                    tooltip: "Item added",
-                                  ),
-                                  SizedBox(
-                                    width: size.width / 50,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: isSaved
-                                      ? InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              FavoriteItems.remove(
-                                                  MainData[index]);
-                                              print(FavoriteItems.toString());
-                                            });
-                                          },
-                                          child: const Icon(
-                                            CupertinoIcons.heart_solid,
-                                            size: 16,
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              FavoriteItems.add(
-                                                  MainData[index]);
-                                              print(FavoriteItems.toString());
-                                            });
-                                          },
-                                          child: const Icon(
-                                            CupertinoIcons.heart,
-                                            size: 16,
-                                          ),
-                                        ),
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: AutoSizeText(
-                                    SearchItems[index].Name,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 30),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 70,
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      '₹${CartProvider.counter * SearchItems[index].Price}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 70,
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: AutoSizeText(
-                                    SearchItems[index].ShortDescription,
-                                    maxLines: 2,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 30),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 50,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                        child: IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(
-                                                CupertinoIcons.delete))),
-                                    SizedBox(
-                                      width: size.width / 70,
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        width: size.width,
-                                        height: size.height / 20,
-                                        decoration: BoxDecoration(
-                                            color: Colors.deepOrange,
-                                            borderRadius:
-                                                BorderRadius.circular(5.0)),
-                                        child: const Center(
-                                            child: Text(
-                                          "Place Order",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              );
-            });
-  }
-
   Widget FullList1(BuildContext context) {
     final CartProvider = Provider.of<Purchase_items_provider>(context);
+    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final ConfirmProvider = Provider.of<Place_order_Provider>(context);
 
     Size size = MediaQuery.of(context).size;
-    return ListIsEmpty
+    return CartProvider.PurchaseList.isEmpty
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset("assets/oops.png"),
-                const Text(
-                  "Search Item is not available ....!",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
+                const Center(
+                  child: Text(
+                    "Search Item is not available ....!",
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
                 ),
               ],
             ),
@@ -466,7 +209,8 @@ class _CartMainScreenState extends State<CartMainScreen> {
             shrinkWrap: true,
             itemCount: CartProvider.PurchaseList.length,
             itemBuilder: (context, index) {
-              bool isSaved = FavoriteItems.contains(MainData[index]);
+              bool isSaved = FavoriteProvider.FavoriteList.any((element) =>
+                  element.Name.contains(CartProvider.PurchaseList[index].Name));
 
               return Card(
                 child: Column(
@@ -479,10 +223,11 @@ class _CartMainScreenState extends State<CartMainScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 12.0),
                                 child: Image(
-                                  image: AssetImage( CartProvider.PurchaseList[index].ImageURL),
+                                  image: AssetImage(CartProvider
+                                      .PurchaseList[index].ImageURL),
                                   // image: AssetImage('first.jpg'),
-                                  width: size.width / 4,
-                                    height: size.height / 4,
+                                  width: size.width / 2,
+                                  height: size.height / 4,
                                 ),
                               ),
                             ],
@@ -497,29 +242,47 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-
                                     Align(
                                       alignment: Alignment.topRight,
                                       child: isSaved
                                           ? InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  CartProvider.PurchaseList.remove(
-                                                      MainData[index]);
-                                                  print( CartProvider.PurchaseList.toString());
+                                                  FavoriteProvider
+                                                      .RemoveFavoriteItems(
+                                                          FavoriteProvider
+                                                                  .FavoriteList[
+                                                              index]);
                                                 });
                                               },
                                               child: const Icon(
                                                 CupertinoIcons.heart_solid,
                                                 size: 16,
+                                                color: Colors.red,
                                               ),
                                             )
                                           : InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  CartProvider.PurchaseList.add(
-                                                      MainData[index]);
-                                                  print( CartProvider.PurchaseList.toString());
+                                                  FavoriteProvider.AddFavoriteItems(
+                                                      FavoriteListModelClass(
+                                                          Price: CartProvider
+                                                              .PurchaseList[
+                                                                  index]
+                                                              .Price,
+                                                          Name: CartProvider
+                                                              .PurchaseList[
+                                                                  index]
+                                                              .Name,
+                                                          ShortDescription:
+                                                              CartProvider
+                                                                  .PurchaseList[
+                                                                      index]
+                                                                  .ShortDescription,
+                                                          ImageURL: CartProvider
+                                                              .PurchaseList[
+                                                                  index]
+                                                              .ImageURL));
                                                 });
                                               },
                                               child: const Icon(
@@ -539,13 +302,15 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                         fontWeight: FontWeight.w300,
                                         fontSize: 30),
                                   ),
-                                ),  SizedBox(
+                                ),
+                                SizedBox(
                                   height: size.height / 70,
                                 ),
                                 SizedBox(
                                   width: size.width,
                                   child: AutoSizeText(
-                                    CartProvider.PurchaseList[index].ShortDescription,
+                                    CartProvider
+                                        .PurchaseList[index].ShortDescription,
                                     maxLines: 2,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
@@ -563,10 +328,10 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                         child: Align(
                                           alignment: Alignment.topLeft,
                                           child: AutoSizeText(
-                                              '₹${CartProvider.counter *  CartProvider.PurchaseList[index].Price}',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 25),
+                                            '₹${CartProvider.PurchaseList[index].Count * CartProvider.PurchaseList[index].Price}',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 25),
                                             maxLines: 1,
                                           ),
                                         ),
@@ -575,47 +340,81 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                     Expanded(
                                       child: IconButton(
                                           onPressed: () {
-                                          CartProvider.RemoveToCart(CartProvider.PurchaseList[index]);
+                                            CartProvider.RemoveToCart(
+                                                CartProvider
+                                                    .PurchaseList[index]);
                                           },
                                           icon: const Icon(
                                               CupertinoIcons.delete)),
                                     ),
                                     Expanded(
                                       child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-
                                           InkWell(
-                                            onTap: CartProvider.decrement,
-                                            child:  CircleAvatar(
-                                              backgroundColor: Colors.grey[200],
-                                              radius: 14,
-                                              child: const Center(child: Icon(Icons.remove,color: Colors.black,)),
-                                            ),
-                                          ),
-                                          Text(
-                                            CartProvider.counter.toString(),
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                            //onTap: CartProvider.decrement(CartProvider.PurchaseList[index].Count),
+                                            onTap: () {
+                                              setState(() {
+                                                if (CartProvider
+                                                        .PurchaseList[index]
+                                                        .Count >
+                                                    1) {
+                                                  CartProvider
+                                                      .PurchaseList[index]
+                                                      .Count--;
+                                                  print(CartProvider
+                                                      .PurchaseList[index]
+                                                      .Count);
+                                                }
+                                              });
+                                            },
 
-                                          InkWell(
-                                            onTap: CartProvider.increment,
                                             child: CircleAvatar(
                                               backgroundColor: Colors.grey[200],
                                               radius: 14,
-                                              child: const Center(child: Icon(Icons.add,color: Colors.black,)),
+                                              child: const Center(
+                                                  child: Icon(
+                                                Icons.remove,
+                                                color: Colors.black,
+                                              )),
+                                            ),
+                                          ),
+                                          Text(
+                                            CartProvider
+                                                .PurchaseList[index].Count
+                                                .toString(),
+                                            //CartProvider.counter.toString(),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          InkWell(
+                                            /*     onTap: (){CartProvider.increment(CartProvider.PurchaseList[index].Count);},*/
+                                            onTap: () {
+                                              setState(() {
+                                                CartProvider.PurchaseList[index]
+                                                    .Count++;
+                                                print(CartProvider
+                                                    .PurchaseList[index].Count);
+                                              });
+                                            },
+                                            child: CircleAvatar(
+                                              backgroundColor: Colors.grey[200],
+                                              radius: 14,
+                                              child: const Center(
+                                                  child: Icon(
+                                                Icons.add,
+                                                color: Colors.black,
+                                              )),
                                             ),
                                           )
-
                                         ],
                                       ),
                                     )
                                   ],
                                 ),
-
                               ],
                             ),
                           ),
@@ -627,17 +426,4 @@ class _CartMainScreenState extends State<CartMainScreen> {
               );
             });
   }
-}
-
-class ProductList {
-  int Price;
-  String Name;
-  String ShortDescription;
-  String ImageURL;
-
-  ProductList(
-      {required this.Price,
-      required this.Name,
-      required this.ShortDescription,
-      required this.ImageURL});
 }

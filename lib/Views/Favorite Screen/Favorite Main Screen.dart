@@ -3,8 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/FavoriteListModelClass.dart';
 import '../../Controller/Favorite_add_provider.dart';
+import '../../Controller/Purchase_items_provider.dart';
 import '../../Utils/Drawer.dart';
+import '../../Utils/Routes_Name.dart';
 
 class FavoriteMainScreen extends StatefulWidget {
   const FavoriteMainScreen({Key? key}) : super(key: key);
@@ -14,484 +17,315 @@ class FavoriteMainScreen extends StatefulWidget {
 }
 
 class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
-  bool SearchButton = false;
-  bool ListIsEmpty = false;
-  TextEditingController search = TextEditingController();
-  Icon CustomSearch =  const Icon(Icons.search,color: Colors.indigo,);
-  Widget CustomText =  const Text("Search",style: TextStyle(color: Colors.indigo),);
-  List<dynamic> SearchItems = [];
-  List<dynamic> FavoriteItems = [];
-
-
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    SearchItems = MainData;
-    super.initState();
-  }
-
-  void onSearchTextChanged(String text) {
-    List<dynamic>? Result = [];
-    if (text.isEmpty) {
-      Result = MainData;
-    } else {
-      Result = MainData.where((element) => element.Name.toString()
-          .toLowerCase()
-          .contains(text.toLowerCase())).toList();
-    }
-
-    setState(() {
-      if (Result!.isEmpty) {
-        ListIsEmpty = true;
-      } else {
-        ListIsEmpty = false;
-      }
-      SearchItems = Result!;
-    });
-  }
-
-
-  List<dynamic> MainData = [
-    ProductList(
-      Name: 'iPhone 11 pro',
-      Price: 120000,
-      ShortDescription:
-      'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
-    ),
-    ProductList(
-      Name: 'iPhone 12 pro',
-      Price: 140000,
-      ShortDescription:
-      'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
-    ),
-    ProductList(
-      Name: 'iPhone 13 pro',
-      Price: 160000,
-      ShortDescription:
-      'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
-    ),
-    ProductList(
-      Name: 'iPhone 14 pro',
-      Price: 180000,
-      ShortDescription:
-      'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
-    ),
-    ProductList(
-      Name: 'iPhone 15 pro',
-      Price: 200000,
-      ShortDescription:
-      'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
-    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final CartProvider = Provider.of<Purchase_items_provider>(context);
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: DrawerWidget(context,Colors.indigo),
+      drawer: DrawerWidget(context, Colors.indigo),
       appBar: AppBar(
-          leading: SearchButton
-              ? IconButton(
-              onPressed: () {
-                setState(() {
-                  SearchButton = false;
-                  CustomSearch =  const Icon(Icons.search,color: Colors.indigo,);
-                  CustomText = const Text("Search");
-                });
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12.0, top: 12.0),
+          child: InkWell(
+              onTap: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(Routes_Name.HomePage);
               },
-              icon:  const Icon(Icons.arrow_back_outlined,color: Colors.indigo,))
-              : Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon:  const Icon(
-                  Icons.menu,
-                  color: Colors.indigo // Change Custom Drawer Icon Color
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              child: const CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.arrow_back_ios_new_sharp,
+                  color: Colors.black,
                 ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              );
-            },
-          ),
-          title:SearchButton
-              ? CustomText :  const Text(
-            "Favourite Screen",
-            style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          actions: [
-
-            IconButton(
-                icon: CustomSearch,
-                onPressed: () {
-                  setState(() {
-                    if (CustomSearch.icon == Icons.search) {
-                      SearchButton = true;
-                      CustomSearch =  const Icon(Icons.clear,color: Colors.indigo);
-                      CustomText = TextField(
-                        textInputAction: TextInputAction.go,
-                        controller: search,
-                        onChanged: (value) => onSearchTextChanged(value),
-                        //onChanged: (Value) => updateList(Value),
-                        decoration:  const InputDecoration(
-                            hintText: "Search....",
-                            hintStyle: TextStyle(color: Colors.indigo),
-                            //
-                            border: UnderlineInputBorder()
+              )),
+        ),
+        title: const Padding(
+          padding: EdgeInsets.only(top: 12.0),
+          child: Center(
+              child: Text(
+                "Favorite Items",
+                style: TextStyle(color: Colors.black),
+              )),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0, top: 12.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, Routes_Name.CartMainScreen);
+              },
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(20),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: FittedBox(
+                        child: Icon(
+                          CupertinoIcons.cart_fill,
+                          color: Colors.black,
                         ),
-                        style:  const TextStyle(color: Colors.indigo, fontSize: 20),
-                      );
-                    } else {
-                      // CustomSearch = const Icon(Icons.search);
-                      search.clear();
-                      onSearchTextChanged("");
-                    }
-                  });
-                }),
-            //!SearchButton ? IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert,color: Colors.lightGreen[900],)) : const SizedBox(),
-            IconButton(
-                onPressed: () {},
-                icon:  const Icon(
-                  CupertinoIcons.option,
-                  color: Colors.indigo,
-                )),
-
-          ]),
-      backgroundColor: Colors.white,
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      child: Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.red[900]),
+                          width: 34 / 2,
+                          height: 34 / 2,
+                          child: Text(
+                            CartProvider.PurchaseList.length.toString(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
-            child: !SearchButton ? FullList1(context) : customlist1(context),
+            child: FullList1(context),
           ),
         ),
       ),
     );
   }
-  Widget customlist1(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
- //   final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
+  
 
-    return ListIsEmpty
-        ? Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset("assets/oops.png"),
-          const Text(
-            "Search Item is not available ....!",
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-        ],
-      ),
-    )
-        : ListView.builder(
-        itemCount: FavoriteItems.length,
-        itemBuilder: (context, index) {
-          bool isSaved = FavoriteItems.contains(SearchItems[index]);
-
-          return Card(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Image(
-                        image: AssetImage(SearchItems[index].ImageURL),
-                        /* width: size.width / 2,
-                              height: size.height / 4,*/
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: isSaved
-                                  ? InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    FavoriteItems.remove(MainData[index]);
-                                    print(FavoriteItems.toString());
-                                  });
-                                },
-                                child: const Icon(
-                                  CupertinoIcons.heart_solid,
-                                  size: 16,
-                                ),
-                              )
-                                  : InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    FavoriteItems.add(MainData[index]);
-                                    print(FavoriteItems.toString());
-                                  });
-                                },
-                                child: const Icon(
-                                  CupertinoIcons.heart,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: AutoSizeText(
-                                SearchItems[index].Name,
-                                maxLines: 1,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 30),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 70,
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  '₹${SearchItems[index].Price}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 70,
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: AutoSizeText(
-                                SearchItems[index].ShortDescription,
-                                maxLines: 2,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 30),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 50,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    width: size.width,
-                                    height: size.height / 20,
-                                    decoration: BoxDecoration(
-                                        color: Colors.indigo,
-                                        borderRadius:
-                                        BorderRadius.circular(5.0)),
-                                    child: const Center(
-                                        child: Text(
-                                          "Add to Cart",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-          );
-        });
-  }
-
-  ListView FullList1(BuildContext context) {
+  Widget FullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final CartProvider = Provider.of<Purchase_items_provider>(context);
 
-    return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: FavoriteProvider.FavoriteList.length,
-        itemBuilder: (context, index) {
-          bool isSaved = FavoriteProvider.FavoriteList.contains(index);
-          List<dynamic> FavoriteItem = FavoriteProvider.FavoriteList;
-
-          return Card(
+    return FavoriteProvider.FavoriteList.isEmpty
+        ? Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Image(
-                        image: AssetImage(FavoriteItem[index].ImageURL),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.topRight,
-                              child:
-                              isSaved ? InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    /*  FavoriteItems.remove(MainData[index]);
-                                          print(FavoriteItems.toString());*/
-                                  /*  FavoriteProvider.RemoveFavoriteItems(index);*/
-                                  });
-
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "Product Remove From Favorite!",
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      backgroundColor: Colors.indigo,
-                                      duration: Duration(seconds: 1),
-                                    ),
-                                  );
-                                },
-                                child:  const Icon(
-                                  CupertinoIcons.heart_solid,
-                                  color: Colors.red,
-                                  size: 16,
-                                ),
-                              )
-                                  : InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    print(FavoriteProvider.FavoriteList.toList().contains(MainData[index].Name));
-                                    /* FavoriteItems.add(MainData[index]);
-                                          print(FavoriteItems.toString());*/
-                                    /*FavoriteProvider.AddFavoriteItems(index);
-*/
-                                  });
-
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "Product Added To Favorite!",
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      backgroundColor: Colors.indigo,
-                                      duration: Duration(seconds: 1),
-                                    ),
-                                  );
-                                },
-                                child: const Icon(
-                                  CupertinoIcons.heart,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: AutoSizeText(
-                                FavoriteItem[index].Name,
-                                maxLines: 1,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300, fontSize: 30),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 80,
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  '₹${FavoriteItem[index].Price}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 80,
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: AutoSizeText(
-                                FavoriteItem[index].ShortDescription,
-                                maxLines: 2,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300, fontSize: 30),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 50,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    width: size.width,
-                                    height: size.height / 20,
-                                    decoration: BoxDecoration(
-                                        color: Colors.indigo,
-                                        borderRadius:
-                                        BorderRadius.circular(5.0)),
-                                    child: const Center(
-                                        child: Text(
-                                          "Add to Cart",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                )
+                Image.asset("assets/oops.png"),
+                const Text(
+                  "Not any items added in Favorite ....!",
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
               ],
             ),
-          );
-        });
+          )
+        : ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: FavoriteProvider.FavoriteList.length,
+            itemBuilder: (context, index) {
+              bool isSaved = FavoriteProvider.FavoriteList.any((element) =>
+                  element.Name.contains(
+                      FavoriteProvider.FavoriteList[index].Name));
+              List<dynamic> FavoriteItem = FavoriteProvider.FavoriteList;
+              bool isAddedInCart = CartProvider.PurchaseList.any(
+                      (element1) => element1.Name.contains(FavoriteProvider.FavoriteList[index].Name));
+              return Card(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Image(
+                            image: AssetImage(FavoriteItem[index].ImageURL),
+                            width: size.width / 2,
+                            height: size.height / 4,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: isSaved
+                                      ? InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              FavoriteProvider
+                                                  .RemoveFavoriteItems(
+                                                      FavoriteProvider
+                                                          .FavoriteList[index]);
+                                            });
+
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  "Product Remove From Favorite!",
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                backgroundColor: Colors.indigo,
+                                                duration: Duration(seconds: 1),
+                                              ),
+                                            );
+                                          },
+                                          child: const Icon(
+                                            CupertinoIcons.heart_solid,
+                                            color: Colors.red,
+                                            size: 16,
+                                          ),
+                                        )
+                                      : InkWell(
+                                          onTap: () {
+                                            setState(() {
+
+                                            });
+
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  "Product Added To Favorite!",
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                backgroundColor: Colors.indigo,
+                                                duration: Duration(seconds: 1),
+                                              ),
+                                            );
+                                          },
+                                          child: const Icon(
+                                            CupertinoIcons.heart,
+                                            size: 16,
+                                          ),
+                                        ),
+                                ),
+                                SizedBox(
+                                  width: size.width,
+                                  child: AutoSizeText(
+                                    FavoriteItem[index].Name,
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 30),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: size.height / 80,
+                                ),
+                                SizedBox(
+                                  width: size.width,
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      '₹${FavoriteItem[index].Price}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: size.height / 80,
+                                ),
+                                SizedBox(
+                                  width: size.width,
+                                  child: AutoSizeText(
+                                    FavoriteItem[index].ShortDescription,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 30),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: size.height / 50,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: isAddedInCart
+                                          ? InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                          width: size.width,
+                                          height: size.height / 20,
+                                          decoration: BoxDecoration(
+                                              color: Colors.pink,
+                                              borderRadius:
+                                              BorderRadius.circular(5.0)),
+                                          child: const Center(
+                                              child: Text(
+                                                "Also Add in Cart",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold),
+                                              )),
+                                        ),
+                                      )
+                                          : InkWell(
+                                        onTap: () {
+                                          CartProvider.AddItemToCart(
+                                              FavoriteListModelClass(
+                                                  Price:
+                                                  FavoriteItem[index].Price,
+                                                  Name: FavoriteItem[index].Name,
+                                                  ShortDescription:
+                                                  FavoriteItem[index]
+                                                      .ShortDescription,
+                                                  ImageURL: FavoriteItem[index]
+                                                      .ImageURL));
+                                        },
+                                        child: Container(
+                                          width: size.width,
+                                          height: size.height / 20,
+                                          decoration: BoxDecoration(
+                                              color: Colors.indigo,
+                                              borderRadius:
+                                              BorderRadius.circular(5.0)),
+                                          child: const Center(
+                                              child: Text(
+                                                "Add to Cart",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold),
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              );
+            });
   }
 }
-
-class ProductList {
-  int Price;
-  String Name;
-  String ShortDescription;
-  String ImageURL;
-
-  ProductList(
-      {required this.Price,
-        required this.Name,
-        required this.ShortDescription,
-        required this.ImageURL});
-}
-

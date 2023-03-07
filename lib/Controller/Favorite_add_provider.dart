@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
-import 'FavoriteListModelClass.dart';
+import '../Models/FavoriteListModelClass.dart';
 
 
 

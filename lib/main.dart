@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
+import 'package:online_ordering_system/Controller/Confirm_Order_Items.dart';
 import 'package:online_ordering_system/HomePage.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:online_ordering_system/Sparce_Screen.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => Favorite_add_provider()),
         ChangeNotifierProvider(create: (_) => Purchase_items_provider()),
+        ChangeNotifierProvider(create: (_) => Place_order_Provider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

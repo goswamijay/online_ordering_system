@@ -4,10 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:online_ordering_system/Controller/Purchase_items_provider.dart';
+import 'package:online_ordering_system/HomePage.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:provider/provider.dart';
 
-import '../../Controller/FavoriteListModelClass.dart';
+import '../../Models/FavoriteListModelClass.dart';
 import '../../Utils/Drawer.dart';
 
 class ProductMainScreen extends StatefulWidget {
@@ -74,43 +75,44 @@ class _ProductMainScreenState extends State<ProductMainScreen>
 
   List<dynamic> MainData = [
     ProductList(
-      Name: 'iPhone 11 pro',
+      Name: 'iPhone 11 Pro Max',
       Price: 120000,
       ShortDescription:
           'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
+      ImageURL: "assets/ItemsPhoto/iphone_11.png",
     ),
     ProductList(
-      Name: 'iPhone 12 pro',
+      Name: 'iPhone 12 Pro Max',
       Price: 140000,
       ShortDescription:
           'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
+      ImageURL: "assets/ItemsPhoto/iphone_12.png",
     ),
     ProductList(
-      Name: 'iPhone 13 pro',
+      Name: 'iPhone 13 Pro Max',
       Price: 160000,
       ShortDescription:
           'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
+      ImageURL: "assets/ItemsPhoto/iphone_13.png",
     ),
     ProductList(
-      Name: 'iPhone 14 pro',
+      Name: 'iPhone 14 Pro Max',
       Price: 180000,
       ShortDescription:
           'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
+      ImageURL: "assets/ItemsPhoto/iphone_14.png",
     ),
     ProductList(
       Name: 'iPhone 15 pro',
       Price: 200000,
       ShortDescription:
           'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
-      ImageURL: "assets/first.jpg",
+      ImageURL: "assets/ItemsPhoto/iphone_12.png",
     ),
   ];
   @override
   Widget build(BuildContext context) {
+    final CartProvider = Provider.of<Purchase_items_provider>(context);
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -145,37 +147,47 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   ),
                                 )),
                             InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, Routes_Name.CartMainScreen);
+                              },
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
-                              child: Container(
-                                child: SizedBox.fromSize(
-                                  size: const Size.fromRadius(20),
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: <Widget>[
-                                      const CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        child: FittedBox(
-                                          child: Icon(
-                                            CupertinoIcons.cart_fill,
-                                            color: Colors.black,
+                              child: SizedBox.fromSize(
+                                size: const Size.fromRadius(20),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: <Widget>[
+                                    const CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      child: FittedBox(
+                                        child: Icon(
+                                          CupertinoIcons.cart_fill,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 0,
+                                      child: Center(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.red[900]),
+                                          width: 34 / 2,
+                                          height: 34 / 2,
+                                          child: Text(
+                                            CartProvider.PurchaseList.length
+                                                .toString(),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
                                         ),
                                       ),
-                                      Positioned(
-                                        right: 0,
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.red),
-                                          width: 20 / 2,
-                                          height: 20 / 2,
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
@@ -296,7 +308,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                           height: size.height / 80,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                          padding: const EdgeInsets.only(left: 0.0, right: 0.0),
                           child: Center(
                             child: !SearchButton
                                 ? FullList1(context)
@@ -317,6 +329,9 @@ class _ProductMainScreenState extends State<ProductMainScreen>
 
   Widget customlist1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final CartProvider = Provider.of<Purchase_items_provider>(context);
+
     return ListIsEmpty
         ? Center(
             child: Column(
@@ -335,7 +350,10 @@ class _ProductMainScreenState extends State<ProductMainScreen>
             shrinkWrap: true,
             itemCount: SearchItems.length,
             itemBuilder: (context, index) {
-              // bool isSaved = FavoriteItems.contains(FavoriteItems[index]);
+              bool isSaved = FavoriteProvider.FavoriteList.any(
+                  (element) => element.Name.contains(MainData[index].Name));
+              bool isAddedInCart1 = CartProvider.PurchaseList.any(
+                      (element1) => element1.Name.contains(SearchItems[index].Name));
 
               return Card(
                 child: Column(
@@ -345,11 +363,12 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         Expanded(
                           child: Image(
                             image: AssetImage(SearchItems[index].ImageURL),
-                            /* width: size.width / 2,
-                              height: size.height / 4,*/
+                            width: size.width / 2,
+                            height: size.height / 4,
                           ),
                         ),
                         Expanded(
+                          flex: 2,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
@@ -360,11 +379,10 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                       ? InkWell(
                                           onTap: () {
                                             setState(() {
-                                              isSaved = false;
-
-                                              /* FavoriteItems.remove(
-                                                  FavoriteItems[index]);
-                                              print(FavoriteItems.toString());*/
+                                              FavoriteProvider
+                                                  .RemoveFavoriteItems(
+                                                      FavoriteProvider
+                                                          .FavoriteList[index]);
                                             });
 
                                             ScaffoldMessenger.of(context)
@@ -381,7 +399,6 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                 duration: Duration(seconds: 1),
                                               ),
                                             );
-                                            // Navigator.pushNamed(context, Routes_Name.HomePage,arguments: {'FavoriteList' : FavoriteItems});
                                           },
                                           child: const Icon(
                                             CupertinoIcons.heart_solid,
@@ -392,10 +409,19 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                       : InkWell(
                                           onTap: () {
                                             setState(() {
-                                              isSaved = true;
-                                              /*     FavoriteItems.add(
-                                                  MainData[index]);
-                                              print(FavoriteItems.toString());*/
+                                              FavoriteProvider.AddFavoriteItems(
+                                                  FavoriteListModelClass(
+                                                      Price:
+                                                      SearchItems[index].Price,
+                                                      Name:
+                                                      SearchItems[index].Name,
+                                                      ShortDescription:
+                                                      SearchItems[index]
+                                                              .ShortDescription,
+                                                      ImageURL: SearchItems[index]
+                                                          .ImageURL,Count: 1));
+                                              print(FavoriteProvider
+                                                  .FavoriteList.length);
                                             });
 
                                             ScaffoldMessenger.of(context)
@@ -463,20 +489,53 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: Container(
-                                        width: size.width,
-                                        height: size.height / 20,
-                                        decoration: BoxDecoration(
-                                            color: Colors.indigo,
-                                            borderRadius:
-                                                BorderRadius.circular(5.0)),
-                                        child: const Center(
-                                            child: Text(
-                                          "Add to Cart",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        )),
+                                      child: isAddedInCart1
+                                          ? InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                          width: size.width,
+                                          height: size.height / 20,
+                                          decoration: BoxDecoration(
+                                              color: Colors.pink,
+                                              borderRadius:
+                                              BorderRadius.circular(5.0)),
+                                          child: const Center(
+                                              child: Text(
+                                                "Also Add in Cart",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold),
+                                              )),
+                                        ),
+                                      )
+                                          : InkWell(
+                                        onTap: () {
+                                          CartProvider.AddItemToCart(
+                                              FavoriteListModelClass(
+                                                  Price:
+                                                  SearchItems[index].Price,
+                                                  Name: SearchItems[index].Name,
+                                                  ShortDescription:
+                                                  SearchItems[index]
+                                                      .ShortDescription,
+                                                  ImageURL: SearchItems[index]
+                                                      .ImageURL,Count: 1));
+                                        },
+                                        child: Container(
+                                          width: size.width,
+                                          height: size.height / 20,
+                                          decoration: BoxDecoration(
+                                              color: Colors.indigo,
+                                              borderRadius:
+                                              BorderRadius.circular(5.0)),
+                                          child: const Center(
+                                              child: Text(
+                                                "Add to Cart",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold),
+                                              )),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -526,8 +585,13 @@ class _ProductMainScreenState extends State<ProductMainScreen>
         itemCount: MainData.length,
         itemBuilder: (context, index) {
           // bool isSaved = FavoriteProvider.FavoriteList1.contains(FavoriteProvider.FavoriteList1);
-          bool isSaved =
-              FavoriteProvider.FavoriteList.contains(MainData[index]);
+          // bool isSaved =
+          //   FavoriteProvider.FavoriteList.contains(MainData[index]);
+
+          bool isSaved = FavoriteProvider.FavoriteList.any(
+              (element) => element.Name.contains(MainData[index].Name));
+          bool isAddedInCart = CartProvider.PurchaseList.any(
+              (element1) => element1.Name.contains(MainData[index].Name));
 
           return Card(
             child: Column(
@@ -537,9 +601,12 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                     Expanded(
                       child: Image(
                         image: AssetImage(MainData[index].ImageURL),
+                        width: size.width / 2,
+                        height: size.height / 4,
                       ),
                     ),
                     Expanded(
+                      flex: 2,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -550,13 +617,9 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   ? InkWell(
                                       onTap: () {
                                         setState(() {
-                                          /*  FavoriteItems.remove(MainData[index]);
-                                          print(FavoriteItems.toString());*/
-                                          /*  FavoriteProvider.RemoveFavoriteItems(
-                                              index);*/
-
                                           FavoriteProvider.RemoveFavoriteItems(
-                                            FavoriteProvider.FavoriteList[index]);
+                                              FavoriteProvider
+                                                  .FavoriteList[index]);
                                         });
 
                                         ScaffoldMessenger.of(context)
@@ -582,20 +645,15 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   : InkWell(
                                       onTap: () {
                                         setState(() {
-                                          /* FavoriteItems.add(MainData[index]);*/
-                                          // print(FavoriteProvider.FavoriteList1.toList());
                                           FavoriteProvider.AddFavoriteItems(
-
-                                             FavoriteListModelClass(
+                                              FavoriteListModelClass(
                                                   Price: MainData[index].Price,
                                                   Name: MainData[index].Name,
                                                   ShortDescription:
                                                       MainData[index]
                                                           .ShortDescription,
                                                   ImageURL: MainData[index]
-                                                      .ImageURL));
-
-                                          // print(FavoriteProvider.FavoriteList1[index].Name.contains(FavoriteProvider.FavoriteList1[index].Name));
+                                                      .ImageURL,Count: 1));
                                           print(FavoriteProvider
                                               .FavoriteList.length);
                                         });
@@ -662,34 +720,55 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                             Row(
                               children: [
                                 Expanded(
-                                  child: InkWell(
-                                    onTap: (){
-                                      CartProvider.AddItemToCart(
-                                          FavoriteListModelClass(
-                                              Price: MainData[index].Price,
-                                              Name: MainData[index].Name,
-                                              ShortDescription:
-                                              MainData[index]
-                                                  .ShortDescription,
-                                              ImageURL: MainData[index]
-                                                  .ImageURL));
-                                    },
-                                    child: Container(
-                                      width: size.width,
-                                      height: size.height / 20,
-                                      decoration: BoxDecoration(
-                                          color: Colors.indigo,
-                                          borderRadius:
-                                              BorderRadius.circular(5.0)),
-                                      child: const Center(
-                                          child: Text(
-                                        "Add to Cart",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                    ),
-                                  ),
+                                  child: isAddedInCart
+                                      ? InkWell(
+                                          onTap: () {},
+                                          child: Container(
+                                            width: size.width,
+                                            height: size.height / 20,
+                                            decoration: BoxDecoration(
+                                                color: Colors.pink,
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0)),
+                                            child: const Center(
+                                                child: Text(
+                                              "Also Add in Cart",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                          ),
+                                        )
+                                      : InkWell(
+                                          onTap: () {
+                                            CartProvider.AddItemToCart(
+                                                FavoriteListModelClass(
+                                                    Price:
+                                                        MainData[index].Price,
+                                                    Name: MainData[index].Name,
+                                                    ShortDescription:
+                                                        MainData[index]
+                                                            .ShortDescription,
+                                                    ImageURL: MainData[index]
+                                                        .ImageURL,
+                                                Count: 1));
+                                          },
+                                          child: Container(
+                                            width: size.width,
+                                            height: size.height / 20,
+                                            decoration: BoxDecoration(
+                                                color: Colors.indigo,
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0)),
+                                            child: const Center(
+                                                child: Text(
+                                              "Add to Cart",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                          ),
+                                        ),
                                 ),
                               ],
                             )
