@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../Models/ConfirmListModelClass.dart';
 import '../../Models/FavoriteListModelClass.dart';
-import '../../Controller/Purchase_items_provider.dart';
+import '../../Controller/Cart_items_provider.dart';
 import '../../Utils/Drawer.dart';
 import '../../Utils/Routes_Name.dart';
 
@@ -215,6 +215,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
               return Card(
                 child: Column(
                   children: [
+                   
                     Row(
                       children: [
                         Expanded(

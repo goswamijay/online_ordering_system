@@ -23,20 +23,6 @@ class Purchase_items_provider with ChangeNotifier {
     notifyListeners();
   }
 
-   decrement(int x) {
-
-
-    if (x > 1) {
-      x--;
-      notifyListeners();
-    }
-  }
-
-   void increment(int x) {
-    x++;
-    notifyListeners();
-  }
-
   void cleanCartItem() {
     _PurchaseList.clear();
     notifyListeners();

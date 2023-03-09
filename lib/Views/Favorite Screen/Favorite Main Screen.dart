@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../Models/FavoriteListModelClass.dart';
 import '../../Controller/Favorite_add_provider.dart';
-import '../../Controller/Purchase_items_provider.dart';
+import '../../Controller/Cart_items_provider.dart';
 import '../../Utils/Drawer.dart';
 import '../../Utils/Routes_Name.dart';
 

@@ -5,7 +5,7 @@ import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../Controller/Confirm_Order_Items.dart';
-import '../../Controller/Purchase_items_provider.dart';
+import '../../Controller/Cart_items_provider.dart';
 import '../../Models/FavoriteListModelClass.dart';
 import '../../Utils/Drawer.dart';
 import '../../Utils/Routes_Name.dart';

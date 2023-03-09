@@ -3,7 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
-import 'package:online_ordering_system/Controller/Purchase_items_provider.dart';
+import 'package:online_ordering_system/Controller/Cart_items_provider.dart';
 import 'package:online_ordering_system/HomePage.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:provider/provider.dart';

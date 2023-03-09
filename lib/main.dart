@@ -9,7 +9,7 @@ import 'package:online_ordering_system/Views/Authentication/LoginPage.dart';
 import 'package:online_ordering_system/Views/Cart%20Screen/Cart%20Main%20Screen.dart';
 import 'package:provider/provider.dart';
 
-import 'Controller/Purchase_items_provider.dart';
+import 'Controller/Cart_items_provider.dart';
 import 'Utils/Drawer.dart';
 import 'Views/Account Screen/Account Main Screen.dart';
 import 'Views/Account Screen/AccountResetPassword.dart';
