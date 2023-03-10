@@ -186,7 +186,6 @@ class _CartMainScreenState extends State<CartMainScreen> {
   Widget FullList1(BuildContext context) {
     final CartProvider = Provider.of<Purchase_items_provider>(context);
     final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
-    final ConfirmProvider = Provider.of<Place_order_Provider>(context);
 
     Size size = MediaQuery.of(context).size;
     return CartProvider.PurchaseList.isEmpty

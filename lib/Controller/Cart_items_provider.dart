@@ -30,7 +30,7 @@ class Purchase_items_provider with ChangeNotifier {
 
 
   int AllItemPrice(){
-   Iterable<int> TotalPrice = _PurchaseList.map((e) => e.Price * counter);
+   Iterable<int> TotalPrice = _PurchaseList.map((e) => e.Price * e.Count);
    TotalPrice.toString();
    final sum = TotalPrice.sum;
    return sum;
