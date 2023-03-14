@@ -1,15 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:online_ordering_system/Views/Account%20Screen/Account%20Main%20Screen.dart';
-import 'package:online_ordering_system/Views/Authentication/OTPScreen.dart';
 import 'package:online_ordering_system/Views/Cart%20Screen/Cart%20Main%20Screen.dart';
 import 'package:online_ordering_system/Views/Order%20Place%20Screen/Order%20Place%20Main%20Screen.dart';
 
-import 'Utils/Drawer.dart';
 import 'Views/Favorite Screen/Favorite Main Screen.dart';
 import 'Views/Product Screen/Product Main Screen.dart';
-import 'Views/Tesr1.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,13 +24,11 @@ class _HomePageState extends State<HomePage> {
   void _onItemTapped(index) {
     setState(() {
       selectedIndex = index;
-
-
     });
   }
   final List<Widget> _widgetOption = <Widget>[
    // const CartMainScreen(),
-    new  ProductMainScreen(),
+    const ProductMainScreen(),
   const CartMainScreen(),
     const FavoriteMainScreen(),
     const AccountMainScreen(),
@@ -51,7 +45,7 @@ class _HomePageState extends State<HomePage> {
           Center(
             child: PageView(
               allowImplicitScrolling: true,
-              scrollDirection: Axis.horizontal,
+              scrollDirection: Axis.vertical,
               controller: controller,
               onPageChanged: (num) {
                 setState(() {
@@ -59,13 +53,11 @@ class _HomePageState extends State<HomePage> {
                 });
               },
               children:[_widgetOption.elementAt(selectedIndex)]
-
-              ,
-            )  /*Center(
-              child: _widgetOption.elementAt(_selectedIndex),
+            ),), /* Center(
+              child: _widgetOption.elementAt(selectedIndex),
             ),*/
            // _widgetOption.elementAt(_selectedIndex),
-          ),
+
           Container(
             height: 80,
           ),

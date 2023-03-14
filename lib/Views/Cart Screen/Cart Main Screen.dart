@@ -27,7 +27,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: DrawerWidget(context, Colors.indigo),
+      drawer: drawerWidget(context, Colors.indigo),
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12.0, top: 12.0),
@@ -107,13 +107,13 @@ class _CartMainScreenState extends State<CartMainScreen> {
       ),
       // backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              height: size.height,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 9,
+            child: Container(
               decoration: const BoxDecoration(
                   color: Color.fromRGBO(246, 244, 244, 1),
                   borderRadius: BorderRadius.only(
@@ -121,11 +121,42 @@ class _CartMainScreenState extends State<CartMainScreen> {
                       topLeft: Radius.circular(16.0))),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: FullList1(context),
+                child: fullList1(context),
               ),
             ),
-          ],
-        ),
+          ),
+
+          Expanded(
+            flex: 1,
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Color.fromRGBO(246, 244, 244, 1),
+                ),
+              child: Padding(
+                padding:  EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children:  [
+                        Text("Total Items (${CartProvider.PurchaseList.length})",style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                        const Spacer(),
+                        Text(CartProvider.allItemPrice().toString(),style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                    const Spacer(),
+                    Row(
+                      children:  [
+                        const Text("Total Price :- ",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                        const Spacer(),
+                        Text(CartProvider.allItemPrice().toString(),style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                      ],
+                    )
+                  ],
+                )
+            ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Row(
         children: [
@@ -137,7 +168,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                 color: Colors.orange,
                 child: Center(
                     child: Text(
-                  "Total Price :- ${CartProvider.AllItemPrice().toString()}",
+                  "Total Price :- ${CartProvider.allItemPrice().toString()}",
                   style: const TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 )),
@@ -183,29 +214,28 @@ class _CartMainScreenState extends State<CartMainScreen> {
     );
   }
 
-  Widget FullList1(BuildContext context) {
+  Widget fullList1(BuildContext context) {
     final CartProvider = Provider.of<Purchase_items_provider>(context);
     final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
 
     Size size = MediaQuery.of(context).size;
     return CartProvider.PurchaseList.isEmpty
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("assets/oops.png"),
-                const Center(
-                  child: Text(
-                    "Search Item is not available ....!",
-                    style: TextStyle(color: Colors.black, fontSize: 20),
-                  ),
-                ),
-              ],
+        ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset("assets/oops.png"),
+            const Center(
+              child: Text(
+                "Search Item is not available ....!",
+                style: TextStyle(color: Colors.black, fontSize: 20),
+              ),
             ),
-          )
+          ],
+        )
         : ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
+           // physics: const NeverScrollableScrollPhysics(),
+          //  shrinkWrap: true,
             itemCount: CartProvider.PurchaseList.length,
             itemBuilder: (context, index) {
               bool isSaved = FavoriteProvider.FavoriteList.any((element) =>
@@ -214,7 +244,6 @@ class _CartMainScreenState extends State<CartMainScreen> {
               return Card(
                 child: Column(
                   children: [
-                   
                     Row(
                       children: [
                         Expanded(
@@ -340,7 +369,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                     Expanded(
                                       child: IconButton(
                                           onPressed: () {
-                                            CartProvider.RemoveToCart(
+                                            CartProvider.removeToCart(
                                                 CartProvider
                                                     .PurchaseList[index]);
                                           },

@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 
-
-Widget DrawerWidget(BuildContext context,Color color){
+Widget drawerWidget(BuildContext context,Color color){
     return SizedBox(
         width: 280,
         child: Drawer(

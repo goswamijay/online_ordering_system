@@ -25,7 +25,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
     final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: DrawerWidget(context,Colors.indigo!),
+      drawer: drawerWidget(context,Colors.indigo!),
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12.0, top: 12.0),
@@ -254,7 +254,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                                   )
                                       : InkWell(
                                     onTap: () {
-                                      CartProvider.AddItemToCart(
+                                      CartProvider.addItemToCart(
                                           FavoriteListModelClass(
                                               Price:
                                               ConfirmProvider.ConfirmList[index].Price,

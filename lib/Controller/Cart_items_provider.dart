@@ -9,16 +9,14 @@ class Purchase_items_provider with ChangeNotifier {
 
   List<dynamic> get PurchaseList => _PurchaseList;
   int _counter = 1;
-
   int get counter => _counter;
 
-
-  void AddItemToCart(FavoriteListModelClass ListModel) {
+  void addItemToCart(FavoriteListModelClass ListModel) {
     _PurchaseList.add(ListModel);
     notifyListeners();
   }
 
-  void RemoveToCart(FavoriteListModelClass ListModel) {
+  void removeToCart(FavoriteListModelClass ListModel) {
     _PurchaseList.remove(ListModel);
     notifyListeners();
   }
@@ -28,12 +26,10 @@ class Purchase_items_provider with ChangeNotifier {
     notifyListeners();
   }
 
-
-  int AllItemPrice(){
-   Iterable<int> TotalPrice = _PurchaseList.map((e) => e.Price * e.Count);
-   TotalPrice.toString();
-   final sum = TotalPrice.sum;
-   return sum;
+  int allItemPrice() {
+    Iterable<int> totalPrice = _PurchaseList.map((e) => e.Price * e.Count);
+    totalPrice.toString();
+    final sum = totalPrice.sum;
+    return sum;
   }
 }
-

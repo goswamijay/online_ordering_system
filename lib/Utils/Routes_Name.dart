@@ -6,6 +6,7 @@ class Routes_Name {
   static String SignUpScreen = 'Signup';
   static String OTPScreen = 'OPTScreen';
   static String ProductMainScreen = 'ProductMainScreen';
+  static String ProductDetailsScreen = 'ProductDetailsScreen';
   static String CartMainScreen = 'CartMainScreen';
   static String FavoriteMainScreen = 'FavoriteMainScreen';
   static String AccountMainScreen = 'AccountMainScreen';

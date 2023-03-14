@@ -19,6 +19,7 @@ import 'Views/Authentication/WelcomeScreen.dart';
 import 'Views/Favorite Screen/Favorite Main Screen.dart';
 import 'Views/Order Place Screen/Order Place Main Screen.dart';
 import 'Views/Product Screen/Product Main Screen.dart';
+import 'Views/ProductDetailsScreen/ProductDetailsScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
               const AccountResetPassword(),
           Routes_Name.OrderPlaceMainScreen: (context) =>
               const OrderPlaceMainScreen(),
+          Routes_Name.ProductDetailsScreen : (context) => const ProductDetailsScreen(),
           // Routes_Name.DrawerWidget : (context) => const DrawerWidget(),
         },
       ),
