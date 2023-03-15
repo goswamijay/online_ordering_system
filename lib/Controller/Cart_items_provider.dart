@@ -32,4 +32,11 @@ class Purchase_items_provider with ChangeNotifier {
     final sum = totalPrice.sum;
     return sum;
   }
+
+  int allItemCount(){
+    Iterable<int> totalCount = _PurchaseList.map((e) => e.Count);
+    totalCount.toString();
+    final count = totalCount.sum;
+    return count;
+  }
 }

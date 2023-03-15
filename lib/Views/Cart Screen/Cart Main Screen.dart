@@ -10,6 +10,7 @@ import '../../Models/FavoriteListModelClass.dart';
 import '../../Controller/Cart_items_provider.dart';
 import '../../Utils/Drawer.dart';
 import '../../Utils/Routes_Name.dart';
+import 'package:collection/collection.dart';
 
 class CartMainScreen extends StatefulWidget {
   const CartMainScreen({Key? key}) : super(key: key);
@@ -24,7 +25,6 @@ class _CartMainScreenState extends State<CartMainScreen> {
     final CartProvider = Provider.of<Purchase_items_provider>(context);
     final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
     final ConfirmProvider = Provider.of<Place_order_Provider>(context);
-
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: drawerWidget(context, Colors.indigo),
@@ -125,42 +125,60 @@ class _CartMainScreenState extends State<CartMainScreen> {
               ),
             ),
           ),
-
           Expanded(
             flex: 1,
             child: Container(
               decoration: const BoxDecoration(
-                  color: Color.fromRGBO(246, 244, 244, 1),
-                ),
+                color: Color.fromRGBO(246, 244, 244, 1),
+              ),
               child: Padding(
-                padding:  EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children:  [
-                        Text("Total Items (${CartProvider.PurchaseList.length})",style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                        const Spacer(),
-                        Text(CartProvider.allItemPrice().toString(),style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                      ],
-                    ),
-                    const Spacer(),
-                    Row(
-                      children:  [
-                        const Text("Total Price :- ",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                        const Spacer(),
-                        Text(CartProvider.allItemPrice().toString(),style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                      ],
-                    )
-                  ],
-                )
-            ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Total Items (${CartProvider.allItemCount().toString()})",
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const Spacer(),
+                          Text(
+                            CartProvider.allItemPrice().toString(),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          const Text(
+                            "Total Price :-",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const Spacer(),
+                          Text(
+                            CartProvider.allItemPrice().toString(),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
+                    ],
+                  )),
             ),
           ),
         ],
       ),
       bottomNavigationBar: Row(
         children: [
-          Expanded(
+          /*Expanded(
             child: InkWell(
               onTap: () {},
               child: Container(
@@ -174,38 +192,95 @@ class _CartMainScreenState extends State<CartMainScreen> {
                 )),
               ),
             ),
-          ),
+          ),*/
           Expanded(
-            child: InkWell(
-              onTap: () {
-                print(CartProvider.PurchaseList.length);
-                setState(() {
-                  for (int index = 0;
-                      index < CartProvider.PurchaseList.length;
-                      index++) {
-                    ConfirmProvider.AddItems(ConfirmListModelClass(
-                        Price: CartProvider.PurchaseList[index].Price,
-                        Name: CartProvider.PurchaseList[index].Name,
-                        ShortDescription:
-                            CartProvider.PurchaseList[index].ShortDescription,
-                        ImageURL: CartProvider.PurchaseList[index].ImageURL,
-                        Count: CartProvider.PurchaseList[index].Count,
-                        dateTime: DateTime.now()));
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CartProvider.PurchaseList.isNotEmpty
+                          ? AlertDialog(
+                              title: const Text("Confirm to Place Order"),
+                              content: Text(
+                                  "You added ${CartProvider.allItemCount()} Product and Total Price ${CartProvider.allItemPrice()}"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Not Now'),
+                                ),
+                                TextButton(
+                                    child: const Text('Place Order'),
+                                    onPressed: () {
+                                      setState(() {
+                                        for (int index = 0;
+                                            index <
+                                                CartProvider
+                                                    .PurchaseList.length;
+                                            index++) {
+                                          ConfirmProvider.AddItems(
+                                              ConfirmListModelClass(
+                                                  Price: CartProvider
+                                                      .PurchaseList[index]
+                                                      .Price,
+                                                  Name: CartProvider
+                                                      .PurchaseList[index].Name,
+                                                  ShortDescription: CartProvider
+                                                      .PurchaseList[index]
+                                                      .ShortDescription,
+                                                  ImageURL: CartProvider
+                                                      .PurchaseList[index]
+                                                      .ImageURL,
+                                                  Count: CartProvider
+                                                      .PurchaseList[index]
+                                                      .Count,
+                                                  dateTime: DateTime.now()));
 
-                    print(ConfirmProvider.ConfirmList[index].Name);
-                  }
-                  CartProvider.cleanCartItem();
-                }); // ConfirmProvider.AddItems()
-              },
-              child: Container(
-                height: size.height / 20,
-                color: Colors.indigo,
-                child: const Center(
-                    child: Text(
-                  "Place Order ",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                )),
+                                          print(ConfirmProvider
+                                              .ConfirmList[index].Name);
+                                        }
+                                        CartProvider.cleanCartItem();
+                                        Navigator.pop(context);
+                                      });
+                                    }),
+                              ],
+                            )
+                          : AlertDialog(
+                              title: const Text("No Items Added in Cart"),
+                              content: const Text("Please add item in cart"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Not Now'),
+                                ),
+                                TextButton(
+                                    child: const Text('Okay'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    }),
+                              ],
+                            );
+                    },
+                  );
+                },
+                child: Container(
+                  height: size.height / 15,
+                  decoration: BoxDecoration(
+                      color: Colors.indigo,
+                      borderRadius: BorderRadius.circular(16)),
+                  child: const Center(
+                      child: Text(
+                    "Place Order ",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  )),
+                ),
               ),
             ),
           ),
@@ -220,22 +295,28 @@ class _CartMainScreenState extends State<CartMainScreen> {
 
     Size size = MediaQuery.of(context).size;
     return CartProvider.PurchaseList.isEmpty
-        ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset("assets/oops.png"),
-            const Center(
-              child: Text(
-                "Search Item is not available ....!",
-                style: TextStyle(color: Colors.black, fontSize: 20),
-              ),
+        ? Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
             ),
-          ],
-        )
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset("assets/cart.gif"),
+                const Center(
+                  child: Text(
+                    "No Items added in cart ....!",
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+          )
         : ListView.builder(
-           // physics: const NeverScrollableScrollPhysics(),
-          //  shrinkWrap: true,
+            // physics: const NeverScrollableScrollPhysics(),
+            //  shrinkWrap: true,
+
             itemCount: CartProvider.PurchaseList.length,
             itemBuilder: (context, index) {
               bool isSaved = FavoriteProvider.FavoriteList.any((element) =>
@@ -271,54 +352,54 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Align(
-                                      alignment: Alignment.topRight,
-                                      child: isSaved
-                                          ? InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  FavoriteProvider
-                                                      .RemoveFavoriteItems(
-                                                          FavoriteProvider
-                                                                  .FavoriteList[
-                                                              index]);
-                                                });
-                                              },
-                                              child: const Icon(
-                                                CupertinoIcons.heart_solid,
-                                                size: 16,
-                                                color: Colors.red,
-                                              ),
-                                            )
-                                          : InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  FavoriteProvider.AddFavoriteItems(
-                                                      FavoriteListModelClass(
-                                                          Price: CartProvider
-                                                              .PurchaseList[
-                                                                  index]
-                                                              .Price,
-                                                          Name: CartProvider
-                                                              .PurchaseList[
-                                                                  index]
-                                                              .Name,
-                                                          ShortDescription:
-                                                              CartProvider
-                                                                  .PurchaseList[
-                                                                      index]
-                                                                  .ShortDescription,
-                                                          ImageURL: CartProvider
-                                                              .PurchaseList[
-                                                                  index]
-                                                              .ImageURL));
-                                                });
-                                              },
-                                              child: const Icon(
-                                                CupertinoIcons.heart,
-                                                size: 16,
-                                              ),
-                                            ),
+                                    Consumer<Favorite_add_provider>(
+                                      builder: (context, value, child) {
+                                        return Align(
+                                          alignment: Alignment.topRight,
+                                          child: isSaved
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    value
+                                                        .RemoveFavoriteItems(
+                                                            FavoriteProvider
+                                                                    .FavoriteList[
+                                                                index]);
+                                                  },
+                                                  child: const Icon(
+                                                    CupertinoIcons.heart_solid,
+                                                    size: 16,
+                                                    color: Colors.red,
+                                                  ),
+                                                )
+                                              : InkWell(
+                                                  onTap: () {
+                                                    value.AddFavoriteItems(
+                                                        FavoriteListModelClass(
+                                                            Price: CartProvider
+                                                                .PurchaseList[
+                                                                    index]
+                                                                .Price,
+                                                            Name: CartProvider
+                                                                .PurchaseList[
+                                                                    index]
+                                                                .Name,
+                                                            ShortDescription:
+                                                                CartProvider
+                                                                    .PurchaseList[
+                                                                        index]
+                                                                    .ShortDescription,
+                                                            ImageURL: CartProvider
+                                                                .PurchaseList[
+                                                                    index]
+                                                                .ImageURL));
+                                                  },
+                                                  child: const Icon(
+                                                    CupertinoIcons.heart,
+                                                    size: 16,
+                                                  ),
+                                                ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),

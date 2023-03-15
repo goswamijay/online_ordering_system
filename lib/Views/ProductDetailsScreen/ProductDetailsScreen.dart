@@ -195,35 +195,65 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             ),
 
+            Row(
+              children: [
+                Expanded(child: Image.network('https://cdn.dribbble.com/users/7797959/screenshots/15909904/mobile1_4x.jpg',height: size.height/10,width: size.width,),),
+                Expanded(child: Image.network( 'https://images.news18.com/ibnlive/uploads/2020/10/1603427907_apple-iphone-12-pro-preorder-page.jpg?im=FitAndFill,width=1200,height=675',height: size.height/10,width: size.width,),),
+                Expanded(child: Image.network( 'https://cdn.images.express.co.uk/img/dynamic/59/590x/Apple-iPhone-12-stock-1370223.webp?r=1607585056252',height: size.height/10,width: size.width,),),
+                Expanded(child: Image.network('https://cdn.dribbble.com/users/7797959/screenshots/15909904/mobile1_4x.jpg',height: size.height/10,width: size.width,)),
+              ],
+            ),
+
+
+            SizedBox(
+              height: size.height/100  ,
+            ),
+
             Padding(
-              padding: const EdgeInsets.only(left: 12.0),
-              child: SizedBox(
-                width: size.width,
-                child: AutoSizeText(
-                  argument!['Name'].toString(),
-                  maxLines: 1,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 30),
-                ),
+              padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      width: size.width,
+                      child: AutoSizeText(
+                        argument!['Name'].toString(),
+                        maxLines: 1,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 30),
+                      ),
+                    ),
+                  ),
+
+                 Row(
+                   children:  [
+                     const Text("4.5"),
+                      Icon(Icons.star,color: Colors.yellow[900],),
+                   ],
+                 )
+                ],
               ),
             ),
             SizedBox(
               height: size.height/60  ,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+              padding: const EdgeInsets.only(left: 14.0,right: 14.0),
               child: SizedBox(
                 width: size.width,
                 child: AutoSizeText(
                   argument!['ShortDescription'].toString(),
                   maxLines: 4,
+                  textAlign: TextAlign.justify,
                   style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       fontSize: 20),
                 ),
               ),
             ),
+
           ],
         ),
       ),

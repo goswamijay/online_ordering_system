@@ -57,7 +57,8 @@ class _Space_ScreenState extends State<Space_Screen> {
                   child: Image(
                       height: size.height / 1.5,
                       width: size.width / 1.5,
-                      image: const AssetImage('assets/logo1.png')),
+                      image: const AssetImage('assets/space1.gif')),
+                      //image: const AssetImage('assets/logo1.png')),
                 ),
               ),
             /*  SizedBox(

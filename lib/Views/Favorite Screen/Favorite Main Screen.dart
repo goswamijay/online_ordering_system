@@ -121,15 +121,24 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
     final CartProvider = Provider.of<Purchase_items_provider>(context);
 
     return FavoriteProvider.FavoriteList.isEmpty
-        ? Center(
+        ? Container(
+      height: size.height,
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(16.0),
+              topLeft: Radius.circular(16.0)),
+          color: Colors.white
+      ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("assets/oops.png"),
+               // Image.asset("assets/oops.png"),
+                Image.asset("assets/favourite.gif"),
                 const Text(
                   "Not any items added in Favorite ....!",
                   style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
+
               ],
             ),
           )
