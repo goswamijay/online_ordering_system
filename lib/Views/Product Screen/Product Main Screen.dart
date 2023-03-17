@@ -8,6 +8,7 @@ import 'package:online_ordering_system/HomePage.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:provider/provider.dart';
 
+import '../../Controller/ApiConnection/ApiConnection.dart';
 import '../../Models/FavoriteListModelClass.dart';
 import '../../Utils/Drawer.dart';
 
@@ -38,12 +39,14 @@ class _ProductMainScreenState extends State<ProductMainScreen>
   List<dynamic> SearchItems = [];
   List<dynamic> FavoriteItems = [];
   TabController? _tabController;
+  int photoIndex = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     SearchItems = MainData;
     _tabController = TabController(vsync: this, length: 11);
+    accessApi();
     super.initState();
   }
 
@@ -73,8 +76,18 @@ class _ProductMainScreenState extends State<ProductMainScreen>
     'https://cdn.images.express.co.uk/img/dynamic/59/590x/Apple-iPhone-12-stock-1370223.webp?r=1607585056252',
   ];
 
+  Future<void> accessApi() async {
+    ApiConncection.getData().then((value) {
+      setState(() {
+        value = MainData;
+print(value);
+        //value = MainData;
+      });
+    });
+  }
+
   List<dynamic> MainData = [
-    ProductList(
+   /* ProductList(
       Name: 'iPhone 11 Pro Max',
       Price: 120000,
       ShortDescription:
@@ -108,7 +121,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
       ShortDescription:
           'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
       ImageURL: "assets/ItemsPhoto/iphone_12.png",
-    ),
+    ),*/
   ];
   @override
   Widget build(BuildContext context) {
@@ -246,6 +259,11 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                             scrollDirection: Axis.horizontal,
                             autoPlay: true,
                             height: 200,
+                            onPageChanged: (index,reason){
+                              setState(() {
+                                photoIndex = index;
+                              });
+                            }
                           ),
                           items: imgList
                               .map((item) => Center(
@@ -254,9 +272,25 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                       width: size.width / 1.1)))
                               .toList(),
                         ),
-                        SizedBox(
-                          height: size.height / 60,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: imgList.map((e) {
+                            int index = imgList.indexOf(e);
+                            return Container(
+                              width: 8,
+                                height: 8,
+                              margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 2),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: photoIndex == index ? const Color.fromRGBO(0, 0,0,0.9) : const Color.fromRGBO(0, 0, 0, 0.4),
+
+                              ),
+                            );
+                          }).toList()
                         ),
+                      /*  SizedBox(
+                          height: size.height / 60,
+                        ),*/
                         /*   const Padding(
                           padding: EdgeInsets.only(left: 8.0),
                           child: Align(
@@ -292,7 +326,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                           isScrollable: true,
                         ),*/
                         SizedBox(
-                          height: size.height / 80,
+                          height: size.height / 100,
                         ),
                         const Padding(
                           padding: EdgeInsets.only(left: 8.0),
@@ -845,4 +879,13 @@ class ProductList {
       required this.Name,
       required this.ShortDescription,
       required this.ImageURL});
+
+  factory ProductList.fromJson(Map json) {
+    return ProductList(
+        Price: json['price'] ,
+        Name: json['title'] ,
+        ShortDescription: json['description'] ,
+        ImageURL: json['images[0]'] ,
+    );
+  }
 }

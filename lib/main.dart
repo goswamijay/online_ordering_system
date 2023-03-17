@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
@@ -7,10 +9,11 @@ import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:online_ordering_system/Sparce_Screen.dart';
 import 'package:online_ordering_system/Views/Authentication/LoginPage.dart';
 import 'package:online_ordering_system/Views/Cart%20Screen/Cart%20Main%20Screen.dart';
+import 'package:online_ordering_system/firebase_options.dart';
 import 'package:provider/provider.dart';
 
 import 'Controller/Cart_items_provider.dart';
-import 'Utils/Drawer.dart';
+import 'Utils/notificationservice/local_notification_service.dart';
 import 'Views/Account Screen/Account Main Screen.dart';
 import 'Views/Account Screen/AccountResetPassword.dart';
 import 'Views/Authentication/OTPScreen.dart';
@@ -21,7 +24,18 @@ import 'Views/Order Place Screen/Order Place Main Screen.dart';
 import 'Views/Product Screen/Product Main Screen.dart';
 import 'Views/ProductDetailsScreen/ProductDetailsScreen.dart';
 
-void main() {
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+  //final fcmToken = await FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  LocalNotificationService.initialize();
+  //print(fcmToken);
   runApp(const MyApp());
 }
 
@@ -41,7 +55,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             fontFamily: GoogleFonts.lato().fontFamily,
             primaryTextTheme: GoogleFonts.latoTextTheme()),
-        initialRoute: Routes_Name.SparceScreen,
+        initialRoute:  Routes_Name.SparceScreen,
         routes: {
           Routes_Name.SparceScreen: (context) => const Space_Screen(),
           Routes_Name.HomePage: (context) => const HomePage(),
@@ -59,7 +73,6 @@ class MyApp extends StatelessWidget {
           Routes_Name.OrderPlaceMainScreen: (context) =>
               const OrderPlaceMainScreen(),
           Routes_Name.ProductDetailsScreen : (context) => const ProductDetailsScreen(),
-          // Routes_Name.DrawerWidget : (context) => const DrawerWidget(),
         },
       ),
     );

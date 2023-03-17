@@ -13,14 +13,14 @@ class _LoginPageState extends State<LoginPage> {
   bool changeButton = false;
   bool _passwordVisible = false;
 
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   moveToHome(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
+    if (formKey.currentState!.validate()) {
       setState(() {
         changeButton = true;
       });
-      _formKey.currentState!.save();
+      formKey.currentState!.save();
       await Future.delayed(const Duration(seconds: 1));
       await Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage,(route) => false);
 
@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 24),
               ),
               Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   children: [
                     Padding(
