@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:online_ordering_system/Controller/Confirm_Order_Items.dart';
-import 'package:online_ordering_system/HomePage.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:online_ordering_system/Sparce_Screen.dart';
 import 'package:online_ordering_system/Views/Authentication/LoginPage.dart';
@@ -13,6 +12,8 @@ import 'package:online_ordering_system/firebase_options.dart';
 import 'package:provider/provider.dart';
 
 import 'Controller/Cart_items_provider.dart';
+import 'GetX/Getx_Main.dart';
+import 'HomePage.dart';
 import 'Utils/notificationservice/local_notification_service.dart';
 import 'Views/Account Screen/Account Main Screen.dart';
 import 'Views/Account Screen/AccountResetPassword.dart';
@@ -36,7 +37,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   LocalNotificationService.initialize();
   //print(fcmToken);
-  runApp(const MyApp());
+  runApp(const GetApp());
 }
 
 class MyApp extends StatelessWidget {

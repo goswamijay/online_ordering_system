@@ -1,42 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
-import '../../Utils/Routes_Name.dart';
-
-class AccountResetPassword extends StatefulWidget {
-  const AccountResetPassword({Key? key}) : super(key: key);
+import '../../Getx_Utils/Getx_Routes_Name.dart';
+class GetSignUp extends StatefulWidget {
+  const GetSignUp({Key? key}) : super(key: key);
 
   @override
-  State<AccountResetPassword> createState() => _AccountResetPasswordState();
+  State<GetSignUp> createState() => _GetSignUpState();
 }
 
-class _AccountResetPasswordState extends State<AccountResetPassword> {
-  bool _passwordVisible = false;
+class _GetSignUpState extends State<GetSignUp> {
 
   static String name = "";
+  static String Email = "";
+  static String Password1 = "";
+  static String Confirm_Password = "";
   bool changeButton = false;
-
+  bool _passwordVisible = false;
   final _formKey = GlobalKey<FormState>();
+
+  moveToHome(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        changeButton = true;
+      });
+      _formKey.currentState!.save();
+      print(Email);
+
+      await Future.delayed(const Duration(seconds: 1));
+      Get.toNamed(GetxRoutes_Name.GetxOTPScreen,arguments: {'email_id': Email.toString()});
+      setState(() {
+        changeButton = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-
         body: SingleChildScrollView(
           child: Column(
             children: [
               Image(
-                  height: Get.height / 2,
+                  height: Get.height / 2.7,
                   width: Get.width,
-                  image: const AssetImage("assets/forget_password.gif")),
+                  image: const AssetImage("assets/signup.png")),
               const Text(
-                "Reset Password",
+                "Welcome",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
               ),
-
               Form(
                 key: _formKey,
                 child: Column(
@@ -44,21 +61,35 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
-                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          hintText: "Current Password",
-                          labelText: "Current Password",
+                          hintText: "User Name",
+                          labelText: "User Name",
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Mobile Number can't empty";
-                          } else if (value.length < 10 || value.length > 10) {
-                            return "Mobile number is not valid";
+                            return "User Name can't empty";
                           }
                         },
                         onChanged: (value) {
                           name = value;
-                          print(name);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          hintText: "Email Id",
+                          labelText: "Email Id",
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Email Id can't empty";
+                          }
+                        },
+                        onChanged: (value) {
+                          Email = value;
+                          print(Email);
                         },
                       ),
                     ),
@@ -68,7 +99,7 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                         obscureText: true,
                         decoration: const InputDecoration(
                           hintText: "Enter Password",
-                          labelText: "New Password",
+                          labelText: "Password",
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -78,8 +109,7 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                           }
                         },
                         onChanged: (value) {
-                          name = value;
-                          print(name);
+                          Password1 = value;
                         },
                       ),
                     ),
@@ -108,35 +138,21 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                             return "Password can't empty";
                           } else if (value.length < 6) {
                             return "Password is less than 6 letter";
-                          } else if (value != name) {
+                          } else if (value != Password1) {
                             return "Password not matched";
                           }
                         },
                         onChanged: (value) {
-                          name = value;
+                          Confirm_Password = value;
+                          print(Confirm_Password);
                         },
                       ),
                     ),
                     SizedBox(
-                      height: Get.height / 50,
+                      height: Get.height / 30,
                     ),
                     InkWell(
-                      onTap: () => {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Your Password Has been updated"),
-                                actions: [
-                                  TextButton(
-                                      child: const Text('Okay'),
-                                      onPressed: () {
-                                        Navigator.pop(context, Routes_Name.HomePage);
-                                      }),
-                                ],
-                              );
-                            })
-                      },
+                      onTap: () => moveToHome(context),
                       child: AnimatedContainer(
                         duration: const Duration(seconds: 1),
                         height: 50,
@@ -154,7 +170,7 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                           color: Colors.white,
                         )
                             : const Text(
-                          "Save The Data",
+                          "Sign UP",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -162,10 +178,31 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                         ),
                       ),
                     ),
-
-                    SizedBox(
-                      height: Get.height / 20,
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("You have an account? "),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(GetxRoutes_Name.GetxLoginScreen);
+                          },
+                          child: const Text("LogIn",
+                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.pink)),
+                        ),
+                      ],
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    RichText(
+                        text: const TextSpan(children: [
+                          TextSpan(text: ("We will send you an ")),
+                          TextSpan(
+                              text: ("One Time Password "),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: ("On this Email Id."))
+                        ]))
                   ],
                 ),
               ),

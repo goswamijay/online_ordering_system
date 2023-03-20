@@ -1,80 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
 
-import '../../Utils/Routes_Name.dart';
 
-class AccountResetPassword extends StatefulWidget {
-  const AccountResetPassword({Key? key}) : super(key: key);
+class GetLoginPage extends StatefulWidget {
+  const GetLoginPage({Key? key}) : super(key: key);
 
   @override
-  State<AccountResetPassword> createState() => _AccountResetPasswordState();
+  State<GetLoginPage> createState() => _GetLoginPageState();
 }
 
-class _AccountResetPasswordState extends State<AccountResetPassword> {
-  bool _passwordVisible = false;
-
+class _GetLoginPageState extends State<GetLoginPage> {
   static String name = "";
   bool changeButton = false;
+  bool _passwordVisible = false;
 
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
+
+  moveToHome(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      setState(() {
+        changeButton = true;
+      });
+      formKey.currentState!.save();
+      await Future.delayed(const Duration(seconds: 1));
+      await Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
+
+      setState(() {
+        changeButton = false;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-
         body: SingleChildScrollView(
           child: Column(
             children: [
               Image(
-                  height: Get.height / 2,
+                  height: Get.height / 2.5,
                   width: Get.width,
-                  image: const AssetImage("assets/forget_password.gif")),
+                  image: const AssetImage("assets/hey.png")),
               const Text(
-                "Reset Password",
+                "Welcome Back",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
               ),
-
               Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
-                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          hintText: "Current Password",
-                          labelText: "Current Password",
+                          hintText: "User Name",
+                          labelText: "Username",
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Mobile Number can't empty";
-                          } else if (value.length < 10 || value.length > 10) {
-                            return "Mobile number is not valid";
-                          }
-                        },
-                        onChanged: (value) {
-                          name = value;
-                          print(name);
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
-                      child: TextFormField(
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          hintText: "Enter Password",
-                          labelText: "New Password",
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Password can't empty";
-                          } else if (value.length < 6) {
-                            return "Password is less than 6 letter";
+                            return "Username can't empty";
                           }
                         },
                         onChanged: (value) {
@@ -100,43 +89,38 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                                   : Icons.visibility_off,
                             ),
                           ),
-                          hintText: "Confirm Password",
-                          labelText: "Confirm Password",
+                          hintText: "Enter Password",
+                          labelText: "Password",
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Password can't empty";
                           } else if (value.length < 6) {
                             return "Password is less than 6 letter";
-                          } else if (value != name) {
-                            return "Password not matched";
                           }
                         },
                         onChanged: (value) {
                           name = value;
+                          print(name);
                         },
                       ),
+                    ),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                              "Reset Password",
+                              style: TextStyle(color: Colors.indigo),
+                            ))
+                      ],
                     ),
                     SizedBox(
                       height: Get.height / 50,
                     ),
                     InkWell(
-                      onTap: () => {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Your Password Has been updated"),
-                                actions: [
-                                  TextButton(
-                                      child: const Text('Okay'),
-                                      onPressed: () {
-                                        Navigator.pop(context, Routes_Name.HomePage);
-                                      }),
-                                ],
-                              );
-                            })
-                      },
+                      onTap: () => moveToHome(context),
                       child: AnimatedContainer(
                         duration: const Duration(seconds: 1),
                         height: 50,
@@ -154,7 +138,7 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                           color: Colors.white,
                         )
                             : const Text(
-                          "Save The Data",
+                          "Login",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -162,10 +146,20 @@ class _AccountResetPasswordState extends State<AccountResetPassword> {
                         ),
                       ),
                     ),
-
-                    SizedBox(
-                      height: Get.height / 20,
-                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Don't have an account? "),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(GetxRoutes_Name.GetxSignUpScreen);
+                          },
+                          child: const Text("SignUp",
+                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.pink,)),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),

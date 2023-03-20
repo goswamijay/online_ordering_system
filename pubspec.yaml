@@ -45,6 +45,7 @@ dependencies:
   firebase_core: ^2.7.1
   flutter_local_notifications: ^8.2.0
   http: ^0.13.5
+  get: ^4.6.5
 
 
 dev_dependencies:

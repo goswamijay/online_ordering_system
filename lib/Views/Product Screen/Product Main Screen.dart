@@ -79,15 +79,15 @@ class _ProductMainScreenState extends State<ProductMainScreen>
   Future<void> accessApi() async {
     ApiConncection.getData().then((value) {
       setState(() {
-        value = MainData;
-print(value);
+       // value = MainData;
+//print(value);
         //value = MainData;
       });
     });
   }
 
   List<dynamic> MainData = [
-   /* ProductList(
+    ProductList(
       Name: 'iPhone 11 Pro Max',
       Price: 120000,
       ShortDescription:
@@ -121,7 +121,7 @@ print(value);
       ShortDescription:
           'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
       ImageURL: "assets/ItemsPhoto/iphone_12.png",
-    ),*/
+    ),
   ];
   @override
   Widget build(BuildContext context) {
