@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:online_ordering_system/GetX/Getx_Views/GetFavorite/GetFavoriteMainScreen.dart';
+import 'package:online_ordering_system/GetX/Getx_Views/GetAccountMainScreen/GetAccountMainScreen.dart';
 import 'Getx_Views/GetCartMainScreen/GetCartMainScreen.dart';
+import 'Getx_Views/GetFavoriteMainScreen/GetFavoriteMainScreen.dart';
+import 'Getx_Views/GetOrderPlaceMainScreen/GetOrderPlaceMainScreen.dart';
 import 'Getx_Views/GetProductMainScreen/GetProductMainScreen.dart';
 
 
@@ -28,8 +30,8 @@ class _GetHomePageState extends State<GetHomePage> {
     const GetProductMainScreen(),
     const GetCartMainScreen(),
     const GetFavoriteMainScreen(),
-    const GetCartMainScreen(),
-    const GetProductMainScreen(),
+    const GetAccountMainScreen(),
+    const GetOrderPlaceMainScreen(),
   ];
 
   @override

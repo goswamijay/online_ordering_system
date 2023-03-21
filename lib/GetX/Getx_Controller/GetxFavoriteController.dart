@@ -7,9 +7,12 @@ class GetxFavoriteController extends GetxController{
 
   addToFavorite(GetxProduct item){
     favoriteData.add(item);
+    update();
   }
 
   removeToFavorite(GetxProduct item){
     favoriteData.remove(item);
+    update();
+
   }
 }
