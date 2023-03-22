@@ -8,6 +8,7 @@ import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
 
 import '../../../Utils/Drawer.dart';
 import '../../Getx_Controller/GetxCartController.dart';
+import '../../Getx_Controller/GetxControllerClass.dart';
 import '../../Getx_Controller/GetxProductController.dart';
 
 class GetProductMainScreen extends StatefulWidget {
@@ -20,9 +21,10 @@ class GetProductMainScreen extends StatefulWidget {
 class _GetProductMainScreenState extends State<GetProductMainScreen> {
   final productController = Get.put(GetxProductController());
   final cartController = Get.put(GetxCartController());
+  GetControllerClass buttonController = Get.put(GetControllerClass());
 
-  bool searchButton = false;
-  bool listIsEmpty = false;
+  // bool searchButton = false;
+  //bool listIsEmpty = false;
   TextEditingController search = TextEditingController();
   Icon customSearch = const Icon(
     Icons.search,
@@ -37,7 +39,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
   );
   List<dynamic> searchItems = [];
   List<dynamic> favoriteItems = [];
-  int photoIndex = 0;
+  //int photoIndex = 0;
 
   @override
   void initState() {
@@ -47,7 +49,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
   }
 
   void onSearchTextChanged(String text) {
-    List<dynamic>? result = [];
+    List<dynamic> result = [];
     if (text.isEmpty) {
       result = productController.productData;
     } else {
@@ -58,14 +60,12 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
           .toList();
     }
 
-    setState(() {
-      if (result!.isEmpty) {
-        listIsEmpty = true;
-      } else {
-        listIsEmpty = false;
-      }
-      searchItems = result;
-    });
+    if (result.isEmpty) {
+      buttonController.listIsEmpty.value = true;
+    } else {
+      buttonController.listIsEmpty.value = false;
+    }
+    searchItems = result;
   }
 
   final List<String> imgList = [
@@ -77,7 +77,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
+      child:  Scaffold(
         key: _scaffoldKey,
         drawer: drawerWidget(context, Colors.indigo),
         backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
@@ -109,9 +109,9 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                   ),
                                 )),
                             Obx(
-                              () => InkWell(
+                                  () => InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context,
+                                  Get.toNamed(
                                       GetxRoutes_Name.GetxCartMainScreen);
                                 },
                                 hoverColor: Colors.transparent,
@@ -168,21 +168,21 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                 itemSize: Get.height / 33,
                                 controller: controller,
                                 onChanged: (value) {
-                                  setState(() {
-                                    searchButton = true;
-                                  });
+                                  buttonController.searchButton.value = true;
                                   onSearchTextChanged(value);
+                                  setState(() {
+
+                                  });
                                 },
                                 onSuffixTap: () {
-                                  setState(() {
-                                    searchButton = false;
-                                    controller.clear();
-                                  });
+                                  buttonController.searchButton.value = false;
+                                  controller.clear();
                                 },
                                 onSubmitted: (value) {},
                                 autocorrect: true,
                               ),
                             ),
+
                             SizedBox(
                               width: Get.width / 60,
                             ),
@@ -203,6 +203,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                         SizedBox(
                           height: Get.height / 50,
                         ),
+
                         CarouselSlider(
                           options: CarouselOptions(
                               aspectRatio: 2.0,
@@ -211,15 +212,13 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                               autoPlay: true,
                               height: 200,
                               onPageChanged: (index, reason) {
-                                setState(() {
-                                  photoIndex = index;
-                                });
+                                buttonController.photoIndex.value = index;
                               }),
                           items: imgList
                               .map((item) => Center(
-                                  child: Image.network(item,
-                                      fit: BoxFit.cover,
-                                      width: Get.width / 1.1)))
+                              child: Image.network(item,
+                                  fit: BoxFit.cover,
+                                  width: Get.width / 1.1)))
                               .toList(),
                         ),
                         Row(
@@ -233,23 +232,25 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                     vertical: 10, horizontal: 2),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: photoIndex == index
+                                  color:
+                                  buttonController.photoIndex.value == index
                                       ? const Color.fromRGBO(0, 0, 0, 0.9)
                                       : const Color.fromRGBO(0, 0, 0, 0.4),
                                 ),
                               );
                             }).toList()),
-
                         SizedBox(
                           height: Get.height / 100,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
                           child: Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                "Best Selling",
-                                style: TextStyle(
+                                !buttonController.searchButton.value
+                                    ? "Best Selling"
+                                    : "Search Items",
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               )),
                         ),
@@ -257,13 +258,14 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                           height: Get.height / 80,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 0.0, right: 0.0),
-                          child: Center(
-                            child: !searchButton
-                                ? fullList1(context)
-                                : customlist1(context),
-                          ),
-                        ),
+                            padding:
+                            const EdgeInsets.only(left: 0.0, right: 0.0),
+                            child: Center(
+                              child: !buttonController.searchButton.value
+                                  ? fullList1(context)
+                                  : customlist1(context),
+
+                            )),
                       ],
                     ),
                   ),
@@ -280,7 +282,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
     final cartController = Get.put(GetxCartController());
     final favoriteController = Get.put(GetxFavoriteController());
 
-    return listIsEmpty
+    return buttonController.listIsEmpty.value
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -316,13 +318,15 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
                         onTap: () {
-                          Get.toNamed(GetxRoutes_Name.GetxProductDetailsScreen,arguments: {
-                            'Price': searchItems[index].Price,
-                            'Name': searchItems[index].Name,
-                            'ImageURL': searchItems[index].ImageURL,
-                            'ShortDescription' : searchItems[index].ShortDescription,
-                            'Index' : index,
-                          });
+                          Get.toNamed(GetxRoutes_Name.GetxProductDetailsScreen,
+                              arguments: {
+                                'Price': searchItems[index].Price,
+                                'Name': searchItems[index].Name,
+                                'ImageURL': searchItems[index].ImageURL,
+                                'ShortDescription':
+                                    searchItems[index].ShortDescription,
+                                'Index': index,
+                              });
                         },
                         child: Card(
                           child: Column(
@@ -574,13 +578,14 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
               shrinkWrap: true,
               itemCount: productController.productData.length,
               itemBuilder: (context, index) {
+                bool isSaved = favoriteController.favoriteData.any((element) =>
+                    element.Name.contains(
+                        productController.productData[index].Name));
+                bool isAdded = cartController.cartData.any((element1) =>
+                    element1.Name.contains(
+                        productController.productData[index].Name));
 
-                bool isSaved = favoriteController.favoriteData
-                    .any((element) => element.Name.contains(productController.productData[index].Name));
-                bool isAdded = cartController.cartData
-                    .any((element1) => element1.Name.contains(productController.productData[index].Name));
-
-           /*     bool isAdded = cartController.cartData
+                /*     bool isAdded = cartController.cartData
                     .contains(productController.productData[index]);
                 bool isSaved = favoriteController.favoriteData
                     .contains(productController.productData[index]);*/
@@ -590,13 +595,16 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onTap: () {
-                    Get.toNamed(GetxRoutes_Name.GetxProductDetailsScreen,arguments: {
-                    'Price': productController.productData[index].Price,
-                    'Name': productController.productData[index].Name,
-                    'ImageURL': productController.productData[index].ImageURL,
-                    'ShortDescription' : productController.productData[index].ShortDescription,
-                    'Index' : index,
-                    });
+                    Get.toNamed(GetxRoutes_Name.GetxProductDetailsScreen,
+                        arguments: {
+                          'Price': productController.productData[index].Price,
+                          'Name': productController.productData[index].Name,
+                          'ImageURL':
+                              productController.productData[index].ImageURL,
+                          'ShortDescription': productController
+                              .productData[index].ShortDescription,
+                          'Index': index,
+                        });
                   },
                   child: Card(
                     child: Column(

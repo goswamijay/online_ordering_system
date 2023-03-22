@@ -12,7 +12,7 @@ import 'package:online_ordering_system/firebase_options.dart';
 import 'package:provider/provider.dart';
 
 import 'Controller/Cart_items_provider.dart';
-import 'GetX/Getx_Main.dart';
+import 'Controller/ChangeControllerClass.dart';
 import 'HomePage.dart';
 import 'Utils/notificationservice/local_notification_service.dart';
 import 'Views/Account Screen/Account Main Screen.dart';
@@ -21,6 +21,7 @@ import 'Views/Authentication/OTPScreen.dart';
 import 'Views/Authentication/SignupPage.dart';
 import 'Views/Authentication/WelcomeScreen.dart';
 import 'Views/Favorite Screen/Favorite Main Screen.dart';
+import 'Views/OnboardingScreen/OnboardingScreen.dart';
 import 'Views/Order Place Screen/Order Place Main Screen.dart';
 import 'Views/Product Screen/Product Main Screen.dart';
 import 'Views/ProductDetailsScreen/ProductDetailsScreen.dart';
@@ -33,11 +34,11 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
-  //final fcmToken = await FirebaseMessaging.instance.getToken();
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  //FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   LocalNotificationService.initialize();
-  //print(fcmToken);
-  runApp(const GetApp());
+  print(fcmToken);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => Favorite_add_provider()),
         ChangeNotifierProvider(create: (_) => Purchase_items_provider()),
         ChangeNotifierProvider(create: (_) => Place_order_Provider()),
+        ChangeNotifierProvider(create: (_) => ChangeControllerClass()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -66,14 +68,12 @@ class MyApp extends StatelessWidget {
           Routes_Name.OTPScreen: (context) => const OTPScreen(),
           Routes_Name.ProductMainScreen: (context) => const ProductMainScreen(),
           Routes_Name.CartMainScreen: (context) => const CartMainScreen(),
-          Routes_Name.FavoriteMainScreen: (context) =>
-              const FavoriteMainScreen(),
+          Routes_Name.FavoriteMainScreen: (context) => const FavoriteMainScreen(),
           Routes_Name.AccountMainScreen: (context) => const AccountMainScreen(),
-          Routes_Name.AccountResetPassword: (context) =>
-              const AccountResetPassword(),
-          Routes_Name.OrderPlaceMainScreen: (context) =>
-              const OrderPlaceMainScreen(),
+          Routes_Name.AccountResetPassword: (context) => const AccountResetPassword(),
+          Routes_Name.OrderPlaceMainScreen: (context) => const OrderPlaceMainScreen(),
           Routes_Name.ProductDetailsScreen : (context) => const ProductDetailsScreen(),
+          Routes_Name.OnBoardingScreen : (context) => const OnBoardingScreen()
         },
       ),
     );

@@ -12,17 +12,16 @@ import 'Views/Product Screen/Product Main Screen.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
-  Map<String,List<dynamic>> FavoriteData = {};
-  List<dynamic>? FavoriteItems = [];
+  Map<String, List<dynamic>> favoriteData = {};
+  List<dynamic>? favoriteItems = [];
   PageController controller = PageController();
-  int _curr = 0;
+  // int _curr = 0;
 
   @override
   void initState() {
@@ -30,10 +29,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     FirebaseMessaging.instance.getInitialMessage().then(
-          (message) {
-        print("FirebaseMessaging.instance.getInitialMessage");
+      (message) {
+        // print("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
-          print("New Notification");
+          //   print("New Notification");
           // if (message.data['_id'] != null) {
           //   Navigator.of(context).push(
           //     MaterialPageRoute(
@@ -49,42 +48,40 @@ class _HomePageState extends State<HomePage> {
 
     // 3. This method only call when App in background and not terminated(not closed)
     FirebaseMessaging.onMessageOpenedApp.listen(
-          (message) {
-        print("FirebaseMessaging.onMessageOpenedApp.listen");
+      (message) {
+        //print("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message.notification != null) {
-          print(message.notification!.title);
-          print(message.notification!.body);
-          print("message.data22 ${message.data['_id']}");
+          // print(message.notification!.title);
+          // print(message.notification!.body);
+          // print("message.data22 ${message.data['_id']}");
         }
       },
     );
-
 
     // 2. This method only call when App in forground it mean app must be opened
     FirebaseMessaging.onMessage.listen(
-          (message) {
-        print("FirebaseMessaging.onMessage.listen");
+      (message) {
+        // print("FirebaseMessaging.onMessage.listen");
         if (message.notification != null) {
-          print(message.notification!.title);
-          print(message.notification!.body);
-          print("message.data11 ${message.data}");
-           LocalNotificationService.createanddisplaynotification(message);
-
+          //print(message.notification!.title);
+          //print(message.notification!.body);
+          //print("message.data11 ${message.data}");
+          LocalNotificationService.createanddisplaynotification(message);
         }
       },
     );
-
-
   }
+
   void _onItemTapped(index) {
     setState(() {
       selectedIndex = index;
     });
   }
+
   final List<Widget> _widgetOption = <Widget>[
-   // const CartMainScreen(),
+    // const CartMainScreen(),
     const ProductMainScreen(),
-  const CartMainScreen(),
+    const CartMainScreen(),
     const FavoriteMainScreen(),
     const AccountMainScreen(),
     const OrderPlaceMainScreen(),
@@ -92,26 +89,25 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       body: Stack(
         children: [
           Center(
             child: PageView(
-              allowImplicitScrolling: true,
-              scrollDirection: Axis.vertical,
-              controller: controller,
-              onPageChanged: (num) {
-                setState(() {
-                  selectedIndex = num;
-                });
-              },
-              children:[_widgetOption.elementAt(selectedIndex)]
-            ),), /* Center(
+                allowImplicitScrolling: true,
+                scrollDirection: Axis.vertical,
+                controller: controller,
+                onPageChanged: (num) {
+                  setState(() {
+                    selectedIndex = num;
+                  });
+                },
+                children: [_widgetOption.elementAt(selectedIndex)]),
+          ),
+          /* Center(
               child: _widgetOption.elementAt(selectedIndex),
             ),*/
-           // _widgetOption.elementAt(_selectedIndex),
+          // _widgetOption.elementAt(_selectedIndex),
 
           Container(
             height: 80,
@@ -150,7 +146,6 @@ class _HomePageState extends State<HomePage> {
                   CupertinoIcons.arrow_up_bin_fill,
                 ),
                 label: "Order List"),
-
           ]),
     );
   }

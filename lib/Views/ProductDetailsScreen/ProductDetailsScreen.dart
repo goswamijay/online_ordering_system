@@ -20,14 +20,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
+    final favoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final cartProvider = Provider.of<Purchase_items_provider>(context);
       argument = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
     Size size = MediaQuery.of(context).size;
 
-    bool isSaved = FavoriteProvider.FavoriteList.any(
+    bool isSaved = favoriteProvider.FavoriteList.any(
             (element) => element.Name.contains( argument!['Name']));
-    bool isAddedInCart = CartProvider.PurchaseList.any(
+    bool isAddedInCart = cartProvider.PurchaseList.any(
             (element1) => element1.Name.contains( argument!['Name']));
     return  Scaffold(
       backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
@@ -85,7 +85,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               width: 34 / 2,
                               height: 34 / 2,
                               child: Text(
-                                CartProvider.PurchaseList.length
+                                cartProvider.PurchaseList.length
                                     .toString(),
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
@@ -127,12 +127,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       child: isSaved
                           ? InkWell(
                         onTap: () {
-                          setState(() {
-                            FavoriteProvider
+
+                            favoriteProvider
                                 .RemoveFavoriteItems(
-                                FavoriteProvider
+                                favoriteProvider
                                     .FavoriteList[argument!['Index']]);
-                          });
+
 
                           ScaffoldMessenger.of(context)
                               .hideCurrentSnackBar();
@@ -156,8 +156,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       )
                           : InkWell(
                         onTap: () {
-                          setState(() {
-                            FavoriteProvider.AddFavoriteItems(
+
+                            favoriteProvider.AddFavoriteItems(
                                 FavoriteListModelClass(
                                     Price:
                                     argument!['Price'],
@@ -166,9 +166,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     argument!['ShortDescription'],
                                     ImageURL: argument!['ImageURL'],
                                     Count: 1));
-                            print(FavoriteProvider
-                                .FavoriteList.length);
-                          });
+
+
 
                           ScaffoldMessenger.of(context)
                               .hideCurrentSnackBar();
@@ -295,7 +294,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               )
                   : InkWell(
                 onTap: () {
-                  CartProvider.addItemToCart(
+                  cartProvider.addItemToCart(
                       FavoriteListModelClass(
                           Price:
                          argument!['Price'],

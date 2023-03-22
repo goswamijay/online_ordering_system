@@ -46,6 +46,7 @@ dependencies:
   flutter_local_notifications: ^8.2.0
   http: ^0.13.5
   get: ^4.6.5
+  smooth_page_indicator: ^1.0.1
 
 
 dev_dependencies:

@@ -4,12 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:online_ordering_system/Controller/Cart_items_provider.dart';
-import 'package:online_ordering_system/HomePage.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:provider/provider.dart';
-
-import '../../Controller/ApiConnection/ApiConnection.dart';
+import '../../Controller/ChangeControllerClass.dart';
 import '../../Models/FavoriteListModelClass.dart';
+import '../../Models/ProductListModelClass.dart';
 import '../../Utils/Drawer.dart';
 
 class ProductMainScreen extends StatefulWidget {
@@ -21,54 +20,24 @@ class ProductMainScreen extends StatefulWidget {
 
 class _ProductMainScreenState extends State<ProductMainScreen>
     with TickerProviderStateMixin {
-  bool SearchButton = false;
-  bool ListIsEmpty = false;
-  bool isSaved = false;
-  TextEditingController search = TextEditingController();
-  Icon CustomSearch = const Icon(
-    Icons.search,
-    color: Colors.indigo,
-  );
+
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController controller = TextEditingController();
-  Widget CustomText = const Text(
-    "Search",
-    style: TextStyle(color: Colors.indigo),
-  );
-  List<dynamic> SearchItems = [];
-  List<dynamic> FavoriteItems = [];
-  TabController? _tabController;
-  int photoIndex = 0;
+  List<dynamic> searchItems = [];
+ // TabController? _tabController;
+  //int photoIndex = 0;
 
   @override
   void initState() {
     // TODO: implement initState
-    SearchItems = MainData;
-    _tabController = TabController(vsync: this, length: 11);
+    searchItems = mainData;
+   // _tabController = TabController(vsync: this, length: 11);
     accessApi();
     super.initState();
   }
 
-  void onSearchTextChanged(String text) {
-    List<dynamic>? Result = [];
-    if (text.isEmpty) {
-      Result = MainData;
-    } else {
-      Result = MainData.where((element) => element.Name.toString()
-          .toLowerCase()
-          .contains(text.toLowerCase())).toList();
-    }
 
-    setState(() {
-      if (Result!.isEmpty) {
-        ListIsEmpty = true;
-      } else {
-        ListIsEmpty = false;
-      }
-      SearchItems = Result!;
-    });
-  }
 
   final List<String> imgList = [
     'https://cdn.dribbble.com/users/7797959/screenshots/15909904/mobile1_4x.jpg',
@@ -77,16 +46,12 @@ class _ProductMainScreenState extends State<ProductMainScreen>
   ];
 
   Future<void> accessApi() async {
-    ApiConncection.getData().then((value) {
-      setState(() {
-       // value = MainData;
-//print(value);
-        //value = MainData;
-      });
-    });
+    /*ApiConncection.getData().then((value) {
+
+    });*/
   }
 
-  List<dynamic> MainData = [
+  List<dynamic> mainData = [
     ProductList(
       Name: 'iPhone 11 Pro Max',
       Price: 120000,
@@ -125,7 +90,8 @@ class _ProductMainScreenState extends State<ProductMainScreen>
   ];
   @override
   Widget build(BuildContext context) {
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
+    final cartProvider = Provider.of<Purchase_items_provider>(context);
+    final changeControllerClass = Provider.of<ChangeControllerClass>(context);
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -191,7 +157,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                           width: 34 / 2,
                                           height: 34 / 2,
                                           child: Text(
-                                            CartProvider.PurchaseList.length
+                                            cartProvider.PurchaseList.length
                                                 .toString(),
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
@@ -212,25 +178,42 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         Row(
                           children: [
                             Expanded(
-                              child: CupertinoSearchTextField(
-                                backgroundColor: Colors.white,
-                                itemSize: size.height / 33,
-                                controller: controller,
-                                onChanged: (value) {
-                                  setState(() {
-                                    SearchButton = true;
-                                  });
-                                  onSearchTextChanged(value);
-                                },
-                                onSuffixTap: () {
-                                  setState(() {
-                                    SearchButton = false;
+                              child: Consumer<ChangeControllerClass>(builder: (context,value,child){
+                                return CupertinoSearchTextField(
+                                  backgroundColor: Colors.white,
+                                  itemSize: size.height / 33,
+                                  controller: controller,
+                                  onChanged: (value) {
+                                    changeControllerClass.searchButtonPress();
+
+                                    if(value.isEmpty){
+                                      changeControllerClass.searchButtonUnPress();
+                                    }
+
+                                    List<dynamic> result = [];
+                                    if (value.isEmpty) {
+                                      result = mainData;
+                                    } else {
+                                      result = mainData.where((element) => element.Name.toString()
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase())).toList();
+                                    }
+
+                                    if (result.isEmpty) {
+                                      changeControllerClass.listIsEmpty();
+                                    } else {
+                                      changeControllerClass.listNotEmpty();
+                                    }
+                                    searchItems = result;
+                                  },
+                                  onSuffixTap: () {
+                                    changeControllerClass.searchButtonUnPress();
                                     controller.clear();
-                                  });
-                                },
-                                onSubmitted: (value) {},
-                                autocorrect: true,
-                              ),
+                                  },
+                                  onSubmitted: (value) {},
+                                  autocorrect: true,
+                                );
+                              }),
                             ),
                             SizedBox(
                               width: size.width / 60,
@@ -260,9 +243,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                             autoPlay: true,
                             height: 200,
                             onPageChanged: (index,reason){
-                              setState(() {
-                                photoIndex = index;
-                              });
+                              changeControllerClass.photoIndex(index);
                             }
                           ),
                           items: imgList
@@ -282,7 +263,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                               margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 2),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: photoIndex == index ? const Color.fromRGBO(0, 0,0,0.9) : const Color.fromRGBO(0, 0, 0, 0.4),
+                                color: changeControllerClass.photoIndex1 == index ? const Color.fromRGBO(0, 0,0,0.9) : const Color.fromRGBO(0, 0, 0, 0.4),
 
                               ),
                             );
@@ -328,13 +309,13 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         SizedBox(
                           height: size.height / 100,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
+                         Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
                           child: Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                "Best Selling",
-                                style: TextStyle(
+                               !changeControllerClass.searchButton ? "Best Selling":"Search List",
+                                style:const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               )),
                         ),
@@ -344,9 +325,9 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         Padding(
                           padding: const EdgeInsets.only(left: 0.0, right: 0.0),
                           child: Center(
-                            child: !SearchButton
-                                ? FullList1(context)
-                                : customlist1(context),
+                            child: !changeControllerClass.searchButton
+                                ? fullList1(context)
+                                : customList1(context),
                           ),
                         ),
                       ],
@@ -361,12 +342,13 @@ class _ProductMainScreenState extends State<ProductMainScreen>
     );
   }
 
-  Widget customlist1(BuildContext context) {
+  Widget customList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
+    final favoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final cartProvider = Provider.of<Purchase_items_provider>(context);
+    final changeControllerClass =  Provider.of<ChangeControllerClass>(context);
 
-    return ListIsEmpty
+    return changeControllerClass.listIsEmpty1
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -382,12 +364,12 @@ class _ProductMainScreenState extends State<ProductMainScreen>
         : ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: SearchItems.length,
+            itemCount: searchItems.length,
             itemBuilder: (context, index) {
-              bool isSaved = FavoriteProvider.FavoriteList.any(
-                  (element) => element.Name.contains(MainData[index].Name));
-              bool isAddedInCart1 = CartProvider.PurchaseList.any((element1) =>
-                  element1.Name.contains(SearchItems[index].Name));
+              bool isSaved = favoriteProvider.FavoriteList.any(
+                  (element) => element.Name.contains(searchItems[index].Name));
+              bool isAddedInCart1 = cartProvider.PurchaseList.any((element1) =>
+                  element1.Name.contains(searchItems[index].Name));
 
               return InkWell(
                 hoverColor: Colors.transparent,
@@ -396,10 +378,10 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                 onTap: () {
                   Navigator.pushNamed(context, Routes_Name.ProductDetailsScreen,
                       arguments: {
-                        'Price': SearchItems[index].Price,
-                        'Name': SearchItems[index].Name,
-                        'ImageURL': SearchItems[index].ImageURL,
-                        'ShortDescription' : SearchItems[index].ShortDescription,
+                        'Price': searchItems[index].Price,
+                        'Name': searchItems[index].Name,
+                        'ImageURL': searchItems[index].ImageURL,
+                        'ShortDescription' : searchItems[index].ShortDescription,
                         'Index' : index,
                       });
                 },
@@ -410,7 +392,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         children: [
                           Expanded(
                             child: Image(
-                              image: AssetImage(SearchItems[index].ImageURL),
+                              image: AssetImage(searchItems[index].ImageURL),
                               width: size.width / 2,
                               height: size.height / 4,
                             ),
@@ -426,12 +408,12 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                     child: isSaved
                                         ? InkWell(
                                             onTap: () {
-                                              setState(() {
-                                                FavoriteProvider
+
+                                                favoriteProvider
                                                     .RemoveFavoriteItems(
-                                                        FavoriteProvider
+                                                        favoriteProvider
                                                             .FavoriteList[index]);
-                                              });
+
 
                                               ScaffoldMessenger.of(context)
                                                   .hideCurrentSnackBar();
@@ -456,23 +438,22 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                           )
                                         : InkWell(
                                             onTap: () {
-                                              setState(() {
-                                                FavoriteProvider.AddFavoriteItems(
+
+                                                favoriteProvider.AddFavoriteItems(
                                                     FavoriteListModelClass(
-                                                        Price: SearchItems[index]
+                                                        Price: searchItems[index]
                                                             .Price,
-                                                        Name: SearchItems[index]
+                                                        Name: searchItems[index]
                                                             .Name,
                                                         ShortDescription:
-                                                            SearchItems[index]
+                                                            searchItems[index]
                                                                 .ShortDescription,
                                                         ImageURL:
-                                                            SearchItems[index]
+                                                            searchItems[index]
                                                                 .ImageURL,
                                                         Count: 1));
-                                                print(FavoriteProvider
-                                                    .FavoriteList.length);
-                                              });
+
+
 
                                               ScaffoldMessenger.of(context)
                                                   .hideCurrentSnackBar();
@@ -498,7 +479,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   SizedBox(
                                     width: size.width,
                                     child: AutoSizeText(
-                                      SearchItems[index].Name,
+                                      searchItems[index].Name,
                                       maxLines: 1,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w300,
@@ -513,7 +494,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        '₹${SearchItems[index].Price}',
+                                        '₹${searchItems[index].Price}',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 25),
@@ -526,7 +507,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   SizedBox(
                                     width: size.width,
                                     child: AutoSizeText(
-                                      SearchItems[index].ShortDescription,
+                                      searchItems[index].ShortDescription,
                                       maxLines: 2,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w300,
@@ -562,18 +543,18 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                               )
                                             : InkWell(
                                                 onTap: () {
-                                                  CartProvider.addItemToCart(
+                                                  cartProvider.addItemToCart(
                                                       FavoriteListModelClass(
                                                           Price:
-                                                              SearchItems[index]
+                                                              searchItems[index]
                                                                   .Price,
-                                                          Name: SearchItems[index]
+                                                          Name: searchItems[index]
                                                               .Name,
                                                           ShortDescription:
-                                                              SearchItems[index]
+                                                              searchItems[index]
                                                                   .ShortDescription,
                                                           ImageURL:
-                                                              SearchItems[index]
+                                                              searchItems[index]
                                                                   .ImageURL,
                                                           Count: 1));
                                                 },
@@ -611,7 +592,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
             });
   }
 
-  Widget TabItemWidget1(String logo, String name) {
+  Widget tabItemWidget1(String logo, String name) {
     return Tab(
       height: 75,
       child: Container(
@@ -633,23 +614,23 @@ class _ProductMainScreenState extends State<ProductMainScreen>
     );
   }
 
-  ListView FullList1(BuildContext context) {
+  ListView fullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
+    final favoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final cartProvider = Provider.of<Purchase_items_provider>(context);
 
     return ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: MainData.length,
+        itemCount: mainData.length,
         itemBuilder: (context, index) {
           // bool isSaved = FavoriteProvider.FavoriteList1.contains(FavoriteProvider.FavoriteList1);
           // bool isSaved = FavoriteProvider.FavoriteList.contains(MainData[index]);
 
-          bool isSaved = FavoriteProvider.FavoriteList.any(
-              (element) => element.Name.contains(MainData[index].Name));
-          bool isAddedInCart = CartProvider.PurchaseList.any(
-              (element1) => element1.Name.contains(MainData[index].Name));
+          bool isSaved = favoriteProvider.FavoriteList.any(
+              (element) => element.Name.contains(mainData[index].Name));
+          bool isAddedInCart = cartProvider.PurchaseList.any(
+              (element1) => element1.Name.contains(mainData[index].Name));
 
           return InkWell(
             hoverColor: Colors.transparent,
@@ -658,10 +639,10 @@ class _ProductMainScreenState extends State<ProductMainScreen>
             onTap: () {
               Navigator.pushNamed(context, Routes_Name.ProductDetailsScreen,
                   arguments: {
-                    'Price': MainData[index].Price,
-                    'Name': MainData[index].Name,
-                    'ImageURL': MainData[index].ImageURL,
-                    'ShortDescription' : MainData[index].ShortDescription,
+                    'Price': mainData[index].Price,
+                    'Name': mainData[index].Name,
+                    'ImageURL': mainData[index].ImageURL,
+                    'ShortDescription' : mainData[index].ShortDescription,
                     'Index' : index,
                   });
             },
@@ -672,7 +653,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                     children: [
                       Expanded(
                         child: Image(
-                          image: AssetImage(MainData[index].ImageURL),
+                          image: AssetImage(mainData[index].ImageURL),
                           width: size.width / 2,
                           height: size.height / 4,
                         ),
@@ -688,12 +669,12 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                 child: isSaved
                                     ? InkWell(
                                         onTap: () {
-                                          setState(() {
-                                            FavoriteProvider
+
+                                            favoriteProvider
                                                 .RemoveFavoriteItems(
-                                                    FavoriteProvider
+                                                    favoriteProvider
                                                         .FavoriteList[index]);
-                                          });
+
 
                                           ScaffoldMessenger.of(context)
                                               .hideCurrentSnackBar();
@@ -717,21 +698,20 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                       )
                                     : InkWell(
                                         onTap: () {
-                                          setState(() {
-                                            FavoriteProvider.AddFavoriteItems(
+
+                                            favoriteProvider.AddFavoriteItems(
                                                 FavoriteListModelClass(
                                                     Price:
-                                                        MainData[index].Price,
-                                                    Name: MainData[index].Name,
+                                                        mainData[index].Price,
+                                                    Name: mainData[index].Name,
                                                     ShortDescription:
-                                                        MainData[index]
+                                                        mainData[index]
                                                             .ShortDescription,
-                                                    ImageURL: MainData[index]
+                                                    ImageURL: mainData[index]
                                                         .ImageURL,
                                                     Count: 1));
-                                            print(FavoriteProvider
-                                                .FavoriteList.length);
-                                          });
+
+
 
                                           ScaffoldMessenger.of(context)
                                               .hideCurrentSnackBar();
@@ -756,7 +736,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                               SizedBox(
                                 width: size.width,
                                 child: AutoSizeText(
-                                  MainData[index].Name,
+                                  mainData[index].Name,
                                   maxLines: 1,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300,
@@ -771,7 +751,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                 child: Align(
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    '₹${MainData[index].Price}',
+                                    '₹${mainData[index].Price}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25),
@@ -784,7 +764,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                               SizedBox(
                                 width: size.width,
                                 child: AutoSizeText(
-                                  MainData[index].ShortDescription,
+                                  mainData[index].ShortDescription,
                                   maxLines: 2,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300,
@@ -799,7 +779,12 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   Expanded(
                                     child: isAddedInCart
                                         ? InkWell(
-                                            onTap: () {},
+                                            onTap: () {
+                                           /*   cartProvider.PurchaseList[index]
+                                                  .Count++;
+                                              print(cartProvider
+                                                  .PurchaseList[index].Count);*/
+                                            },
                                             child: Container(
                                               width: size.width,
                                               height: size.height / 20,
@@ -810,8 +795,8 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                           5.0)),
                                               child: const Center(
                                                   child: Text(
-                                                "Also Add in Cart",
-                                                style: TextStyle(
+                                                "Added in Cart :- 1 ",
+                                                style:  TextStyle(
                                                     color: Colors.white,
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -820,16 +805,16 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                           )
                                         : InkWell(
                                             onTap: () {
-                                              CartProvider.addItemToCart(
+                                              cartProvider.addItemToCart(
                                                   FavoriteListModelClass(
                                                       Price:
-                                                          MainData[index].Price,
+                                                          mainData[index].Price,
                                                       Name:
-                                                          MainData[index].Name,
+                                                          mainData[index].Name,
                                                       ShortDescription:
-                                                          MainData[index]
+                                                          mainData[index]
                                                               .ShortDescription,
-                                                      ImageURL: MainData[index]
+                                                      ImageURL: mainData[index]
                                                           .ImageURL,
                                                       Count: 1));
                                             },
@@ -865,27 +850,5 @@ class _ProductMainScreenState extends State<ProductMainScreen>
             ),
           );
         });
-  }
-}
-
-class ProductList {
-  int Price;
-  String Name;
-  String ShortDescription;
-  String ImageURL;
-
-  ProductList(
-      {required this.Price,
-      required this.Name,
-      required this.ShortDescription,
-      required this.ImageURL});
-
-  factory ProductList.fromJson(Map json) {
-    return ProductList(
-        Price: json['price'] ,
-        Name: json['title'] ,
-        ShortDescription: json['description'] ,
-        ImageURL: json['images[0]'] ,
-    );
   }
 }

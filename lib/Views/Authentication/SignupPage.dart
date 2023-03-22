@@ -9,10 +9,10 @@ class SignUPPage extends StatefulWidget {
 }
 
 class _SignUPPageState extends State<SignUPPage> {
-  static String name = "";
-  static String Email = "";
-  static String Password1 = "";
-  static String Confirm_Password = "";
+   String name = "";
+   String email = "";
+   String password1 = "";
+   String confirmPassword = "";
   bool changeButton = false;
   bool _passwordVisible = false;
   final _formKey = GlobalKey<FormState>();
@@ -23,11 +23,10 @@ class _SignUPPageState extends State<SignUPPage> {
         changeButton = true;
       });
       _formKey.currentState!.save();
-      print(Email);
 
-      await Future.delayed(const Duration(seconds: 1));
-      //await Navigator.pushNamed(context, Routes_Name.OTPScreen);
-      Navigator.pushNamed(context, Routes_Name.OTPScreen, arguments: {'email_id': Email.toString()});
+      await Future.delayed(const Duration(seconds: 1),(){
+        Navigator.pushNamed(context, Routes_Name.OTPScreen, arguments: {'email_id': email.toString()});
+      });
 
       setState(() {
         changeButton = false;
@@ -70,10 +69,10 @@ class _SignUPPageState extends State<SignUPPage> {
                           if (value!.isEmpty) {
                             return "User Name can't empty";
                           }
+                          return null;
                         },
                         onChanged: (value) {
                           name = value;
-                          print(name);
                         },
                       ),
                     ),
@@ -88,10 +87,10 @@ class _SignUPPageState extends State<SignUPPage> {
                           if (value!.isEmpty) {
                             return "Email Id can't empty";
                           }
+                          return null;
                         },
                         onChanged: (value) {
-                          Email = value;
-                          print(Email);
+                          email = value;
                         },
                       ),
                     ),
@@ -109,10 +108,10 @@ class _SignUPPageState extends State<SignUPPage> {
                           } else if (value.length < 6) {
                             return "Password is less than 6 letter";
                           }
+                          return null;
                         },
                         onChanged: (value) {
-                          Password1 = value;
-                          print(Password1);
+                          password1 = value;
                         },
                       ),
                     ),
@@ -141,13 +140,13 @@ class _SignUPPageState extends State<SignUPPage> {
                             return "Password can't empty";
                           } else if (value.length < 6) {
                             return "Password is less than 6 letter";
-                          } else if (value != Password1) {
+                          } else if (value != password1) {
                             return "Password not matched";
                           }
+                          return null;
                         },
                         onChanged: (value) {
-                          Confirm_Password = value;
-                          print(Confirm_Password);
+                          confirmPassword = value;
                         },
                       ),
                     ),

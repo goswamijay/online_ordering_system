@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:online_ordering_system/Controller/Confirm_Order_Items.dart';
 import 'package:provider/provider.dart';
-
 import '../../Models/ConfirmListModelClass.dart';
 import '../../Models/FavoriteListModelClass.dart';
 import '../../Controller/Cart_items_provider.dart';
 import '../../Utils/Drawer.dart';
 import '../../Utils/Routes_Name.dart';
-import 'package:collection/collection.dart';
 
 class CartMainScreen extends StatefulWidget {
   const CartMainScreen({Key? key}) : super(key: key);
@@ -22,9 +20,9 @@ class CartMainScreen extends StatefulWidget {
 class _CartMainScreenState extends State<CartMainScreen> {
   @override
   Widget build(BuildContext context) {
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
-    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
-    final ConfirmProvider = Provider.of<Place_order_Provider>(context);
+    final cartProvider = Provider.of<Purchase_items_provider>(context);
+    final favoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final confirmProvider = Provider.of<Place_order_Provider>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: drawerWidget(context, Colors.indigo),
@@ -91,7 +89,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                           width: 34 / 2,
                           height: 34 / 2,
                           child: Text(
-                            FavoriteProvider.FavoriteList.length.toString(),
+                            favoriteProvider.FavoriteList.length.toString(),
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: Colors.white),
                           ),
@@ -138,14 +136,14 @@ class _CartMainScreenState extends State<CartMainScreen> {
                       Row(
                         children: [
                           Text(
-                            "Total Items (${CartProvider.allItemCount().toString()})",
+                            "Total Items (${cartProvider.allItemCount().toString()})",
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),
                           const Spacer(),
                           Text(
-                            CartProvider.allItemPrice().toString(),
+                            cartProvider.allItemPrice().toString(),
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
@@ -163,7 +161,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                           ),
                           const Spacer(),
                           Text(
-                            CartProvider.allItemPrice().toString(),
+                            cartProvider.allItemPrice().toString(),
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
@@ -201,11 +199,11 @@ class _CartMainScreenState extends State<CartMainScreen> {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return CartProvider.PurchaseList.isNotEmpty
+                      return cartProvider.PurchaseList.isNotEmpty
                           ? AlertDialog(
                               title: const Text("Confirm to Place Order"),
                               content: Text(
-                                  "You added ${CartProvider.allItemCount()} Product and Total Price ${CartProvider.allItemPrice()}"),
+                                  "You added ${cartProvider.allItemCount()} Product and Total Price ${cartProvider.allItemPrice()}"),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -216,36 +214,28 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                 TextButton(
                                     child: const Text('Place Order'),
                                     onPressed: () {
-                                      setState(() {
-                                        for (int index = 0;
-                                            index <
-                                                CartProvider
-                                                    .PurchaseList.length;
-                                            index++) {
-                                          ConfirmProvider.AddItems(
-                                              ConfirmListModelClass(
-                                                  Price: CartProvider
-                                                      .PurchaseList[index]
-                                                      .Price,
-                                                  Name: CartProvider
-                                                      .PurchaseList[index].Name,
-                                                  ShortDescription: CartProvider
-                                                      .PurchaseList[index]
-                                                      .ShortDescription,
-                                                  ImageURL: CartProvider
-                                                      .PurchaseList[index]
-                                                      .ImageURL,
-                                                  Count: CartProvider
-                                                      .PurchaseList[index]
-                                                      .Count,
-                                                  dateTime: DateTime.now()));
-
-                                          print(ConfirmProvider
-                                              .ConfirmList[index].Name);
-                                        }
-                                        CartProvider.cleanCartItem();
-                                        Navigator.pop(context);
-                                      });
+                                      for (int index = 0;
+                                          index <
+                                              cartProvider.PurchaseList.length;
+                                          index++) {
+                                        confirmProvider.AddItems(
+                                            ConfirmListModelClass(
+                                                Price: cartProvider
+                                                    .PurchaseList[index].Price,
+                                                Name: cartProvider
+                                                    .PurchaseList[index].Name,
+                                                ShortDescription: cartProvider
+                                                    .PurchaseList[index]
+                                                    .ShortDescription,
+                                                ImageURL: cartProvider
+                                                    .PurchaseList[index]
+                                                    .ImageURL,
+                                                Count: cartProvider
+                                                    .PurchaseList[index].Count,
+                                                dateTime: DateTime.now()));
+                                      }
+                                      cartProvider.cleanCartItem();
+                                      Navigator.pop(context);
                                     }),
                               ],
                             )
@@ -290,11 +280,11 @@ class _CartMainScreenState extends State<CartMainScreen> {
   }
 
   Widget fullList1(BuildContext context) {
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
-    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final cartProvider = Provider.of<Purchase_items_provider>(context);
+    final favoriteProvider = Provider.of<Favorite_add_provider>(context);
 
     Size size = MediaQuery.of(context).size;
-    return CartProvider.PurchaseList.isEmpty
+    return cartProvider.PurchaseList.isEmpty
         ? Container(
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -317,10 +307,10 @@ class _CartMainScreenState extends State<CartMainScreen> {
             // physics: const NeverScrollableScrollPhysics(),
             //  shrinkWrap: true,
 
-            itemCount: CartProvider.PurchaseList.length,
+            itemCount: cartProvider.PurchaseList.length,
             itemBuilder: (context, index) {
-              bool isSaved = FavoriteProvider.FavoriteList.any((element) =>
-                  element.Name.contains(CartProvider.PurchaseList[index].Name));
+              bool isSaved = favoriteProvider.FavoriteList.any((element) =>
+                  element.Name.contains(cartProvider.PurchaseList[index].Name));
 
               return Card(
                 child: Column(
@@ -333,7 +323,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 12.0),
                                 child: Image(
-                                  image: AssetImage(CartProvider
+                                  image: AssetImage(cartProvider
                                       .PurchaseList[index].ImageURL),
                                   // image: AssetImage('first.jpg'),
                                   width: size.width / 2,
@@ -359,11 +349,10 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                           child: isSaved
                                               ? InkWell(
                                                   onTap: () {
-                                                    value
-                                                        .RemoveFavoriteItems(
-                                                            FavoriteProvider
-                                                                    .FavoriteList[
-                                                                index]);
+                                                    value.RemoveFavoriteItems(
+                                                        favoriteProvider
+                                                                .FavoriteList[
+                                                            index]);
                                                   },
                                                   child: const Icon(
                                                     CupertinoIcons.heart_solid,
@@ -375,20 +364,20 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                                   onTap: () {
                                                     value.AddFavoriteItems(
                                                         FavoriteListModelClass(
-                                                            Price: CartProvider
+                                                            Price: cartProvider
                                                                 .PurchaseList[
                                                                     index]
                                                                 .Price,
-                                                            Name: CartProvider
+                                                            Name: cartProvider
                                                                 .PurchaseList[
                                                                     index]
                                                                 .Name,
                                                             ShortDescription:
-                                                                CartProvider
+                                                                cartProvider
                                                                     .PurchaseList[
                                                                         index]
                                                                     .ShortDescription,
-                                                            ImageURL: CartProvider
+                                                            ImageURL: cartProvider
                                                                 .PurchaseList[
                                                                     index]
                                                                 .ImageURL));
@@ -406,7 +395,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                 SizedBox(
                                   width: size.width,
                                   child: AutoSizeText(
-                                    CartProvider.PurchaseList[index].Name,
+                                    cartProvider.PurchaseList[index].Name,
                                     maxLines: 1,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
@@ -419,7 +408,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                 SizedBox(
                                   width: size.width,
                                   child: AutoSizeText(
-                                    CartProvider
+                                    cartProvider
                                         .PurchaseList[index].ShortDescription,
                                     maxLines: 2,
                                     style: const TextStyle(
@@ -438,7 +427,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                         child: Align(
                                           alignment: Alignment.topLeft,
                                           child: AutoSizeText(
-                                            '₹${CartProvider.PurchaseList[index].Count * CartProvider.PurchaseList[index].Price}',
+                                            '₹${cartProvider.PurchaseList[index].Count * cartProvider.PurchaseList[index].Price}',
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 25),
@@ -450,8 +439,8 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                     Expanded(
                                       child: IconButton(
                                           onPressed: () {
-                                            CartProvider.removeToCart(
-                                                CartProvider
+                                            cartProvider.removeToCart(
+                                                cartProvider
                                                     .PurchaseList[index]);
                                           },
                                           icon: const Icon(
@@ -465,23 +454,15 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           InkWell(
-                                            //onTap: CartProvider.decrement(CartProvider.PurchaseList[index].Count),
                                             onTap: () {
-                                              setState(() {
-                                                if (CartProvider
-                                                        .PurchaseList[index]
-                                                        .Count >
-                                                    1) {
-                                                  CartProvider
+                                              if (cartProvider
                                                       .PurchaseList[index]
-                                                      .Count--;
-                                                  print(CartProvider
-                                                      .PurchaseList[index]
-                                                      .Count);
-                                                }
-                                              });
+                                                      .Count >
+                                                  1) {
+                                                cartProvider
+                                                    .decreaseCount(index);
+                                              }
                                             },
-
                                             child: CircleAvatar(
                                               backgroundColor: Colors.grey[200],
                                               radius: 14,
@@ -493,22 +474,15 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                             ),
                                           ),
                                           Text(
-                                            CartProvider
+                                            cartProvider
                                                 .PurchaseList[index].Count
                                                 .toString(),
-                                            //CartProvider.counter.toString(),
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           InkWell(
-                                            /*     onTap: (){CartProvider.increment(CartProvider.PurchaseList[index].Count);},*/
                                             onTap: () {
-                                              setState(() {
-                                                CartProvider.PurchaseList[index]
-                                                    .Count++;
-                                                print(CartProvider
-                                                    .PurchaseList[index].Count);
-                                              });
+                                              cartProvider.increaseCount(index);
                                             },
                                             child: CircleAvatar(
                                               backgroundColor: Colors.grey[200],

@@ -22,10 +22,9 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
-    Size size = MediaQuery.of(context).size;
+    final favoriteProvider = Provider.of<Favorite_add_provider>(context);
     return Scaffold(
-      drawer: drawerWidget(context,Colors.indigo!),
+      drawer: drawerWidget(context,Colors.indigo),
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12.0, top: 12.0),
@@ -89,7 +88,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                           width: 34 / 2,
                           height: 34 / 2,
                           child: Text(
-                            FavoriteProvider.FavoriteList.length.toString(),
+                            favoriteProvider.FavoriteList.length.toString(),
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: Colors.white),
                           ),
@@ -106,19 +105,19 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
       backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FullList1(context),
+        child: fullList1(context),
       ),
     );
   }
 
 
-  Widget FullList1(BuildContext context) {
+  Widget fullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final ConfirmProvider = Provider.of<Place_order_Provider>(context);
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
+    final confirmProvider = Provider.of<Place_order_Provider>(context);
+    final cartProvider = Provider.of<Purchase_items_provider>(context);
 
 
-    return ConfirmProvider.ConfirmList.isEmpty
+    return confirmProvider.ConfirmList.isEmpty
         ? Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -134,11 +133,11 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
     )
         :
     ListView.builder(
-        itemCount: ConfirmProvider.ConfirmList.length,
+        itemCount: confirmProvider.ConfirmList.length,
         itemBuilder: (context, index) {
 
-          bool isAddedInCart = CartProvider.PurchaseList.any(
-                  (element1) => element1.Name.contains(ConfirmProvider.ConfirmList[index].Name));
+          bool isAddedInCart = cartProvider.PurchaseList.any(
+                  (element1) => element1.Name.contains(confirmProvider.ConfirmList[index].Name));
           return Card(
             child: Column(
               children: [
@@ -146,7 +145,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                   children: [
                     Expanded(
                       child: Image(
-                        image: AssetImage(ConfirmProvider.ConfirmList[index].ImageURL),
+                        image: AssetImage(confirmProvider.ConfirmList[index].ImageURL),
                         width: size.width / 2,
                         height: size.height / 4,
                       ),
@@ -161,7 +160,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                                 alignment: Alignment.topRight,
                                 child: AutoSizeText(
                                  // "Order Place Date:- ${DateTime.parse("2023-03-10")}",
-                                  "Order Place Date:- ${ConfirmProvider.ConfirmList[index].dateTime}",
+                                  "Order Place Date:- ${confirmProvider.ConfirmList[index].dateTime}",
 
                                   maxLines: 1,)),
 
@@ -171,7 +170,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                             SizedBox(
                               width: size.width,
                               child: AutoSizeText(
-                                ConfirmProvider.ConfirmList[index].Name,
+                                confirmProvider.ConfirmList[index].Name,
                                 maxLines: 1,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300, fontSize: 30),
@@ -189,7 +188,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        '₹${ConfirmProvider.ConfirmList[index].Price*ConfirmProvider.ConfirmList[index].Count}',
+                                        '₹${confirmProvider.ConfirmList[index].Price*confirmProvider.ConfirmList[index].Count}',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 25),
@@ -205,7 +204,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                                       alignment: Alignment.topLeft,
                                       child: AutoSizeText(
 
-                                          'Total Items added:-${ConfirmProvider.ConfirmList[index].Count}',
+                                          'Total Items added:-${confirmProvider.ConfirmList[index].Count}',
                                           style: const TextStyle(
                                               fontSize: 18),
                                         maxLines: 1,
@@ -221,7 +220,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                             SizedBox(
                               width: size.width,
                               child: AutoSizeText(
-                                ConfirmProvider.ConfirmList[index].ShortDescription,
+                                confirmProvider.ConfirmList[index].ShortDescription,
                                 maxLines: 2,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300, fontSize: 30),
@@ -254,15 +253,15 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
                                   )
                                       : InkWell(
                                     onTap: () {
-                                      CartProvider.addItemToCart(
+                                      cartProvider.addItemToCart(
                                           FavoriteListModelClass(
                                               Price:
-                                              ConfirmProvider.ConfirmList[index].Price,
-                                              Name: ConfirmProvider.ConfirmList[index].Name,
+                                              confirmProvider.ConfirmList[index].Price,
+                                              Name: confirmProvider.ConfirmList[index].Name,
                                               ShortDescription:
-                                              ConfirmProvider.ConfirmList[index]
+                                              confirmProvider.ConfirmList[index]
                                                   .ShortDescription,
-                                              ImageURL: ConfirmProvider.ConfirmList[index]
+                                              ImageURL: confirmProvider.ConfirmList[index]
                                                   .ImageURL));
                                     },
                                     child: Container(

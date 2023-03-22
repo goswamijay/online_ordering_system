@@ -9,7 +9,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  static String name = "";
+   String name = "";
   bool changeButton = false;
   bool _passwordVisible = false;
 
@@ -21,9 +21,9 @@ class _LoginPageState extends State<LoginPage> {
         changeButton = true;
       });
       formKey.currentState!.save();
-      await Future.delayed(const Duration(seconds: 1));
-      await Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage,(route) => false);
-
+      await Future.delayed(const Duration(seconds: 1),(){
+         Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage,(route) => false);
+      });
       setState(() {
         changeButton = false;
       });
@@ -64,10 +64,10 @@ class _LoginPageState extends State<LoginPage> {
                           if (value!.isEmpty) {
                             return "Username can't empty";
                           }
+                          return null;
                         },
                         onChanged: (value) {
                           name = value;
-                          print(name);
                         },
                       ),
                     ),
@@ -97,10 +97,10 @@ class _LoginPageState extends State<LoginPage> {
                           } else if (value.length < 6) {
                             return "Password is less than 6 letter";
                           }
+                          return null;
                         },
                         onChanged: (value) {
                           name = value;
-                          print(name);
                         },
                       ),
                     ),

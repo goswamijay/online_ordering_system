@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../Views/Product Screen/Product Main Screen.dart';
-
+import '../../Models/ProductListModelClass.dart';
 class ApiConncection {
   static Future<List<dynamic>> getData() async {
     List<ProductList> users = [];

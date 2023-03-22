@@ -33,6 +33,16 @@ class Purchase_items_provider with ChangeNotifier {
     return sum;
   }
 
+  void increaseCount(int index){
+    _PurchaseList[index].Count++;
+    notifyListeners();
+  }
+
+  void decreaseCount(int index){
+    _PurchaseList[index].Count--;
+    notifyListeners();
+  }
+
   int allItemCount(){
     Iterable<int> totalCount = _PurchaseList.map((e) => e.Count);
     totalCount.toString();

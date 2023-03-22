@@ -20,9 +20,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
-
-    Size size = MediaQuery.of(context).size;
+    final cartProvider = Provider.of<Purchase_items_provider>(context);
     return Scaffold(
       drawer: drawerWidget(context, Colors.indigo),
       appBar: AppBar(
@@ -88,7 +86,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                           width: 34 / 2,
                           height: 34 / 2,
                           child: Text(
-                            CartProvider.PurchaseList.length.toString(),
+                            cartProvider.PurchaseList.length.toString(),
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: Colors.white),
                           ),
@@ -107,7 +105,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
-            child: FullList1(context),
+            child: fullList1(context),
           ),
         ),
       ),
@@ -115,12 +113,12 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
   }
   
 
-  Widget FullList1(BuildContext context) {
+  Widget fullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final FavoriteProvider = Provider.of<Favorite_add_provider>(context);
-    final CartProvider = Provider.of<Purchase_items_provider>(context);
+    final favoriteProvider = Provider.of<Favorite_add_provider>(context);
+    final cartProvider = Provider.of<Purchase_items_provider>(context);
 
-    return FavoriteProvider.FavoriteList.isEmpty
+    return favoriteProvider.FavoriteList.isEmpty
         ? Container(
       height: size.height,
       decoration: const BoxDecoration(
@@ -145,14 +143,14 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
         : ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: FavoriteProvider.FavoriteList.length,
+            itemCount: favoriteProvider.FavoriteList.length,
             itemBuilder: (context, index) {
-              bool isSaved = FavoriteProvider.FavoriteList.any((element) =>
+              bool isSaved = favoriteProvider.FavoriteList.any((element) =>
                   element.Name.contains(
-                      FavoriteProvider.FavoriteList[index].Name));
-              List<dynamic> FavoriteItem = FavoriteProvider.FavoriteList;
-              bool isAddedInCart = CartProvider.PurchaseList.any(
-                      (element1) => element1.Name.contains(FavoriteProvider.FavoriteList[index].Name));
+                      favoriteProvider.FavoriteList[index].Name));
+              List<dynamic> favoriteItem = favoriteProvider.FavoriteList;
+              bool isAddedInCart = cartProvider.PurchaseList.any(
+                      (element1) => element1.Name.contains(favoriteProvider.FavoriteList[index].Name));
               return Card(
                 child: Column(
                   children: [
@@ -160,7 +158,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                       children: [
                         Expanded(
                           child: Image(
-                            image: AssetImage(FavoriteItem[index].ImageURL),
+                            image: AssetImage(favoriteItem[index].ImageURL),
                             width: size.width / 2,
                             height: size.height / 4,
                           ),
@@ -176,13 +174,10 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                   child: isSaved
                                       ? InkWell(
                                           onTap: () {
-                                            setState(() {
-                                              FavoriteProvider
+                                              favoriteProvider
                                                   .RemoveFavoriteItems(
-                                                      FavoriteProvider
+                                                      favoriteProvider
                                                           .FavoriteList[index]);
-                                            });
-
                                             ScaffoldMessenger.of(context)
                                                 .hideCurrentSnackBar();
                                             ScaffoldMessenger.of(context)
@@ -206,10 +201,6 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                         )
                                       : InkWell(
                                           onTap: () {
-                                            setState(() {
-
-                                            });
-
                                             ScaffoldMessenger.of(context)
                                                 .hideCurrentSnackBar();
                                             ScaffoldMessenger.of(context)
@@ -234,7 +225,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                 SizedBox(
                                   width: size.width,
                                   child: AutoSizeText(
-                                    FavoriteItem[index].Name,
+                                    favoriteItem[index].Name,
                                     maxLines: 1,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
@@ -249,7 +240,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      '₹${FavoriteItem[index].Price}',
+                                      '₹${favoriteItem[index].Price}',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 25),
@@ -262,7 +253,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                 SizedBox(
                                   width: size.width,
                                   child: AutoSizeText(
-                                    FavoriteItem[index].ShortDescription,
+                                    favoriteItem[index].ShortDescription,
                                     maxLines: 2,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w300,
@@ -296,15 +287,15 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                       )
                                           : InkWell(
                                         onTap: () {
-                                          CartProvider.addItemToCart(
+                                          cartProvider.addItemToCart(
                                               FavoriteListModelClass(
                                                   Price:
-                                                  FavoriteItem[index].Price,
-                                                  Name: FavoriteItem[index].Name,
+                                                  favoriteItem[index].Price,
+                                                  Name: favoriteItem[index].Name,
                                                   ShortDescription:
-                                                  FavoriteItem[index]
+                                                  favoriteItem[index]
                                                       .ShortDescription,
-                                                  ImageURL: FavoriteItem[index]
+                                                  ImageURL: favoriteItem[index]
                                                       .ImageURL));
                                         },
                                         child: Container(
