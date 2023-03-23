@@ -14,4 +14,7 @@ class Routes_Name {
   static String OrderPlaceMainScreen = 'OrderPlaceMainScreen';
   static String DrawerWidget = 'DrawerWidget';
   static String OnBoardingScreen = 'OnBoardingScreen';
+  static String ResetPasswordEmail = 'ResetPasswordEmail';
+  static String ResetPasswordOTP = 'ResetPasswordOTP';
+  static String ResetPasswordValue = 'ResetPasswordValue';
 }

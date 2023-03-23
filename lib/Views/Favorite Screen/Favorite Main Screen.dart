@@ -17,7 +17,6 @@ class FavoriteMainScreen extends StatefulWidget {
 }
 
 class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
-
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<Purchase_items_provider>(context);
@@ -46,9 +45,9 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
           padding: EdgeInsets.only(top: 12.0),
           child: Center(
               child: Text(
-                "Favorite Items",
-                style: TextStyle(color: Colors.black),
-              )),
+            "Favorite Items",
+            style: TextStyle(color: Colors.black),
+          )),
         ),
         centerTitle: true,
         elevation: 0,
@@ -111,7 +110,6 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
       ),
     );
   }
-  
 
   Widget fullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -120,23 +118,21 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
 
     return favoriteProvider.FavoriteList.isEmpty
         ? Container(
-      height: size.height,
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(16.0),
-              topLeft: Radius.circular(16.0)),
-          color: Colors.white
-      ),
+            height: size.height,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(16.0),
+                    topLeft: Radius.circular(16.0)),
+                color: Colors.white),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-               // Image.asset("assets/oops.png"),
+                // Image.asset("assets/oops.png"),
                 Image.asset("assets/favourite.gif"),
                 const Text(
                   "Not any items added in Favorite ....!",
                   style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
-
               ],
             ),
           )
@@ -149,181 +145,213 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                   element.Name.contains(
                       favoriteProvider.FavoriteList[index].Name));
               List<dynamic> favoriteItem = favoriteProvider.FavoriteList;
-              bool isAddedInCart = cartProvider.PurchaseList.any(
-                      (element1) => element1.Name.contains(favoriteProvider.FavoriteList[index].Name));
-              return Card(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Image(
-                            image: AssetImage(favoriteItem[index].ImageURL),
-                            width: size.width / 2,
-                            height: size.height / 4,
+              bool isAddedInCart = cartProvider.PurchaseList.any((element1) =>
+                  element1.Name.contains(
+                      favoriteProvider.FavoriteList[index].Name));
+              return InkWell(
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                onTap: () {
+                  Navigator.pushNamed(context, Routes_Name.ProductDetailsScreen,
+                      arguments: {
+                        'Price': favoriteProvider.FavoriteList[index].Price,
+                        'Name': favoriteProvider.FavoriteList[index].Name,
+                        'ImageURL':
+                            favoriteProvider.FavoriteList[index].ImageURL,
+                        'ShortDescription': favoriteProvider
+                            .FavoriteList[index].ShortDescription,
+                        'Index': index,
+                      });
+                },
+                child: Card(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Image(
+                              image: AssetImage(favoriteItem[index].ImageURL),
+                              width: size.width / 2,
+                              height: size.height / 4,
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: isSaved
-                                      ? InkWell(
-                                          onTap: () {
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: isSaved
+                                        ? InkWell(
+                                            onTap: () {
                                               favoriteProvider
                                                   .RemoveFavoriteItems(
                                                       favoriteProvider
                                                           .FavoriteList[index]);
-                                            ScaffoldMessenger.of(context)
-                                                .hideCurrentSnackBar();
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                  "Product Remove From Favorite!",
-                                                  style:
-                                                      TextStyle(fontSize: 16),
+                                              ScaffoldMessenger.of(context)
+                                                  .hideCurrentSnackBar();
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    "Product Remove From Favorite!",
+                                                    style:
+                                                        TextStyle(fontSize: 16),
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.indigo,
+                                                  duration:
+                                                      Duration(seconds: 1),
                                                 ),
-                                                backgroundColor: Colors.indigo,
-                                                duration: Duration(seconds: 1),
-                                              ),
-                                            );
-                                          },
-                                          child: const Icon(
-                                            CupertinoIcons.heart_solid,
-                                            color: Colors.red,
-                                            size: 16,
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () {
-                                            ScaffoldMessenger.of(context)
-                                                .hideCurrentSnackBar();
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                  "Product Added To Favorite!",
-                                                  style:
-                                                      TextStyle(fontSize: 16),
+                                              );
+                                            },
+                                            child: const Icon(
+                                              CupertinoIcons.heart_solid,
+                                              color: Colors.red,
+                                              size: 16,
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              ScaffoldMessenger.of(context)
+                                                  .hideCurrentSnackBar();
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    "Product Added To Favorite!",
+                                                    style:
+                                                        TextStyle(fontSize: 16),
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.indigo,
+                                                  duration:
+                                                      Duration(seconds: 1),
                                                 ),
-                                                backgroundColor: Colors.indigo,
-                                                duration: Duration(seconds: 1),
-                                              ),
-                                            );
-                                          },
-                                          child: const Icon(
-                                            CupertinoIcons.heart,
-                                            size: 16,
+                                              );
+                                            },
+                                            child: const Icon(
+                                              CupertinoIcons.heart,
+                                              size: 16,
+                                            ),
                                           ),
-                                        ),
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: AutoSizeText(
-                                    favoriteItem[index].Name,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 30),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 80,
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      '₹${favoriteItem[index].Price}',
+                                  SizedBox(
+                                    width: size.width,
+                                    child: AutoSizeText(
+                                      favoriteItem[index].Name,
+                                      maxLines: 1,
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25),
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 30),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 80,
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: AutoSizeText(
-                                    favoriteItem[index].ShortDescription,
-                                    maxLines: 2,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 30),
+                                  SizedBox(
+                                    height: size.height / 80,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 50,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: isAddedInCart
-                                          ? InkWell(
-                                        onTap: () {},
-                                        child: Container(
-                                          width: size.width,
-                                          height: size.height / 20,
-                                          decoration: BoxDecoration(
-                                              color: Colors.pink,
-                                              borderRadius:
-                                              BorderRadius.circular(5.0)),
-                                          child: const Center(
-                                              child: Text(
-                                                "Also Add in Cart",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold),
-                                              )),
-                                        ),
-                                      )
-                                          : InkWell(
-                                        onTap: () {
-                                          cartProvider.addItemToCart(
-                                              FavoriteListModelClass(
-                                                  Price:
-                                                  favoriteItem[index].Price,
-                                                  Name: favoriteItem[index].Name,
-                                                  ShortDescription:
-                                                  favoriteItem[index]
-                                                      .ShortDescription,
-                                                  ImageURL: favoriteItem[index]
-                                                      .ImageURL));
-                                        },
-                                        child: Container(
-                                          width: size.width,
-                                          height: size.height / 20,
-                                          decoration: BoxDecoration(
-                                              color: Colors.indigo,
-                                              borderRadius:
-                                              BorderRadius.circular(5.0)),
-                                          child: const Center(
-                                              child: Text(
-                                                "Add to Cart",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold),
-                                              )),
-                                        ),
+                                  SizedBox(
+                                    width: size.width,
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        '₹${favoriteItem[index].Price}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 25),
                                       ),
                                     ),
-                                  ],
-                                )
-                              ],
+                                  ),
+                                  SizedBox(
+                                    height: size.height / 80,
+                                  ),
+                                  SizedBox(
+                                    width: size.width,
+                                    child: AutoSizeText(
+                                      favoriteItem[index].ShortDescription,
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: size.height / 50,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: isAddedInCart
+                                            ? InkWell(
+                                                onTap: () {},
+                                                child: Container(
+                                                  width: size.width,
+                                                  height: size.height / 20,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.pink,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0)),
+                                                  child: const Center(
+                                                      child: Text(
+                                                    "Also Add in Cart",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )),
+                                                ),
+                                              )
+                                            : InkWell(
+                                                onTap: () {
+                                                  cartProvider.addItemToCart(
+                                                      FavoriteListModelClass(
+                                                          Price: favoriteItem[
+                                                                  index]
+                                                              .Price,
+                                                          Name: favoriteItem[
+                                                                  index]
+                                                              .Name,
+                                                          ShortDescription:
+                                                              favoriteItem[
+                                                                      index]
+                                                                  .ShortDescription,
+                                                          ImageURL:
+                                                              favoriteItem[
+                                                                      index]
+                                                                  .ImageURL));
+                                                },
+                                                child: Container(
+                                                  width: size.width,
+                                                  height: size.height / 20,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.indigo,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0)),
+                                                  child: const Center(
+                                                      child: Text(
+                                                    "Add to Cart",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               );
             });

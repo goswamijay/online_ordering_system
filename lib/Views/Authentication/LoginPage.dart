@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 
+import '../../Controller/ApiConnection/Authentication.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -9,11 +11,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-   String name = "";
+  String name = "";
   bool changeButton = false;
   bool _passwordVisible = false;
 
   final formKey = GlobalKey<FormState>();
+  TextEditingController loginEmailIdController = TextEditingController();
+  TextEditingController loginPasswordIdController = TextEditingController();
 
   moveToHome(BuildContext context) async {
     if (formKey.currentState!.validate()) {
@@ -21,14 +25,18 @@ class _LoginPageState extends State<LoginPage> {
         changeButton = true;
       });
       formKey.currentState!.save();
-      await Future.delayed(const Duration(seconds: 1),(){
-         Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage,(route) => false);
+      //accessApi();
+      await Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes_Name.HomePage, (route) => false);
       });
       setState(() {
         changeButton = false;
       });
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +62,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(
+                        controller: loginEmailIdController,
                         decoration: const InputDecoration(
                           hintText: "User Name",
                           labelText: "Username",
@@ -72,8 +81,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(
+                        controller: loginPasswordIdController,
                         obscureText: !_passwordVisible,
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
@@ -108,7 +118,10 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         const Spacer(),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(Routes_Name.ResetPasswordEmail);
+                            },
                             child: const Text(
                               "Reset Password",
                               style: TextStyle(color: Colors.indigo),
@@ -156,7 +169,10 @@ class _LoginPageState extends State<LoginPage> {
                                 context, Routes_Name.SignUpScreen);
                           },
                           child: const Text("SignUp",
-                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.pink,)),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.pink,
+                              )),
                         ),
                       ],
                     )

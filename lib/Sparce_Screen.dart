@@ -69,8 +69,10 @@ class _Space_ScreenState extends State<Space_Screen> {
 
   void navigation() {
     Future.delayed(const Duration(seconds: 3), () {
+   /*   Navigator.pushNamedAndRemoveUntil(
+          context, Routes_Name.LoginScreen, (route) => false);*/
       Navigator.pushNamedAndRemoveUntil(
-          context, Routes_Name.LoginScreen, (route) => false);
+          context, Routes_Name.OnBoardingScreen, (route) => false);
     });
   }
 

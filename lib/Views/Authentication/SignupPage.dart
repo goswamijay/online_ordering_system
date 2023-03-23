@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 
+import '../../Controller/ApiConnection/Authentication.dart';
+
 class SignUPPage extends StatefulWidget {
   const SignUPPage({Key? key}) : super(key: key);
 
@@ -16,6 +18,11 @@ class _SignUPPageState extends State<SignUPPage> {
   bool changeButton = false;
   bool _passwordVisible = false;
   final _formKey = GlobalKey<FormState>();
+  TextEditingController signupNameController = TextEditingController();
+   TextEditingController signupMobileController = TextEditingController();
+   TextEditingController signupEmailController = TextEditingController();
+   TextEditingController signupPasswordController = TextEditingController();
+
 
   moveToHome(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -23,6 +30,7 @@ class _SignUPPageState extends State<SignUPPage> {
         changeButton = true;
       });
       _formKey.currentState!.save();
+     //accessApi();
 
       await Future.delayed(const Duration(seconds: 1),(){
         Navigator.pushNamed(context, Routes_Name.OTPScreen, arguments: {'email_id': email.toString()});
@@ -33,6 +41,12 @@ class _SignUPPageState extends State<SignUPPage> {
       });
     }
   }
+
+   Future<void> accessApi() async {
+     Authentication.loginUser(
+         signupNameController.text, signupPasswordController.text,signupNameController.text,signupMobileController.text)
+         .then((value) => value);
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +75,7 @@ class _SignUPPageState extends State<SignUPPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
+                        controller: signupNameController,
                         decoration: const InputDecoration(
                           hintText: "User Name",
                           labelText: "User Name",
@@ -79,6 +94,7 @@ class _SignUPPageState extends State<SignUPPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
+                        controller: signupEmailController,
                         decoration: const InputDecoration(
                           hintText: "Email Id",
                           labelText: "Email Id",
@@ -97,6 +113,29 @@ class _SignUPPageState extends State<SignUPPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                       child: TextFormField(
+                        controller: signupMobileController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          hintText: "Mobile Number",
+                          labelText: "Mobile Number",
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Mobile Number can't empty";
+                          } else if (value.length < 10 || value.length > 10) {
+                            return "Mobile number is not valid";
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          name = value;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      child: TextFormField(
+                        controller: signupPasswordController,
                         obscureText: true,
                         decoration: const InputDecoration(
                           hintText: "Enter Password",

@@ -7,6 +7,7 @@ import 'package:online_ordering_system/Controller/Confirm_Order_Items.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:online_ordering_system/Sparce_Screen.dart';
 import 'package:online_ordering_system/Views/Authentication/LoginPage.dart';
+import 'package:online_ordering_system/Views/Authentication/ResetPassword/ResetPasswordOTP.dart';
 import 'package:online_ordering_system/Views/Cart%20Screen/Cart%20Main%20Screen.dart';
 import 'package:online_ordering_system/firebase_options.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,8 @@ import 'Utils/notificationservice/local_notification_service.dart';
 import 'Views/Account Screen/Account Main Screen.dart';
 import 'Views/Account Screen/AccountResetPassword.dart';
 import 'Views/Authentication/OTPScreen.dart';
+import 'Views/Authentication/ResetPassword/ResetPasswordEmail.dart';
+import 'Views/Authentication/ResetPassword/ResetPasswordValue.dart';
 import 'Views/Authentication/SignupPage.dart';
 import 'Views/Authentication/WelcomeScreen.dart';
 import 'Views/Favorite Screen/Favorite Main Screen.dart';
@@ -34,10 +37,10 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
-  final fcmToken = await FirebaseMessaging.instance.getToken();
+  //final fcmToken = await FirebaseMessaging.instance.getToken();
   //FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  LocalNotificationService.initialize();
-  print(fcmToken);
+  //LocalNotificationService.initialize();
+ // print(fcmToken);
   runApp(const MyApp());
 }
 
@@ -73,7 +76,10 @@ class MyApp extends StatelessWidget {
           Routes_Name.AccountResetPassword: (context) => const AccountResetPassword(),
           Routes_Name.OrderPlaceMainScreen: (context) => const OrderPlaceMainScreen(),
           Routes_Name.ProductDetailsScreen : (context) => const ProductDetailsScreen(),
-          Routes_Name.OnBoardingScreen : (context) => const OnBoardingScreen()
+          Routes_Name.OnBoardingScreen : (context) => const OnBoardingScreen(),
+          Routes_Name.ResetPasswordEmail : (context) => const ResetPasswordEmail(),
+          Routes_Name.ResetPasswordOTP : (context) => const ResetPasswordOTP(),
+          Routes_Name.ResetPasswordValue : (context) => const ResetPasswordValue()
         },
       ),
     );

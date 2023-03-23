@@ -23,7 +23,6 @@ class _ProductMainScreenState extends State<ProductMainScreen>
 
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  TextEditingController controller = TextEditingController();
   List<dynamic> searchItems = [];
  // TabController? _tabController;
   //int photoIndex = 0;
@@ -182,7 +181,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                 return CupertinoSearchTextField(
                                   backgroundColor: Colors.white,
                                   itemSize: size.height / 33,
-                                  controller: controller,
+                                  controller: changeControllerClass.controller,
                                   onChanged: (value) {
                                     changeControllerClass.searchButtonPress();
 
@@ -204,11 +203,11 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                     } else {
                                       changeControllerClass.listNotEmpty();
                                     }
-                                    searchItems = result;
+                                    changeControllerClass.searchItems = result;
                                   },
                                   onSuffixTap: () {
                                     changeControllerClass.searchButtonUnPress();
-                                    controller.clear();
+                                    changeControllerClass.controller.clear();
                                   },
                                   onSubmitted: (value) {},
                                   autocorrect: true,
@@ -364,12 +363,12 @@ class _ProductMainScreenState extends State<ProductMainScreen>
         : ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: searchItems.length,
+            itemCount: changeControllerClass.searchItems.length,
             itemBuilder: (context, index) {
               bool isSaved = favoriteProvider.FavoriteList.any(
-                  (element) => element.Name.contains(searchItems[index].Name));
+                  (element) => element.Name.contains(changeControllerClass.searchItems[index].Name));
               bool isAddedInCart1 = cartProvider.PurchaseList.any((element1) =>
-                  element1.Name.contains(searchItems[index].Name));
+                  element1.Name.contains(changeControllerClass.searchItems[index].Name));
 
               return InkWell(
                 hoverColor: Colors.transparent,
@@ -378,10 +377,10 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                 onTap: () {
                   Navigator.pushNamed(context, Routes_Name.ProductDetailsScreen,
                       arguments: {
-                        'Price': searchItems[index].Price,
-                        'Name': searchItems[index].Name,
-                        'ImageURL': searchItems[index].ImageURL,
-                        'ShortDescription' : searchItems[index].ShortDescription,
+                        'Price': changeControllerClass.searchItems[index].Price,
+                        'Name': changeControllerClass.searchItems[index].Name,
+                        'ImageURL': changeControllerClass.searchItems[index].ImageURL,
+                        'ShortDescription' : changeControllerClass.searchItems[index].ShortDescription,
                         'Index' : index,
                       });
                 },
@@ -392,7 +391,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         children: [
                           Expanded(
                             child: Image(
-                              image: AssetImage(searchItems[index].ImageURL),
+                              image: AssetImage(changeControllerClass.searchItems[index].ImageURL),
                               width: size.width / 2,
                               height: size.height / 4,
                             ),
@@ -441,15 +440,15 @@ class _ProductMainScreenState extends State<ProductMainScreen>
 
                                                 favoriteProvider.AddFavoriteItems(
                                                     FavoriteListModelClass(
-                                                        Price: searchItems[index]
+                                                        Price: changeControllerClass.searchItems[index]
                                                             .Price,
-                                                        Name: searchItems[index]
+                                                        Name: changeControllerClass.searchItems[index]
                                                             .Name,
                                                         ShortDescription:
-                                                            searchItems[index]
+                                                            changeControllerClass.searchItems[index]
                                                                 .ShortDescription,
                                                         ImageURL:
-                                                            searchItems[index]
+                                                            changeControllerClass.searchItems[index]
                                                                 .ImageURL,
                                                         Count: 1));
 
@@ -479,7 +478,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   SizedBox(
                                     width: size.width,
                                     child: AutoSizeText(
-                                      searchItems[index].Name,
+                                      changeControllerClass.searchItems[index].Name,
                                       maxLines: 1,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w300,
@@ -494,7 +493,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        '₹${searchItems[index].Price}',
+                                        '₹${changeControllerClass.searchItems[index].Price}',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 25),
@@ -507,7 +506,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   SizedBox(
                                     width: size.width,
                                     child: AutoSizeText(
-                                      searchItems[index].ShortDescription,
+                                      changeControllerClass.searchItems[index].ShortDescription,
                                       maxLines: 2,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w300,
@@ -546,15 +545,15 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                   cartProvider.addItemToCart(
                                                       FavoriteListModelClass(
                                                           Price:
-                                                              searchItems[index]
+                                                              changeControllerClass.searchItems[index]
                                                                   .Price,
-                                                          Name: searchItems[index]
+                                                          Name: changeControllerClass.searchItems[index]
                                                               .Name,
                                                           ShortDescription:
-                                                              searchItems[index]
+                                                              changeControllerClass.searchItems[index]
                                                                   .ShortDescription,
                                                           ImageURL:
-                                                              searchItems[index]
+                                                              changeControllerClass.searchItems[index]
                                                                   .ImageURL,
                                                           Count: 1));
                                                 },

@@ -18,13 +18,11 @@ class OrderPlaceMainScreen extends StatefulWidget {
 }
 
 class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
-
   @override
   Widget build(BuildContext context) {
-
     final favoriteProvider = Provider.of<Favorite_add_provider>(context);
     return Scaffold(
-      drawer: drawerWidget(context,Colors.indigo),
+      drawer: drawerWidget(context, Colors.indigo),
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12.0, top: 12.0),
@@ -48,9 +46,9 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
           padding: EdgeInsets.only(top: 12.0),
           child: Center(
               child: Text(
-                "Order Placed Items",
-                style: TextStyle(color: Colors.black),
-              )),
+            "Order Placed Items",
+            style: TextStyle(color: Colors.black),
+          )),
         ),
         centerTitle: true,
         elevation: 0,
@@ -110,189 +108,217 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
     );
   }
 
-
   Widget fullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final confirmProvider = Provider.of<Place_order_Provider>(context);
     final cartProvider = Provider.of<Purchase_items_provider>(context);
 
-
     return confirmProvider.ConfirmList.isEmpty
         ? Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset("assets/oops.png"),
-          const Text(
-            "No any items purchase....!",
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-        ],
-      ),
-    )
-        :
-    ListView.builder(
-        itemCount: confirmProvider.ConfirmList.length,
-        itemBuilder: (context, index) {
-
-          bool isAddedInCart = cartProvider.PurchaseList.any(
-                  (element1) => element1.Name.contains(confirmProvider.ConfirmList[index].Name));
-          return Card(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Image(
-                        image: AssetImage(confirmProvider.ConfirmList[index].ImageURL),
-                        width: size.width / 2,
-                        height: size.height / 4,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Align(
-                                alignment: Alignment.topRight,
-                                child: AutoSizeText(
-                                 // "Order Place Date:- ${DateTime.parse("2023-03-10")}",
-                                  "Order Place Date:- ${confirmProvider.ConfirmList[index].dateTime}",
-
-                                  maxLines: 1,)),
-
-                            SizedBox(
-                              height: size.height / 70,
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: AutoSizeText(
-                                confirmProvider.ConfirmList[index].Name,
-                                maxLines: 1,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300, fontSize: 30),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 70,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: SizedBox(
-                                    width: size.width,
-                                    child: Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        '₹${confirmProvider.ConfirmList[index].Price*confirmProvider.ConfirmList[index].Count}',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                Expanded(
-                                  child: SizedBox(
-                                    width: size.width,
-                                    child: Align(
-                                      alignment: Alignment.topLeft,
-                                      child: AutoSizeText(
-
-                                          'Total Items added:-${confirmProvider.ConfirmList[index].Count}',
-                                          style: const TextStyle(
-                                              fontSize: 18),
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: size.height / 70,
-                            ),
-                            SizedBox(
-                              width: size.width,
-                              child: AutoSizeText(
-                                confirmProvider.ConfirmList[index].ShortDescription,
-                                maxLines: 2,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300, fontSize: 30),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height / 70,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: isAddedInCart
-                                      ? InkWell(
-                                    onTap: () {},
-                                    child: Container(
-                                      width: size.width,
-                                      height: size.height / 20,
-                                      decoration: BoxDecoration(
-                                          color: Colors.pink,
-                                          borderRadius:
-                                          BorderRadius.circular(5.0)),
-                                      child: const Center(
-                                          child: Text(
-                                            "Also Add in Cart",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                    ),
-                                  )
-                                      : InkWell(
-                                    onTap: () {
-                                      cartProvider.addItemToCart(
-                                          FavoriteListModelClass(
-                                              Price:
-                                              confirmProvider.ConfirmList[index].Price,
-                                              Name: confirmProvider.ConfirmList[index].Name,
-                                              ShortDescription:
-                                              confirmProvider.ConfirmList[index]
-                                                  .ShortDescription,
-                                              ImageURL: confirmProvider.ConfirmList[index]
-                                                  .ImageURL));
-                                    },
-                                    child: Container(
-                                      width: size.width,
-                                      height: size.height / 20,
-                                      decoration: BoxDecoration(
-                                          color: Colors.indigo,
-                                          borderRadius:
-                                          BorderRadius.circular(5.0)),
-                                      child: const Center(
-                                          child: Text(
-                                            "Again Add to Cart",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                )
+                Image.asset("assets/oops.png"),
+                const Text(
+                  "No any items purchase....!",
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
               ],
             ),
-          );
-        });
+          )
+        : ListView.builder(
+            itemCount: confirmProvider.ConfirmList.length,
+            itemBuilder: (context, index) {
+              bool isAddedInCart = cartProvider.PurchaseList.any((element1) =>
+                  element1.Name.contains(
+                      confirmProvider.ConfirmList[index].Name));
+              return InkWell(
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                onTap: () {
+                  Navigator.pushNamed(context, Routes_Name.ProductDetailsScreen,
+                      arguments: {
+                        'Price': confirmProvider.ConfirmList[index].Price,
+                        'Name': confirmProvider.ConfirmList[index].Name,
+                        'ImageURL': confirmProvider.ConfirmList[index].ImageURL,
+                        'ShortDescription':
+                            confirmProvider.ConfirmList[index].ShortDescription,
+                        'Index': index,
+                      });
+                },
+                child: Card(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Image(
+                              image: AssetImage(
+                                  confirmProvider.ConfirmList[index].ImageURL),
+                              width: size.width / 2,
+                              height: size.height / 4,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Align(
+                                      alignment: Alignment.topRight,
+                                      child: AutoSizeText(
+                                        // "Order Place Date:- ${DateTime.parse("2023-03-10")}",
+                                        "Order Place Date:- ${confirmProvider.ConfirmList[index].dateTime}",
+
+                                        maxLines: 1,
+                                      )),
+                                  SizedBox(
+                                    height: size.height / 70,
+                                  ),
+                                  SizedBox(
+                                    width: size.width,
+                                    child: AutoSizeText(
+                                      confirmProvider.ConfirmList[index].Name,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: size.height / 70,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          width: size.width,
+                                          child: Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              '₹${confirmProvider.ConfirmList[index].Price * confirmProvider.ConfirmList[index].Count}',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 25),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: SizedBox(
+                                          width: size.width,
+                                          child: Align(
+                                            alignment: Alignment.topLeft,
+                                            child: AutoSizeText(
+                                              'Total Items added:-${confirmProvider.ConfirmList[index].Count}',
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: size.height / 70,
+                                  ),
+                                  SizedBox(
+                                    width: size.width,
+                                    child: AutoSizeText(
+                                      confirmProvider
+                                          .ConfirmList[index].ShortDescription,
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: size.height / 70,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: isAddedInCart
+                                            ? InkWell(
+                                                onTap: () {},
+                                                child: Container(
+                                                  width: size.width,
+                                                  height: size.height / 20,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.pink,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0)),
+                                                  child: const Center(
+                                                      child: Text(
+                                                    "Also Add in Cart",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )),
+                                                ),
+                                              )
+                                            : InkWell(
+                                                onTap: () {
+                                                  cartProvider.addItemToCart(
+                                                      FavoriteListModelClass(
+                                                          Price: confirmProvider
+                                                              .ConfirmList[
+                                                                  index]
+                                                              .Price,
+                                                          Name: confirmProvider
+                                                              .ConfirmList[
+                                                                  index]
+                                                              .Name,
+                                                          ShortDescription:
+                                                              confirmProvider
+                                                                  .ConfirmList[
+                                                                      index]
+                                                                  .ShortDescription,
+                                                          ImageURL:
+                                                              confirmProvider
+                                                                  .ConfirmList[
+                                                                      index]
+                                                                  .ImageURL));
+                                                },
+                                                child: Container(
+                                                  width: size.width,
+                                                  height: size.height / 20,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.indigo,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0)),
+                                                  child: const Center(
+                                                      child: Text(
+                                                    "Again Add to Cart",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )),
+                                                ),
+                                              ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            });
   }
 }
-

@@ -1,7 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../Models/OnBoardingModelClass.dart';
+import '../../Utils/Routes_Name.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -11,160 +13,134 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
+  final controller = PageController(viewportFraction: 1, keepPage: true);
 
   List<OnBoardingModel> onBoardInfo = [
     OnBoardingModel(
-        'Choose Product',
-        'You Can Easily Find The Product You Want From Our Various Products!',
-        'assets/OnBoarding/i.png'),
-    OnBoardingModel('Choose a Payment Method',
-        'We Have Many Payment Methods Supported!', 'assets/OnBoarding/ii.png'),
+        title: 'Choose Product',
+        description:
+            'You Can Easily Find \n The Product You Want From Our Various Products!',
+        imagePath: 'assets/OnBoarding/i.png'),
     OnBoardingModel(
-        'Get Your Order',
-        'Open The Doors, Your Order is Now Ready For You!',
-        'assets/OnBoarding/iii.png'),
+        title: 'Add item in cart',
+        description:
+            'You can easy to add item in \n cart and wishlist and purchase product!',
+        imagePath: 'assets/OnBoarding/ii.png'),
+    OnBoardingModel(
+        title: 'Get Your Order',
+        description: 'Open The Doors, Your Order is Now Ready For You!',
+        imagePath: 'assets/OnBoarding/iii.png'),
   ];
   @override
   Widget build(BuildContext context) {
-    PageController pageController = PageController();
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          //page view
-          Expanded(
-            flex: 4,
-            child: PageView.builder(
-              physics: const BouncingScrollPhysics(),
-              controller: pageController,
-              itemBuilder: (context, index) =>
-                  onboardBuildPage(onBoardInfo[index]),
-              itemCount: onBoardInfo.length,
-              onPageChanged: (index) {
-                /* if (index == onBoardInfo.length - 1) {
-                  //OnBoardingCubit.get(context).listenPageLastIndex(true);
-                } else
-                //  OnBoardingCubit.get(context).listenPageLastIndex(false);
-              },*/
-              }
-            ),
-          ),
-
-          //indicator, buttons
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  //Indicator
-                  SmoothPageIndicator(
-                    controller: pageController,
-                    count: onBoardInfo.length,
-                    effect: const WormEffect(
-                      dotColor: Colors.indigo,
-                      activeDotColor: Colors.orange,
-                      dotHeight: 10.0,
-                      dotWidth: 10.0,
-                    ),
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      //Skip
-                      TextButton(
-                        onPressed: () {
-                          /*CacheHelper.saveData(
-                              key: 'onboardingIsSeen', value: true);
-                          navigateAndRemove(context, LoginScreen());*/
-                        },
-                        child: const Text(
-                          'SKIP',
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.orange,
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      MaterialButton(
-                        padding: const EdgeInsets.all(10.0),
-                        onPressed: () {
-                       /*   if (OnBoardingCubit
-                              .get(context)
-                              .isLastPage) {
-                            CacheHelper.saveData(
-                                key: 'onboardingIsSeen', value: true);
-                            navigateAndRemove(context, LoginScreen());
-                          } else {
-                            pageController.nextPage(
-                              duration: Duration(milliseconds: 1000),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                            );
-                          }*/
-                        },
-                        color: Colors.orange,
-                        child:  const Text(
-                          'Get Started',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.0,
-                          ),
-                        )
-                         /*   : const Icon(
-                          Icons.keyboard_arrow_right,
-                          color: Colors.white,
-                          size: 24.0,
-                        ),*/
-                      ),
-                    ],
-                  ),
-                ],
+    return SafeArea(
+        child: Scaffold(
+      body: SizedBox(
+        width: double.infinity,
+        child: Column(
+          children: [
+            Expanded(
+                flex: 6,
+                child: PageView.builder(
+                  controller: controller,
+                  itemCount: onBoardInfo.length,
+                  itemBuilder: (context, index) {
+                    return onboardBuildPage(
+                      text: onBoardInfo[index].title,
+                      description: onBoardInfo[index].description,
+                      imagePath: onBoardInfo[index].imagePath,
+                    );
+                  },
+                )),
+            Expanded(
+              flex: 1,
+              child: SmoothPageIndicator(
+                controller: controller,
+                count: onBoardInfo.length,
+                effect: ExpandingDotsEffect(
+                  activeDotColor: Colors.deepPurple,
+                  dotColor: Colors.deepPurple.shade200,
+                  expansionFactor: 2.0,
+                  dotHeight: 12,
+                  dotWidth: 12,
+                  // strokeWidth: 5,
+                ),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding:
+                  const EdgeInsets.only(bottom: 20.0, left: 20.0, right: 20.0),
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, Routes_Name.LoginScreen);
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(seconds: 1),
+                  height: 40,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: const Text(
+                    "Continue",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
-    );
+    ));
   }
-    Widget onboardBuildPage(OnBoardingModel pageInfo) =>
-        Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 40.0),
-          child: Image.asset(
-            pageInfo.imagePath,
-          ),
-        ),
+}
 
-        //upper texts
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            children: [
-              Text(
-                pageInfo.title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.indigo,
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Text(
-                pageInfo.description,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
+class onboardBuildPage extends StatelessWidget {
+  const onboardBuildPage(
+      {Key? key,
+      required this.text,
+      required this.description,
+      required this.imagePath})
+      : super(key: key);
+  final String text, description, imagePath;
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Column(
+      children: [
+        const Spacer(),
+        /*const Text(
+          "Online Ordering System",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+        ),*/
+        const Spacer(),
+        Text(text,
+            style: const TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.black)),
+        const Spacer(),
+        AutoSizeText(
+          description,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontSize: 16, fontWeight: FontWeight.normal, color: Colors.black),
+          maxLines: 2,
         ),
+        const Spacer(
+          flex: 2,
+        ),
+        Image(
+            height: size.height / 2,
+            width: size.width / 2,
+            image: AssetImage(imagePath)),
       ],
     );
   }
+}

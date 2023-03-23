@@ -293,7 +293,10 @@ class _CartMainScreenState extends State<CartMainScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset("assets/cart.gif"),
+               // Image(image: AssetImage('assets/cart1.png')),
+                Image.asset("assets/cart1.png",
+                height: size.height/2,
+                width: size.width/2,),
                 const Center(
                   child: Text(
                     "No Items added in cart ....!",
@@ -312,200 +315,215 @@ class _CartMainScreenState extends State<CartMainScreen> {
               bool isSaved = favoriteProvider.FavoriteList.any((element) =>
                   element.Name.contains(cartProvider.PurchaseList[index].Name));
 
-              return Card(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 12.0),
-                                child: Image(
-                                  image: AssetImage(cartProvider
-                                      .PurchaseList[index].ImageURL),
-                                  // image: AssetImage('first.jpg'),
-                                  width: size.width / 2,
-                                  height: size.height / 4,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+              return InkWell(
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                onTap: (){
+                  Navigator.pushNamed(context, Routes_Name.ProductDetailsScreen,
+                      arguments: {
+                        'Price': cartProvider.PurchaseList[index].Price,
+                        'Name': cartProvider.PurchaseList[index].Name,
+                        'ImageURL': cartProvider.PurchaseList[index].ImageURL,
+                        'ShortDescription' : cartProvider.PurchaseList[index].ShortDescription,
+                        'Index' : index,
+                      });
+                },
+                child: Card(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
                             child: Column(
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Consumer<Favorite_add_provider>(
-                                      builder: (context, value, child) {
-                                        return Align(
-                                          alignment: Alignment.topRight,
-                                          child: isSaved
-                                              ? InkWell(
-                                                  onTap: () {
-                                                    value.RemoveFavoriteItems(
-                                                        favoriteProvider
-                                                                .FavoriteList[
-                                                            index]);
-                                                  },
-                                                  child: const Icon(
-                                                    CupertinoIcons.heart_solid,
-                                                    size: 16,
-                                                    color: Colors.red,
-                                                  ),
-                                                )
-                                              : InkWell(
-                                                  onTap: () {
-                                                    value.AddFavoriteItems(
-                                                        FavoriteListModelClass(
-                                                            Price: cartProvider
-                                                                .PurchaseList[
-                                                                    index]
-                                                                .Price,
-                                                            Name: cartProvider
-                                                                .PurchaseList[
-                                                                    index]
-                                                                .Name,
-                                                            ShortDescription:
-                                                                cartProvider
-                                                                    .PurchaseList[
-                                                                        index]
-                                                                    .ShortDescription,
-                                                            ImageURL: cartProvider
-                                                                .PurchaseList[
-                                                                    index]
-                                                                .ImageURL));
-                                                  },
-                                                  child: const Icon(
-                                                    CupertinoIcons.heart,
-                                                    size: 16,
-                                                  ),
-                                                ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: AutoSizeText(
-                                    cartProvider.PurchaseList[index].Name,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 30),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 12.0),
+                                  child: Image(
+                                    image: AssetImage(cartProvider
+                                        .PurchaseList[index].ImageURL),
+                                    // image: AssetImage('first.jpg'),
+                                    width: size.width / 2,
+                                    height: size.height / 4,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 70,
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: AutoSizeText(
-                                    cartProvider
-                                        .PurchaseList[index].ShortDescription,
-                                    maxLines: 2,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 30),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 70,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: SizedBox(
-                                        width: size.width,
-                                        child: Align(
-                                          alignment: Alignment.topLeft,
-                                          child: AutoSizeText(
-                                            '₹${cartProvider.PurchaseList[index].Count * cartProvider.PurchaseList[index].Price}',
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 25),
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: IconButton(
-                                          onPressed: () {
-                                            cartProvider.removeToCart(
-                                                cartProvider
-                                                    .PurchaseList[index]);
-                                          },
-                                          icon: const Icon(
-                                              CupertinoIcons.delete)),
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              if (cartProvider
-                                                      .PurchaseList[index]
-                                                      .Count >
-                                                  1) {
-                                                cartProvider
-                                                    .decreaseCount(index);
-                                              }
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundColor: Colors.grey[200],
-                                              radius: 14,
-                                              child: const Center(
-                                                  child: Icon(
-                                                Icons.remove,
-                                                color: Colors.black,
-                                              )),
-                                            ),
-                                          ),
-                                          Text(
-                                            cartProvider
-                                                .PurchaseList[index].Count
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              cartProvider.increaseCount(index);
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundColor: Colors.grey[200],
-                                              radius: 14,
-                                              child: const Center(
-                                                  child: Icon(
-                                                Icons.add,
-                                                color: Colors.black,
-                                              )),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
                                 ),
                               ],
                             ),
                           ),
-                        )
-                      ],
-                    )
-                  ],
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Consumer<Favorite_add_provider>(
+                                        builder: (context, value, child) {
+                                          return Align(
+                                            alignment: Alignment.topRight,
+                                            child: isSaved
+                                                ? InkWell(
+                                                    onTap: () {
+                                                      value.RemoveFavoriteItems(
+                                                          favoriteProvider
+                                                                  .FavoriteList[
+                                                              index]);
+                                                    },
+                                                    child: const Icon(
+                                                      CupertinoIcons.heart_solid,
+                                                      size: 16,
+                                                      color: Colors.red,
+                                                    ),
+                                                  )
+                                                : InkWell(
+                                                    onTap: () {
+                                                      value.AddFavoriteItems(
+                                                          FavoriteListModelClass(
+                                                              Price: cartProvider
+                                                                  .PurchaseList[
+                                                                      index]
+                                                                  .Price,
+                                                              Name: cartProvider
+                                                                  .PurchaseList[
+                                                                      index]
+                                                                  .Name,
+                                                              ShortDescription:
+                                                                  cartProvider
+                                                                      .PurchaseList[
+                                                                          index]
+                                                                      .ShortDescription,
+                                                              ImageURL: cartProvider
+                                                                  .PurchaseList[
+                                                                      index]
+                                                                  .ImageURL));
+                                                    },
+                                                    child: const Icon(
+                                                      CupertinoIcons.heart,
+                                                      size: 16,
+                                                    ),
+                                                  ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: size.width,
+                                    child: AutoSizeText(
+                                      cartProvider.PurchaseList[index].Name,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: size.height / 70,
+                                  ),
+                                  SizedBox(
+                                    width: size.width,
+                                    child: AutoSizeText(
+                                      cartProvider
+                                          .PurchaseList[index].ShortDescription,
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: size.height / 70,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: SizedBox(
+                                          width: size.width,
+                                          child: Align(
+                                            alignment: Alignment.topLeft,
+                                            child: AutoSizeText(
+                                              '₹${cartProvider.PurchaseList[index].Count * cartProvider.PurchaseList[index].Price}',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 25),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: IconButton(
+                                            onPressed: () {
+                                              cartProvider.removeToCart(
+                                                  cartProvider
+                                                      .PurchaseList[index]);
+                                            },
+                                            icon: const Icon(
+                                                CupertinoIcons.delete)),
+                                      ),
+                                      Expanded(
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                if (cartProvider
+                                                        .PurchaseList[index]
+                                                        .Count >
+                                                    1) {
+                                                  cartProvider
+                                                      .decreaseCount(index);
+                                                }
+                                              },
+                                              child: CircleAvatar(
+                                                backgroundColor: Colors.grey[200],
+                                                radius: 14,
+                                                child: const Center(
+                                                    child: Icon(
+                                                  Icons.remove,
+                                                  color: Colors.black,
+                                                )),
+                                              ),
+                                            ),
+                                            Text(
+                                              cartProvider
+                                                  .PurchaseList[index].Count
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            InkWell(
+                                              onTap: () {
+                                                cartProvider.increaseCount(index);
+                                              },
+                                              child: CircleAvatar(
+                                                backgroundColor: Colors.grey[200],
+                                                radius: 14,
+                                                child: const Center(
+                                                    child: Icon(
+                                                  Icons.add,
+                                                  color: Colors.black,
+                                                )),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               );
             });
