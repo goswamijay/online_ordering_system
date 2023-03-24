@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 
+import '../../Controller/ApiConnection/Authentication.dart';
+import '../../Models/SignupModelClass.dart';
+
 class OTPScreen extends StatefulWidget {
   const OTPScreen({Key? key}) : super(key: key);
 
@@ -11,6 +14,57 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   Map<String, dynamic>? argument = {};
+  List<SignupModelClass> list1 = [];
+  String verificationCode = '';
+  TextEditingController otp = TextEditingController();
+
+  moveToHome(BuildContext context) async {
+    accessApi();
+    Future.delayed(const Duration(seconds: 3), () {
+      if (list1[0].status == "1") {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Verification Code is Verified Successfully"),
+                actions: [
+                  TextButton(
+                      child: const Text('Okay'),
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, Routes_Name.HomePage, (route) => false);
+                      }),
+                ],
+              );
+            });
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Verification Code is Not Current"),
+                actions: [
+                  TextButton(
+                      child: const Text('Okay'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }),
+                ],
+              );
+            });
+      }
+    });
+  }
+
+  void accessApi() async {
+    //  String id = list.map((e) => e.data.id).toString();
+    await Future.delayed(const Duration(seconds: 1), () async {
+      print( argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''));
+      list1 = await Authentication.otpVerification(
+          argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''), verificationCode.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     argument =
@@ -61,28 +115,16 @@ class _OTPScreenState extends State<OTPScreen> {
                   height: size.height / 30,
                 ),
                 OtpTextField(
-                  numberOfFields: 6,
+                  numberOfFields: 4,
                   borderColor: const Color(0xFF512DA8),
                   showFieldAsBox: true,
-                  onCodeChanged: (String code) {},
-
-                  onSubmit: (String verificationCode) {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text("Verification Code"),
-                            content: Text('Code entered is $verificationCode'),
-                            actions: [
-                              TextButton(
-                                  child: const Text('Okay'),
-                                  onPressed: () {
-                                    Navigator.pushNamedAndRemoveUntil(context,
-                                        Routes_Name.HomePage, (route) => false);
-                                  }),
-                            ],
-                          );
-                        });
+                  onCodeChanged: (String code) {
+                    verificationCode = code;
+                  },
+                  onSubmit: (String code) {
+                    verificationCode = code;
+                    print(verificationCode);
+                    moveToHome(context);
                   }, // end onSubmit
                 ),
                 SizedBox(

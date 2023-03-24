@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_ordering_system/Models/SignupModelClass.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 
 import '../../Controller/ApiConnection/Authentication.dart';
@@ -22,18 +23,53 @@ class _SignUPPageState extends State<SignUPPage> {
    TextEditingController signupMobileController = TextEditingController();
    TextEditingController signupEmailController = TextEditingController();
    TextEditingController signupPasswordController = TextEditingController();
-
+   List<SignupModelClass> list = [];
 
   moveToHome(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
+    accessApi();
+
+  if (_formKey.currentState!.validate()) {
       setState(() {
         changeButton = true;
       });
       _formKey.currentState!.save();
-     //accessApi();
 
-      await Future.delayed(const Duration(seconds: 1),(){
-        Navigator.pushNamed(context, Routes_Name.OTPScreen, arguments: {'email_id': email.toString()});
+      await Future.delayed(const Duration(seconds: 2),(){
+
+        if(list[0].status == "1"){
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Your account is Register"),
+                  content:  Text('You will Received OTP in your ${signupEmailController.text}'),
+                  actions: [
+                    TextButton(
+                        child: const Text('Okay'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes_Name.OTPScreen, arguments: {'email_id': email.toString(),'id': list.map((e) => e.data.id)});
+                        }),
+                  ],
+                );
+              });
+        }
+        else{
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Your account is already Register"),
+                  content: const Text('Please login this account'),
+                  actions: [
+                    TextButton(
+                        child: const Text('Okay'),
+                        onPressed: () {
+                         Navigator.of(context).pop();
+                        }),
+                  ],
+                );
+              });
+        }
       });
 
       setState(() {
@@ -42,10 +78,13 @@ class _SignUPPageState extends State<SignUPPage> {
     }
   }
 
-   Future<void> accessApi() async {
-     Authentication.loginUser(
-         signupNameController.text, signupPasswordController.text,signupNameController.text,signupMobileController.text)
-         .then((value) => value);
+
+
+   void accessApi() async {
+      list = await Authentication.signUpUser(
+        //"hi.jay2002@gmail.com","123456","Jay","9558737335"
+         signupEmailController.text, signupPasswordController.text,signupNameController.text,signupMobileController.text
+      );
    }
 
   @override

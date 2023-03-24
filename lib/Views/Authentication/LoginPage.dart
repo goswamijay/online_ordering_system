@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
-
 import '../../Controller/ApiConnection/Authentication.dart';
+import '../../Models/LoginModelClass.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,29 +14,71 @@ class _LoginPageState extends State<LoginPage> {
   String name = "";
   bool changeButton = false;
   bool _passwordVisible = false;
+  List<LoginModelClass> list = [];
 
   final formKey = GlobalKey<FormState>();
   TextEditingController loginEmailIdController = TextEditingController();
   TextEditingController loginPasswordIdController = TextEditingController();
 
+
   moveToHome(BuildContext context) async {
+    accessApi();
+
     if (formKey.currentState!.validate()) {
       setState(() {
         changeButton = true;
       });
       formKey.currentState!.save();
-      //accessApi();
-      await Future.delayed(const Duration(seconds: 1), () {
-        Navigator.pushNamedAndRemoveUntil(
-            context, Routes_Name.HomePage, (route) => false);
+
+      await Future.delayed(const Duration(seconds: 2),(){
+
+        if(list[0].status == "1"){
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Congratulation....!!! "),
+                  content:  const Text('Login Successfully'),
+                  actions: [
+                    TextButton(
+                        child: const Text('Okay'),
+                        onPressed: () {
+               Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage, (route) => false);
+                        }),
+                  ],
+                );
+              });
+        }
+        else{
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Please Register in App"),
+                  content: const Text('Your email id is not verified kindly register again with same details and verify your account to use app!'),
+                  actions: [
+                    TextButton(
+                        child: const Text('Okay'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }),
+                  ],
+                );
+              });
+        }
       });
+
       setState(() {
         changeButton = false;
       });
     }
   }
 
-
+  void accessApi() async {
+    list = await Authentication.logInUser(
+        loginEmailIdController.text, loginPasswordIdController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(

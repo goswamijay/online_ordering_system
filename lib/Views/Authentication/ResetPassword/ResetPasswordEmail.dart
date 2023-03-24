@@ -11,12 +11,88 @@ class ResetPasswordEmail extends StatefulWidget {
 }
 
 class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
+
+/*
+  Future<List<SignupModelClass>> otpVerification(
+      String userId, String otp) async {
+    List<SignupModelClass> signUp = [];
+    try {
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/user/verifyOtpOnRegister');
+      var response = await http.post(
+        uri,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+        body: jsonEncode(
+          {
+            "userId": userId,
+            "otp": otp
+          },
+        ),
+      );
+
+      print(response.statusCode == 400);
+      var jsonData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        //Map<String, dynamic> newResponses = jsonDecode(response.body);
+        print(json.decode(response.body));
+
+        signUp = [
+          SignupModelClass(
+              status: jsonData['status'].toString(),
+              msg: jsonData['msg'],
+              data:
+              SignUpData(
+                id: jsonData['data']['_id'].toString(),
+                name: jsonData['data']['name'].toString(),
+                mobileNo: jsonData['data']['mobileNo'].toString(),
+                emailId: jsonData['data']['emailId'],
+                status: jsonData['data']['status'].toString(),
+                createdAt: jsonData['data']['createdAt'].toString(),
+                updatedAt: jsonData['data']['updatedAt'].toString(),
+                v: jsonData['data']['__v'].toString(),
+                jwtToken: jsonData['data']['jwtToken'].toString(),
+                fcmToken: jsonData['data']['fcmToken'].toString(),
+              )
+          )
+        ];
+        return signUp;
+      } else if(response.statusCode == 400){
+        signUp = [
+          SignupModelClass(
+              status: jsonData['status'].toString(),
+              msg: jsonData['msg'],
+              data:
+              SignUpData(
+                id: jsonData['data']['_id'].toString(),
+                name: jsonData['data']['name'].toString(),
+                mobileNo: jsonData['data']['mobileNo'].toString(),
+                emailId: jsonData['data']['emailId'],
+                status: jsonData['data']['status'].toString(),
+                createdAt: jsonData['data']['createdAt'].toString(),
+                updatedAt: jsonData['data']['updatedAt'].toString(),
+                v: jsonData['data']['__v'].toString(),
+                jwtToken: jsonData['data']['jwtToken'].toString(),
+                fcmToken: jsonData['data']['fcmToken'].toString(),
+              )
+          )
+        ];
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    return signUp;
+  }*/
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     String name = "";
 
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     return SafeArea(
       child: Scaffold(
 
@@ -36,7 +112,7 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
               ),
 
               Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   children: [
                     Padding(
