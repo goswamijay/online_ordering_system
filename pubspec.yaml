@@ -47,6 +47,8 @@ dependencies:
   http: ^0.13.5
   get: ^4.6.5
   smooth_page_indicator: ^1.0.1
+  shared_preferences: ^2.0.20
+
 
 
 dev_dependencies:

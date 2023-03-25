@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:online_ordering_system/Models/SignupModelClass.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
+import 'package:provider/provider.dart';
 
 import '../../Controller/ApiConnection/Authentication.dart';
 
@@ -12,48 +12,52 @@ class SignUPPage extends StatefulWidget {
 }
 
 class _SignUPPageState extends State<SignUPPage> {
-   String name = "";
-   String email = "";
-   String password1 = "";
-   String confirmPassword = "";
+  String name = "";
+  String email = "";
+  String password1 = "";
+  String confirmPassword = "";
   bool changeButton = false;
   bool _passwordVisible = false;
   final _formKey = GlobalKey<FormState>();
   TextEditingController signupNameController = TextEditingController();
-   TextEditingController signupMobileController = TextEditingController();
-   TextEditingController signupEmailController = TextEditingController();
-   TextEditingController signupPasswordController = TextEditingController();
-   List<SignupModelClass> list = [];
+  TextEditingController signupMobileController = TextEditingController();
+  TextEditingController signupEmailController = TextEditingController();
+  TextEditingController signupPasswordController = TextEditingController();
 
   moveToHome(BuildContext context) async {
-    accessApi();
+    final signUpProvider = Provider.of<Authentication>(context, listen: false);
+    signUpProvider.signUpUser(
+        signupEmailController.text.trim(),
+        signupPasswordController.text.trim(),
+        signupNameController.text.trim(),
+        signupMobileController.text.trim());
 
-  if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       setState(() {
         changeButton = true;
       });
       _formKey.currentState!.save();
 
-      await Future.delayed(const Duration(seconds: 2),(){
-
-        if(list[0].status == "1"){
+      await Future.delayed(const Duration(seconds: 2), () {
+        if (signUpProvider.signUpData[0].status == "1") {
           showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
                   title: const Text("Your account is Register"),
-                  content:  Text('You will Received OTP in your ${signupEmailController.text}'),
+                  content: Text(
+                      'You will Received OTP in your ${signupEmailController.text}'),
                   actions: [
                     TextButton(
                         child: const Text('Okay'),
                         onPressed: () {
-                          Navigator.pushNamed(context, Routes_Name.OTPScreen, arguments: {'email_id': email.toString(),'id': list.map((e) => e.data.id)});
+                          Navigator.pushNamed(context, Routes_Name.OTPScreen,
+                          );
                         }),
                   ],
                 );
               });
-        }
-        else{
+        } else if (signUpProvider.signUpData[0].status == "0") {
           showDialog(
               context: context,
               builder: (context) {
@@ -64,7 +68,7 @@ class _SignUPPageState extends State<SignUPPage> {
                     TextButton(
                         child: const Text('Okay'),
                         onPressed: () {
-                         Navigator.of(context).pop();
+                          Navigator.of(context).pop();
                         }),
                   ],
                 );
@@ -77,15 +81,6 @@ class _SignUPPageState extends State<SignUPPage> {
       });
     }
   }
-
-
-
-   void accessApi() async {
-      list = await Authentication.signUpUser(
-        //"hi.jay2002@gmail.com","123456","Jay","9558737335"
-         signupEmailController.text, signupPasswordController.text,signupNameController.text,signupMobileController.text
-      );
-   }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +107,7 @@ class _SignUPPageState extends State<SignUPPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(
                         controller: signupNameController,
                         decoration: const InputDecoration(
@@ -131,7 +126,7 @@ class _SignUPPageState extends State<SignUPPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(
                         controller: signupEmailController,
                         decoration: const InputDecoration(
@@ -150,7 +145,7 @@ class _SignUPPageState extends State<SignUPPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(
                         controller: signupMobileController,
                         keyboardType: TextInputType.number,
@@ -172,7 +167,7 @@ class _SignUPPageState extends State<SignUPPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(
                         controller: signupPasswordController,
                         obscureText: true,
@@ -194,7 +189,7 @@ class _SignUPPageState extends State<SignUPPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(
                         obscureText: !_passwordVisible,
                         decoration: InputDecoration(
@@ -265,10 +260,13 @@ class _SignUPPageState extends State<SignUPPage> {
                         const Text("You have an account? "),
                         InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, Routes_Name.LoginScreen);
+                            Navigator.pushNamed(
+                                context, Routes_Name.LoginScreen);
                           },
                           child: const Text("LogIn",
-                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.pink)),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.pink)),
                         ),
                       ],
                     ),

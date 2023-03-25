@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:online_ordering_system/Controller/ApiConnection/Authentication.dart';
 
+import '../../../Models/ResetPasswordOtpModelClass.dart';
 import '../../../Utils/Routes_Name.dart';
-
+import 'package:http/http.dart' as http;
 
 class ResetPasswordEmail extends StatefulWidget {
   const ResetPasswordEmail({Key? key}) : super(key: key);
@@ -11,91 +15,67 @@ class ResetPasswordEmail extends StatefulWidget {
 }
 
 class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
+  TextEditingController resetPasswordEmailController = TextEditingController();
 
-/*
-  Future<List<SignupModelClass>> otpVerification(
-      String userId, String otp) async {
-    List<SignupModelClass> signUp = [];
-    try {
-      var uri = Uri.parse(
-          'https://shopping-app-backend-t4ay.onrender.com/user/verifyOtpOnRegister');
-      var response = await http.post(
-        uri,
-        headers: {
-          'Content-type': 'application/json',
-          "Accept": "application/json",
-          "Access-Control_Allow_Origin": "*"
-        },
-        body: jsonEncode(
-          {
-            "userId": userId,
-            "otp": otp
-          },
-        ),
-      );
+  List<ResetPasswordOtpModelClass> list = [];
+  
 
-      print(response.statusCode == 400);
-      var jsonData = json.decode(response.body);
+  moveToNext(BuildContext context) async {
+    accessApi();
 
-      if (response.statusCode == 200) {
-        //Map<String, dynamic> newResponses = jsonDecode(response.body);
-        print(json.decode(response.body));
-
-        signUp = [
-          SignupModelClass(
-              status: jsonData['status'].toString(),
-              msg: jsonData['msg'],
-              data:
-              SignUpData(
-                id: jsonData['data']['_id'].toString(),
-                name: jsonData['data']['name'].toString(),
-                mobileNo: jsonData['data']['mobileNo'].toString(),
-                emailId: jsonData['data']['emailId'],
-                status: jsonData['data']['status'].toString(),
-                createdAt: jsonData['data']['createdAt'].toString(),
-                updatedAt: jsonData['data']['updatedAt'].toString(),
-                v: jsonData['data']['__v'].toString(),
-                jwtToken: jsonData['data']['jwtToken'].toString(),
-                fcmToken: jsonData['data']['fcmToken'].toString(),
-              )
-          )
-        ];
-        return signUp;
-      } else if(response.statusCode == 400){
-        signUp = [
-          SignupModelClass(
-              status: jsonData['status'].toString(),
-              msg: jsonData['msg'],
-              data:
-              SignUpData(
-                id: jsonData['data']['_id'].toString(),
-                name: jsonData['data']['name'].toString(),
-                mobileNo: jsonData['data']['mobileNo'].toString(),
-                emailId: jsonData['data']['emailId'],
-                status: jsonData['data']['status'].toString(),
-                createdAt: jsonData['data']['createdAt'].toString(),
-                updatedAt: jsonData['data']['updatedAt'].toString(),
-                v: jsonData['data']['__v'].toString(),
-                jwtToken: jsonData['data']['jwtToken'].toString(),
-                fcmToken: jsonData['data']['fcmToken'].toString(),
-              )
-          )
-        ];
+    Future.delayed(const Duration(seconds: 3), () {
+      print(list.map((e) => e.status));
+      if (list[0].status == "1") {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Verification Code is send Successfully"),
+                actions: [
+                  TextButton(
+                      child: const Text('Okay'),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, Routes_Name.ResetPasswordOTP, arguments: {
+                          'email_id':
+                              resetPasswordEmailController.text.toString(),'id': list.map((e) => e.data.id)}
+              ); }
+                      ),
+                ],
+              );
+            });
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("This Email Id is not Registered With us kindly register first!"),
+                actions: [
+                  TextButton(
+                      child: const Text('Okay'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }),
+                ],
+              );
+            });
       }
-    } catch (e) {
-      print(e.toString());
-    }
-    return signUp;
-  }*/
+    });
+  }
+
+  void accessApi() async {
+    list =  await Authentication.resetPassword(resetPasswordEmailController.text);
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    String name = "";
+    final formKey11 = GlobalKey<FormState>();
 
-    final formKey = GlobalKey<FormState>();
     return SafeArea(
       child: Scaffold(
-
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -110,14 +90,14 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
               ),
-
               Form(
-                key: formKey,
+                key: formKey11,
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(
+                        controller: resetPasswordEmailController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           hintText: "Enter Register Email ID",
@@ -131,31 +111,26 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
                           }
                           return null;
                         },
-                        onChanged: (value) {
-                          name = value;
-                        },
                       ),
                     ),
-
                     SizedBox(
                       height: size.height / 50,
                     ),
                     InkWell(
-                      onTap: () => {
-                        Navigator.pushNamed(context,Routes_Name.ResetPasswordOTP  ,arguments: {'email_id': name.toString()})
+                      onTap: () {
+                        moveToNext(context);
                       },
                       child: AnimatedContainer(
                         duration: const Duration(seconds: 1),
                         height: 50,
-                        width:  150,
+                        width: 150,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           /*  shape: changeButton? BoxShape.circle : BoxShape.rectangle,*/
                           color: Colors.deepPurple,
-                          borderRadius:
-                          BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        child:  const Text(
+                        child: const Text(
                           "Save The Data",
                           style: TextStyle(
                               color: Colors.white,
@@ -164,19 +139,17 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
                         ),
                       ),
                     ),
-
                     SizedBox(
                       height: size.height / 20,
                     ),
-
                     RichText(
                         text: const TextSpan(children: [
-                          TextSpan(text: ("We will send you an ")),
-                          TextSpan(
-                              text: ("One Time Password "),
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: ("On this Email Id."))
-                        ]))
+                      TextSpan(text: ("We will send you an ")),
+                      TextSpan(
+                          text: ("One Time Password "),
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: ("On this Email Id."))
+                    ]))
                   ],
                 ),
               ),

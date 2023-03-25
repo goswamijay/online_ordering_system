@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
+import 'package:provider/provider.dart';
 import '../../Controller/ApiConnection/Authentication.dart';
 import '../../Models/LoginModelClass.dart';
 
@@ -20,9 +21,10 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController loginEmailIdController = TextEditingController();
   TextEditingController loginPasswordIdController = TextEditingController();
 
-
   moveToHome(BuildContext context) async {
-    accessApi();
+    final loginProvider = Provider.of<Authentication>(context, listen: false);
+    loginProvider.loginUser(loginEmailIdController.text.trim(),
+        loginPasswordIdController.text.trim());
 
     if (formKey.currentState!.validate()) {
       setState(() {
@@ -30,32 +32,31 @@ class _LoginPageState extends State<LoginPage> {
       });
       formKey.currentState!.save();
 
-      await Future.delayed(const Duration(seconds: 2),(){
-
-        if(list[0].status == "1"){
+      await Future.delayed(const Duration(seconds: 2), () {
+        if (loginProvider.loginData[0].status == "1") {
           showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
                   title: const Text("Congratulation....!!! "),
-                  content:  const Text('Login Successfully'),
+                  content: const Text('Login Successfully'),
                   actions: [
                     TextButton(
                         child: const Text('Okay'),
                         onPressed: () {
-               Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage, (route) => false);
+                             Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage, (route) => false);
                         }),
                   ],
                 );
               });
-        }
-        else{
+        } else if (loginProvider.loginData[0].status == "0") {
           showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
                   title: const Text("Please Register in App"),
-                  content: const Text('Your email id is not verified kindly register again with same details and verify your account to use app!'),
+                  content: const Text(
+                      'Your email id is not verified kindly register again with same details and verify your account to use app!'),
                   actions: [
                     TextButton(
                         child: const Text('Okay'),
@@ -72,12 +73,6 @@ class _LoginPageState extends State<LoginPage> {
         changeButton = false;
       });
     }
-  }
-
-  void accessApi() async {
-    list = await Authentication.logInUser(
-        loginEmailIdController.text, loginPasswordIdController.text,
-    );
   }
 
   @override
@@ -122,7 +117,6 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: TextFormField(

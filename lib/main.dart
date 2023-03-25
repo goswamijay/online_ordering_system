@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:online_ordering_system/Controller/ApiConnection/Authentication.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:online_ordering_system/Controller/Confirm_Order_Items.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => Purchase_items_provider()),
         ChangeNotifierProvider(create: (_) => Place_order_Provider()),
         ChangeNotifierProvider(create: (_) => ChangeControllerClass()),
+        ChangeNotifierProvider(create: (_) => Authentication())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
