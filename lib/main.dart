@@ -12,7 +12,9 @@ import 'package:online_ordering_system/Views/Authentication/ResetPassword/ResetP
 import 'package:online_ordering_system/Views/Cart%20Screen/Cart%20Main%20Screen.dart';
 import 'package:online_ordering_system/firebase_options.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Controller/ApiConnection/ApiConnection.dart';
 import 'Controller/Cart_items_provider.dart';
 import 'Controller/ChangeControllerClass.dart';
 import 'HomePage.dart';
@@ -45,25 +47,34 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Favorite_add_provider()),
         ChangeNotifierProvider(create: (_) => Purchase_items_provider()),
         ChangeNotifierProvider(create: (_) => Place_order_Provider()),
         ChangeNotifierProvider(create: (_) => ChangeControllerClass()),
-        ChangeNotifierProvider(create: (_) => Authentication())
+        ChangeNotifierProvider(create: (_) => Authentication()),
+        ChangeNotifierProvider(create: (_) => ApiConnection())
+
       ],
       child: MaterialApp(
+
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             fontFamily: GoogleFonts.lato().fontFamily,
             primaryTextTheme: GoogleFonts.latoTextTheme()),
-        initialRoute:  Routes_Name.SparceScreen,
+        initialRoute: Routes_Name.SparceScreen,
         routes: {
           Routes_Name.SparceScreen: (context) => const Space_Screen(),
           Routes_Name.HomePage: (context) => const HomePage(),

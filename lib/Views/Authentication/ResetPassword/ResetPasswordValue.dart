@@ -60,7 +60,7 @@ class _ResetPasswordValueState extends State<ResetPasswordValue> {
 
   void accessApi() async {
     await Future.delayed(const Duration(seconds: 1), () async {
-      list1 = await Authentication.resetPassword2(
+      list1 = await Authentication.resetPasswordValueChange(
           argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''),
           verificationCodeController.text);
     });

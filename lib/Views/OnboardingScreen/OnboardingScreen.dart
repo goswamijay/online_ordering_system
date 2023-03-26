@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../Models/OnBoardingModelClass.dart';
@@ -14,6 +15,29 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final controller = PageController(viewportFraction: 1, keepPage: true);
+
+  String fcmToken1 = "" ;
+
+
+  dataAccess() async{
+    final prefs = await SharedPreferences.getInstance();
+    fcmToken1 = prefs.get('fcmToken1').toString();
+    print(fcmToken1);
+    print(fcmToken1.toString() != "null");
+
+    if(fcmToken1.toString().isNotEmpty || fcmToken1.toString() != "null" ){
+      Navigator.pushReplacementNamed(context, Routes_Name.HomePage);
+    }else{
+
+    }
+
+  }
+  @override
+  void initState() {
+    super.initState();
+    dataAccess();
+  }
+
 
   List<OnBoardingModel> onBoardInfo = [
     OnBoardingModel(

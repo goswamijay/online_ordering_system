@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget drawerWidget(BuildContext context,Color color){
     return SizedBox(
@@ -113,7 +114,11 @@ Widget drawerWidget(BuildContext context,Color color){
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 leading: const Icon(CupertinoIcons.square_arrow_left),
-                onTap: () {},
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                 prefs.clear();
+                  Navigator.pushNamedAndRemoveUntil(context, Routes_Name.OnBoardingScreen, (route) => false);
+                },
               ),
             ],
           ),

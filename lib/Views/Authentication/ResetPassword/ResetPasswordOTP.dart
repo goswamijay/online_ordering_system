@@ -61,7 +61,7 @@ class _ResetPasswordOTPState extends State<ResetPasswordOTP> {
     //  String id = list.map((e) => e.data.id).toString();
     await Future.delayed(const Duration(seconds: 1), () async {
       print(argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''));
-      list1 = await Authentication.otpVerificationMain1(
+      list1 = await Authentication.otpPasswordResetVerification(
           argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''),
           verificationCode.toString());
     });

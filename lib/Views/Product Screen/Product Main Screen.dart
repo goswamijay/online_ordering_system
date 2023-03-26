@@ -6,6 +6,7 @@ import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:online_ordering_system/Controller/Cart_items_provider.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:provider/provider.dart';
+import '../../Controller/ApiConnection/ApiConnection.dart';
 import '../../Controller/ChangeControllerClass.dart';
 import '../../Models/FavoriteListModelClass.dart';
 import '../../Models/ProductListModelClass.dart';
@@ -24,6 +25,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<dynamic> searchItems = [];
+
  // TabController? _tabController;
   //int photoIndex = 0;
 
@@ -32,8 +34,8 @@ class _ProductMainScreenState extends State<ProductMainScreen>
     // TODO: implement initState
     searchItems = mainData;
    // _tabController = TabController(vsync: this, length: 11);
-    accessApi();
     super.initState();
+    accessApi(context);
   }
 
 
@@ -43,14 +45,21 @@ class _ProductMainScreenState extends State<ProductMainScreen>
     'https://images.news18.com/ibnlive/uploads/2020/10/1603427907_apple-iphone-12-pro-preorder-page.jpg?im=FitAndFill,width=1200,height=675',
     'https://cdn.images.express.co.uk/img/dynamic/59/590x/Apple-iPhone-12-stock-1370223.webp?r=1607585056252',
   ];
+  List<dynamic> mainData = [];
+  accessApi(BuildContext context) async {
+    final apiConnection1 = Provider.of<ApiConnection>(context,listen: false);
+    apiConnection1.productAllAPI();
 
-  Future<void> accessApi() async {
-    /*ApiConncection.getData().then((value) {
+    Future.delayed(const Duration(seconds: 5),(){
+      mainData = apiConnection1.productAll.map((e) => e).toList();
+      apiConnection1.showItem();
+      print(mainData.map((e) => e.data).length);
+      print(mainData[0].data.length);
+    });
 
-    });*/
   }
 
-  List<dynamic> mainData = [
+ /* List<dynamic> mainData = [
     ProductList(
       Name: 'iPhone 11 Pro Max',
       Price: 120000,
@@ -86,11 +95,13 @@ class _ProductMainScreenState extends State<ProductMainScreen>
           'The phone comes with a 5.80-inch touchscreen display offering a resolution of 1125x2436 pixels at a pixel density of 458 pixels per inch (ppi). iPhone 11 Pro is powered by a hexa-core Apple A13 Bionic processor. It comes with 4GB of RAM. The iPhone 11 Pro runs iOS 13 and is powered by a 3046mAh non-removable battery. ',
       ImageURL: "assets/ItemsPhoto/iphone_12.png",
     ),
-  ];
+  ];*/
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<Purchase_items_provider>(context);
     final changeControllerClass = Provider.of<ChangeControllerClass>(context);
+    final apiConnection1 = Provider.of<ApiConnection>(context);
+
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -223,11 +234,13 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   color: Colors.black),
-                              child: const Icon(
+                              child: IconButton(onPressed: (){
+
+                              }, icon: const Icon(
                                 CupertinoIcons.line_horizontal_3_decrease,
                                 color: Colors.white,
                                 size: 20,
-                              ),
+                              ),)
                             )
                           ],
                         ),
@@ -323,11 +336,11 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 0.0, right: 0.0),
-                          child: Center(
+                          child: apiConnection1.showItemBool ? Center(
                             child: !changeControllerClass.searchButton
                                 ? fullList1(context)
                                 : customList1(context),
-                          ),
+                          ) : CircularProgressIndicator(),
                         ),
                       ],
                     ),
@@ -621,7 +634,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
     return ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: mainData.length,
+        itemCount: mainData[0].data.length,
         itemBuilder: (context, index) {
           // bool isSaved = FavoriteProvider.FavoriteList1.contains(FavoriteProvider.FavoriteList1);
           // bool isSaved = FavoriteProvider.FavoriteList.contains(MainData[index]);
@@ -652,7 +665,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                     children: [
                       Expanded(
                         child: Image(
-                          image: AssetImage(mainData[index].ImageURL),
+                          image: NetworkImage(mainData[0].data[index].imageUrl.replaceAll('(', '').replaceAll(')', '')),
                           width: size.width / 2,
                           height: size.height / 4,
                         ),
@@ -735,7 +748,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                               SizedBox(
                                 width: size.width,
                                 child: AutoSizeText(
-                                  mainData[index].Name,
+                                  mainData[0].data[index].title,
                                   maxLines: 1,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300,
@@ -750,7 +763,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                 child: Align(
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    '₹${mainData[index].Price}',
+                                    '\$${mainData[0].data[index].price}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25),
@@ -763,7 +776,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                               SizedBox(
                                 width: size.width,
                                 child: AutoSizeText(
-                                  mainData[index].ShortDescription,
+                                  mainData[0].data[index].description,
                                   maxLines: 2,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w300,
@@ -804,7 +817,8 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                           )
                                         : InkWell(
                                             onTap: () {
-                                              cartProvider.addItemToCart(
+                                              //cartProvider.productAllAPI(mainData[0].data[index].id);
+                                             /* cartProvider.addItemToCart(
                                                   FavoriteListModelClass(
                                                       Price:
                                                           mainData[index].Price,
@@ -815,7 +829,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                               .ShortDescription,
                                                       ImageURL: mainData[index]
                                                           .ImageURL,
-                                                      Count: 1));
+                                                      Count: 1));*/
                                             },
                                             child: Container(
                                               width: size.width,
