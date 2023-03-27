@@ -2,7 +2,6 @@
 
 A Simple and Beautiful App in Flutter
 
-
 ## 💫 Uses :
 
 - Provider
