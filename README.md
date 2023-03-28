@@ -26,4 +26,4 @@ Improvements, Bug Fixes and New Features are warmly welcomed! 🤩
  - [Music Player](https://github.com/goswamijay/Music-Player)
  - [Weather App](https://github.com/goswamijay/Weather-App)
  - [Currency Converter](https://github.com/goswamijay/Currency-Converter)
- - [Stopwatch](https://github.com/goswamijay/Stopwatch)
+ - [Stopwatch](https://github.com/goswamijay/Stopwatch) 
