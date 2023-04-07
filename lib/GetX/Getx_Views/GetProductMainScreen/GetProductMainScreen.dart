@@ -79,7 +79,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
     return SafeArea(
       child:  Scaffold(
         key: _scaffoldKey,
-        drawer: drawerWidget(context, Colors.indigo),
+        drawer: const DrawerWidget(),
         backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
         body: SingleChildScrollView(
           child: Center(

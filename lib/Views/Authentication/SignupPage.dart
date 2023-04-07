@@ -51,7 +51,9 @@ class _SignUPPageState extends State<SignUPPage> {
                     TextButton(
                         child: const Text('Okay'),
                         onPressed: () {
-                          Navigator.pushNamed(context, Routes_Name.OTPScreen,
+                          Navigator.pushNamed(
+                            context,
+                            Routes_Name.OTPScreen,
                           );
                         }),
                   ],
@@ -107,7 +109,7 @@ class _SignUPPageState extends State<SignUPPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: signupNameController,
                         decoration: const InputDecoration(
@@ -126,7 +128,7 @@ class _SignUPPageState extends State<SignUPPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: signupEmailController,
                         decoration: const InputDecoration(
@@ -136,6 +138,14 @@ class _SignUPPageState extends State<SignUPPage> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Email Id can't empty";
+                          } else {
+                            String emailExp =
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                            RegExp regExp = RegExp(emailExp);
+                            if (regExp.hasMatch(value)) {
+                            } else {
+                              return "Please Enter Valid Email";
+                            }
                           }
                           return null;
                         },
@@ -145,7 +155,7 @@ class _SignUPPageState extends State<SignUPPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: signupMobileController,
                         keyboardType: TextInputType.number,
@@ -167,7 +177,7 @@ class _SignUPPageState extends State<SignUPPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: signupPasswordController,
                         obscureText: true,
@@ -189,7 +199,7 @@ class _SignUPPageState extends State<SignUPPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         obscureText: !_passwordVisible,
                         decoration: InputDecoration(

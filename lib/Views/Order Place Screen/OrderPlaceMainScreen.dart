@@ -1,30 +1,64 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../Models/FavoriteListModelClass.dart';
-import '../../Controller/Favorite_add_provider.dart';
+import '../../Controller/ApiConnection/ApiConnection.dart';
+import '../../Controller/ChangeControllerClass.dart';
+import '../../Controller/Confirm_Order_Items.dart';
 import '../../Controller/Cart_items_provider.dart';
 import '../../Utils/Drawer.dart';
 import '../../Utils/Routes_Name.dart';
 
-class FavoriteMainScreen extends StatefulWidget {
-  const FavoriteMainScreen({Key? key}) : super(key: key);
+class OrderPlaceMainScreen extends StatefulWidget {
+  const OrderPlaceMainScreen({Key? key}) : super(key: key);
 
   @override
-  State<FavoriteMainScreen> createState() => _FavoriteMainScreenState();
+  State<OrderPlaceMainScreen> createState() => _OrderPlaceMainScreenState();
 }
 
-class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
+class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      accessApi(context);
+    });
+  }
+
+  accessApi(BuildContext context) async {
+    final apiConnection1 =
+        Provider.of<PlaceOrderProvider>(context, listen: false);
+    final mainDataProvider =
+    Provider.of<ApiConnection>(context, listen: false);
+    final cartProvider = Provider.of<purchase_items_provider>(context,listen: false);
+
+
+    mainDataProvider.showItemBool = false;
+    apiConnection1.showItemBool = false;
+    cartProvider.showItemBool = false;
+    await mainDataProvider.productAllAPI(context);
+    await apiConnection1.placeOrderAllDataAPI();
+    await cartProvider.cartAllDataAPI();
+    apiConnection1.showItem();
+    mainDataProvider.showItem();
+    cartProvider.showItem();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<Purchase_items_provider>(context);
+    final favoriteProvider = Provider.of<FavoriteAddProvider>(context);
+    final placeOrderProvider = Provider.of<PlaceOrderProvider>(context);
+    final mainDataProvider = Provider.of<ApiConnection>(context, listen: false);
+
     return Scaffold(
-      drawer: drawerWidget(context, Colors.indigo),
+      drawer: const DrawerWidget(),
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.only(left: 12.0, top: 12.0),
+          padding: const EdgeInsets.only(left: 8.0, top: 8.0),
           child: InkWell(
               onTap: () {
                 Navigator.of(context)
@@ -42,10 +76,10 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
               )),
         ),
         title: const Padding(
-          padding: EdgeInsets.only(top: 12.0),
+          padding: EdgeInsets.only(top: 5.0),
           child: Center(
               child: Text(
-            "Favorite Items",
+            "Order Placed Items",
             style: TextStyle(color: Colors.black),
           )),
         ),
@@ -57,7 +91,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
             padding: const EdgeInsets.only(right: 12.0, top: 12.0),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, Routes_Name.CartMainScreen);
+                Navigator.pushNamed(context, Routes_Name.FavoriteMainScreen);
               },
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
@@ -71,7 +105,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                       backgroundColor: Colors.white,
                       child: FittedBox(
                         child: Icon(
-                          CupertinoIcons.cart_fill,
+                          CupertinoIcons.heart_solid,
                           color: Colors.black,
                         ),
                       ),
@@ -84,11 +118,14 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                               shape: BoxShape.circle, color: Colors.red[900]),
                           width: 34 / 2,
                           height: 34 / 2,
-                          child: Text(
-                            cartProvider.PurchaseList.length.toString(),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.white),
-                          ),
+                          child: placeOrderProvider.showItemBool
+                              ? Text(
+                                  favoriteProvider.favoriteData.data.length
+                                      .toString(),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              : const CircularProgressIndicator(),
                         ),
                       ),
                     )
@@ -100,54 +137,48 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
         ],
       ),
       backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: fullList1(context),
-          ),
-        ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: placeOrderProvider.showItemBool || mainDataProvider.showItemBool
+            ? fullList1(context)
+            : const Center(child: CircularProgressIndicator()),
       ),
     );
   }
 
   Widget fullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final favoriteProvider = Provider.of<Favorite_add_provider>(context);
-    final cartProvider = Provider.of<Purchase_items_provider>(context);
+    final confirmProvider = Provider.of<PlaceOrderProvider>(context);
+    final cartProvider = Provider.of<purchase_items_provider>(context);
+    final mainDataProvider = Provider.of<ApiConnection>(context, listen: false);
 
-    return favoriteProvider.FavoriteList.isEmpty
-        ? Container(
-            height: size.height,
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(16.0),
-                    topLeft: Radius.circular(16.0)),
-                color: Colors.white),
+
+    return confirmProvider.confirmList.data.isEmpty
+        ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Image.asset("assets/oops.png"),
-                Image.asset("assets/favourite.gif"),
+                Image.asset("assets/oops.png"),
                 const Text(
-                  "Not any items added in Favorite ....!",
+                  "No any items purchase....!",
                   style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
               ],
             ),
           )
         : ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: favoriteProvider.FavoriteList.length,
+            itemCount: confirmProvider.confirmList.data.length,
             itemBuilder: (context, index) {
-              bool isSaved = favoriteProvider.FavoriteList.any((element) =>
-                  element.Name.contains(
-                      favoriteProvider.FavoriteList[index].Name));
-              List<dynamic> favoriteItem = favoriteProvider.FavoriteList;
-              bool isAddedInCart = cartProvider.PurchaseList.any((element1) =>
+              bool isAddedInCart = false;
+            /*  List<bool> isAddedInCart = [];
+                for(int j = 0; j < cartProvider.addCartItem[0].data.length ; j++){
+                   isAddedInCart = [(confirmProvider.confirmList.data[index].imageUrl.toString() == cartProvider.addCartItem[0].data[j].productDetails.imageUrl.toString())];
+                }*/
+
+              /*  bool isAddedInCart = cartProvider.PurchaseList.any((element1) =>
                   element1.Name.contains(
-                      favoriteProvider.FavoriteList[index].Name));
+                      confirmProvider.ConfirmList[index].Name));*/
               return InkWell(
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -155,12 +186,12 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                 onTap: () {
                   Navigator.pushNamed(context, Routes_Name.ProductDetailsScreen,
                       arguments: {
-                        'Price': favoriteProvider.FavoriteList[index].Price,
-                        'Name': favoriteProvider.FavoriteList[index].Name,
+                        'Price': confirmProvider.confirmList.data[index].price,
+                        'Name': confirmProvider.confirmList.data[index].title,
                         'ImageURL':
-                            favoriteProvider.FavoriteList[index].ImageURL,
-                        'ShortDescription': favoriteProvider
-                            .FavoriteList[index].ShortDescription,
+                            confirmProvider.confirmList.data[index].imageUrl,
+                        'ShortDescription':
+                            confirmProvider.confirmList.data[index].description,
                         'Index': index,
                       });
                 },
@@ -171,7 +202,8 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                         children: [
                           Expanded(
                             child: Image(
-                              image: AssetImage(favoriteItem[index].ImageURL),
+                              image: NetworkImage(confirmProvider
+                                  .confirmList.data[index].imageUrl),
                               width: size.width / 2,
                               height: size.height / 4,
                             ),
@@ -183,66 +215,22 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                               child: Column(
                                 children: [
                                   Align(
-                                    alignment: Alignment.topRight,
-                                    child: isSaved
-                                        ? InkWell(
-                                            onTap: () {
-                                              favoriteProvider
-                                                  .RemoveFavoriteItems(
-                                                      favoriteProvider
-                                                          .FavoriteList[index]);
-                                              ScaffoldMessenger.of(context)
-                                                  .hideCurrentSnackBar();
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                    "Product Remove From Favorite!",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                  backgroundColor:
-                                                      Colors.indigo,
-                                                  duration:
-                                                      Duration(seconds: 1),
-                                                ),
-                                              );
-                                            },
-                                            child: const Icon(
-                                              CupertinoIcons.heart_solid,
-                                              color: Colors.red,
-                                              size: 16,
-                                            ),
-                                          )
-                                        : InkWell(
-                                            onTap: () {
-                                              ScaffoldMessenger.of(context)
-                                                  .hideCurrentSnackBar();
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                    "Product Added To Favorite!",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                  backgroundColor:
-                                                      Colors.indigo,
-                                                  duration:
-                                                      Duration(seconds: 1),
-                                                ),
-                                              );
-                                            },
-                                            child: const Icon(
-                                              CupertinoIcons.heart,
-                                              size: 16,
-                                            ),
-                                          ),
+                                      alignment: Alignment.topRight,
+                                      child: AutoSizeText(
+                                        // "Order Place Date:- ${DateTime.parse("2023-03-10")}",
+                                        "Order Place Date:- ${confirmProvider.confirmList.data[index].updatedAt}",
+                                        textAlign : TextAlign.end,
+                                        maxLines: 2
+                                        ,
+                                      )),
+                                  SizedBox(
+                                    height: size.height / 100,
                                   ),
                                   SizedBox(
                                     width: size.width,
                                     child: AutoSizeText(
-                                      favoriteItem[index].Name,
+                                      confirmProvider
+                                          .confirmList.data[index].title,
                                       maxLines: 1,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w300,
@@ -250,27 +238,49 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: size.height / 80,
+                                    height: size.height / 70,
                                   ),
-                                  SizedBox(
-                                    width: size.width,
-                                    child: Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        '₹${favoriteItem[index].Price}',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          width: size.width,
+                                          child: Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              '\$${confirmProvider.confirmList.data[index].price}',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 25),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      Expanded(
+                                        child: SizedBox(
+                                          width: size.width,
+                                          child: Align(
+                                            alignment: Alignment.topLeft,
+                                            child: AutoSizeText(
+                                              'Total Items added:-${confirmProvider.confirmList.data[index].quantity}',
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
-                                    height: size.height / 80,
+                                    height: size.height / 70,
                                   ),
                                   SizedBox(
                                     width: size.width,
                                     child: AutoSizeText(
-                                      favoriteItem[index].ShortDescription,
+                                      confirmProvider
+                                          .confirmList.data[index].description,
                                       maxLines: 2,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w300,
@@ -278,12 +288,17 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: size.height / 50,
+                                    height: size.height / 70,
                                   ),
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: isAddedInCart
+                                        child: /*mainDataProvider
+                                            .productAll[0]
+                                            .data[index]
+                                            .quantity !=
+                                            0*/
+                                        isAddedInCart
                                             ? InkWell(
                                                 onTap: () {},
                                                 child: Container(
@@ -306,22 +321,11 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                               )
                                             : InkWell(
                                                 onTap: () {
-                                                  cartProvider.addItemToCart(
-                                                      FavoriteListModelClass(
-                                                          Price: favoriteItem[
-                                                                  index]
-                                                              .Price,
-                                                          Name: favoriteItem[
-                                                                  index]
-                                                              .Name,
-                                                          ShortDescription:
-                                                              favoriteItem[
-                                                                      index]
-                                                                  .ShortDescription,
-                                                          ImageURL:
-                                                              favoriteItem[
-                                                                      index]
-                                                                  .ImageURL));
+                                                  cartProvider.productAllAPI(
+                                                      confirmProvider
+                                                          .confirmList
+                                                          .data[index]
+                                                          .productId);
                                                 },
                                                 child: Container(
                                                   width: size.width,
@@ -333,7 +337,7 @@ class _FavoriteMainScreenState extends State<FavoriteMainScreen> {
                                                               5.0)),
                                                   child: const Center(
                                                       child: Text(
-                                                    "Add to Cart",
+                                                    "Again Add to Cart",
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontWeight:

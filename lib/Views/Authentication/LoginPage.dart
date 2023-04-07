@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
   moveToHome(BuildContext context) async {
     final loginProvider = Provider.of<Authentication>(context, listen: false);
-    loginProvider.loginUser(loginEmailIdController.text.trim(),
+    await loginProvider.loginUser(loginEmailIdController.text.trim(),
         loginPasswordIdController.text.trim());
 
     if (formKey.currentState!.validate()) {
@@ -32,14 +32,27 @@ class _LoginPageState extends State<LoginPage> {
       });
       formKey.currentState!.save();
 
-      await Future.delayed(const Duration(seconds: 2), () {
+      await Future.delayed(const Duration(seconds: 0), () {
         if (loginProvider.loginData[0].status == "1") {
-          showDialog(
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routes_Name.HomePage, (route) => false);
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Login Successfully",
+                style: TextStyle(fontSize: 16),
+              ),
+              backgroundColor: Colors.indigo,
+              duration: Duration(seconds: 1),
+            ),
+          );
+          /* showDialog(
               context: context,
               builder: (context) {
-                return AlertDialog(
+                return  AlertDialog(
                   title: const Text("Congratulation....!!! "),
-                  content: const Text('Login Successfully'),
+                  content: const Text(''),
                   actions: [
                     TextButton(
                         child: const Text('Okay'),
@@ -48,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                         }),
                   ],
                 );
-              });
+              });*/
         } else if (loginProvider.loginData[0].status == "0") {
           showDialog(
               context: context,
@@ -99,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: loginEmailIdController,
                         decoration: const InputDecoration(
@@ -109,6 +122,14 @@ class _LoginPageState extends State<LoginPage> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Username can't empty";
+                          } else {
+                            String emailExp =
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                            RegExp regExp = RegExp(emailExp);
+                            if (regExp.hasMatch(value)) {
+                            } else {
+                              return "Please Enter Valid Email";
+                            }
                           }
                           return null;
                         },
@@ -118,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: loginPasswordIdController,
                         obscureText: !_passwordVisible,

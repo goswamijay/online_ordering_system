@@ -1,30 +1,75 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Models/ProductListModelClass.dart';
+import '../../Utils/Routes_Name.dart';
+import '../Cart_items_provider.dart';
 
 class ApiConnection extends ChangeNotifier {
   List<ProductAllAPI> _productAll = [];
   List<dynamic> get productAll => _productAll;
 
+
   bool showItemBool = false;
+  bool addedInCartBool = false;
+  bool addedInFavoriteBool = false;
+
+  int _totalItem = 0;
+  int get totalItem => _totalItem;
+  bool isFavorite1 =false;
+  showCart(BuildContext context){
+    final cartProvider = Provider.of<purchase_items_provider>(context);
+
+    Future.delayed(const Duration(seconds: 3),(){
+      _totalItem = productAll[0].totalProduct.length ?? '0';
+    });
+    notifyListeners();
+  }
+
+
 
   showItem(){
     showItemBool = true;
     notifyListeners();
   }
 
-  Future<void> productAllAPI() async {
+  addedInCart(int index){
+   if(productAll[0].data[index].quantity != 0){
+     addedInCartBool = true;
+     notifyListeners();
+
+   }else{
+     addedInCartBool = false;
+     notifyListeners();
+
+   }
+  }
+
+  addedInFavorite(int index){
+    if(productAll[0]
+        .data[index].watchListItemId !=
+        ''){
+      addedInFavoriteBool = true;
+      notifyListeners();
+    }else{
+      addedInFavoriteBool =false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> productAllAPI(BuildContext context) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      print('fcmToken');
 
-      final fcmToken1 = prefs.getString('fcmToken1'.toString()) ?? '';
-      final fcmToken0 = prefs.getString('fcmToken0');
+      final jwtToken1 = prefs.getString('jwtToken'.toString()) ?? '';
+      final jwtToken0 = prefs.getString('jwtToken');
 
-      print(fcmToken1.toString());
+      log(jwtToken1.toString());
 
       var uri = Uri.parse(
           'https://shopping-app-backend-t4ay.onrender.com/product/getAllProduct');
@@ -32,20 +77,20 @@ class ApiConnection extends ChangeNotifier {
         uri,
         headers: {
           'Content-type': 'application/json',
-          'Authorization':' Bearer ${fcmToken1.toString()}',
-              "Accept": "application/json",
+          'Authorization':' Bearer ${jwtToken1.toString()}',
+          "Accept": "application/json",
           "Access-Control_Allow_Origin": "*"
         },
       );
       var jsonData = json.decode(response.body);
-      print(jsonData.toString());
+     log(jsonData.toString());
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         List<ProductAllAPI> productList = [];
         //var productList = ProductAllAPI.fromJson(jsonData);
-      productList = [ProductAllAPI.fromJson(jsonData)] ;
+        productList = [ProductAllAPI.fromJson(jsonData)] ;
 
-     /*   productList = [
+        /*   productList = [
           ProductAllAPI(
               status: int.parse(jsonData['staus']).toInt(),
               msg: jsonData['msg'],
@@ -65,12 +110,18 @@ class ApiConnection extends ChangeNotifier {
         _productAll = productList;
 
         notifyListeners();
-      } else {
-        var productList = <ProductAllAPI>[];
+      } else if(response.statusCode == 400) {
+
+        List<ProductAllAPI> productList = [];
+        //var productList = ProductAllAPI.fromJson(jsonData);
+        productList = [ProductAllAPI.fromJson(jsonData)] ;
+        _productAll = productList;
+
+        /* var productList = <ProductAllAPI>[];
 
         productList = [
           ProductAllAPI(
-              status: int.parse(jsonData['staus']).toInt(),
+              status: int.parse(jsonData['status']).toInt(),
               msg: jsonData['msg'],
               totalProduct: 0,
               data: [ProductAllAPIData(
@@ -78,16 +129,20 @@ class ApiConnection extends ChangeNotifier {
                 title: '',
                 description: '',
                 price: '',
-                imageUrl: '',
-                v: 0,
-                createdAt: '',
-                updatedAt: '',
+                imageUrl: '', quantity: 0, cartItemId: '',
+
               )])
         ];
-        _productAll = productList;
+        _productAll = productList;*/
+      }else{
+        Future.delayed(const Duration(seconds: 0),(){
+          Navigator.pushNamedAndRemoveUntil(context,
+              Routes_Name.LoginScreen, (route) => false);
+        });
       }
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
+
 }

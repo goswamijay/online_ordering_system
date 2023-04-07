@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Utils/Routes_Name.dart';
 
@@ -15,6 +16,32 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
   bool changeButton = false;
 
   final _formKey = GlobalKey<FormState>();
+  String email = '';
+  String name1 = '';
+  String mobileNo = '';
+  TextEditingController name0 = TextEditingController();
+  TextEditingController email0 = TextEditingController();
+  TextEditingController mobileNo0 = TextEditingController();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    access(context);
+  }
+
+  access(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      email = prefs.getString('LoginEmail').toString();
+      email0.text = email;
+      name1 = prefs.getString('LoginName').toString();
+      name0.text = name1;
+      mobileNo = prefs.getString('LoginMobileNo').toString();
+      mobileNo0.text = mobileNo;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +84,9 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
-                        initialValue: "Jay Goswami",
+                        controller: name0,
                         readOnly: true,
                         decoration: const InputDecoration(
                           hintText: "User Name of user",
@@ -68,9 +95,9 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
-                        initialValue: "goswamijay07@gmail.com",
+                        controller: email0,
                         readOnly: true,
                         decoration: const InputDecoration(
                           hintText: "Email Address of user",
@@ -79,28 +106,18 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
-                        keyboardType: TextInputType.number,
+                        controller: mobileNo0,
+                        readOnly: true,
                         decoration: const InputDecoration(
-                          hintText: "Mobile Number",
-                          labelText: "Mobile Number",
+                          hintText: "Mobile No",
+                          labelText: "Mobile No of user",
                         ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Mobile Number can't empty";
-                          } else if (value.length < 10 || value.length > 10) {
-                            return "Mobile number is not valid";
-                          }
-                        },
-                        onChanged: (value) {
-                          name = value;
-                          print(name);
-                        },
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
                           hintText: "Address of user",
@@ -112,10 +129,10 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                           } else if (value.length < 10) {
                             return "Address of user is not valid";
                           }
+                          return null;
                         },
                         onChanged: (value) {
                           name = value;
-                          print(name);
                         },
                       ),
                     ),
@@ -133,7 +150,7 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                                   TextButton(
                                       child: const Text('Okay'),
                                       onPressed: () {
-                                      Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
                                       }),
                                 ],
                               );
@@ -178,6 +195,18 @@ class _AccountMainScreenState extends State<AccountMainScreen> {
                           child: const Text("Reset Password",
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
+                        InkWell(
+                          onTap: () async {
+                            SharedPreferences preferences =
+                                await SharedPreferences.getInstance();
+                            await preferences.remove('fcmToken1');
+                            await preferences.clear();
+                            print('clear');
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                Routes_Name.OnBoardingScreen, (route) => false);
+                          },
+                          child: Icon(CupertinoIcons.square_arrow_left),
+                        )
                       ],
                     ),
                     SizedBox(

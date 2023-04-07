@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:online_ordering_system/Models/SignupModelClass.dart';
@@ -18,22 +20,53 @@ class _ResetPasswordOTPState extends State<ResetPasswordOTP> {
   Map<String, dynamic>? argument = {};
   List<SignupModelClass> list1 = [];
   String verificationCode = '';
+  int status = 0;
+
+  resetPasswordOTP(String userId, String otp) async {
+    try {
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/user/verifyOtpOnRegister');
+      var response = await http.post(
+        uri,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+        body: jsonEncode(
+          {"userId": userId, "otp": otp},
+        ),
+      );
+
+      var jsonData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        status = jsonData['status'];
+      } else if (response.statusCode == 400) {
+        status = jsonData['status'];
+      }
+    } catch (e) {
+      return e;
+    }
+  }
 
 
   moveToHome(BuildContext context) async {
-    accessApi();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (list1[0].status == "1") {
+    await resetPasswordOTP(argument!['userId'],verificationCode.toString());
+    Future.delayed(const Duration(seconds: 0), () {
+      if (status == 1) {
         showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text("Verification Code is Verified Successfully"),
+                title:  Text("Verification Code is Verified Successfully & New Password will send into your ${argument!['email_id'].toString()} id."),
                 actions: [
                   TextButton(
                       child: const Text('Okay'),
                       onPressed: () {
-                        Navigator.pushNamed(context, Routes_Name.ResetPasswordValue, arguments: {'id': list1[0].data.jwtToken});
+                        //Navigator.pushNamed(context, Routes_Name.ResetPasswordValue, arguments: {'id': list1[0].data.jwtToken});
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, Routes_Name.LoginScreen, (route) => false);
                       }),
                 ],
               );
@@ -57,15 +90,6 @@ class _ResetPasswordOTPState extends State<ResetPasswordOTP> {
     });
   }
 
-  void accessApi() async {
-    //  String id = list.map((e) => e.data.id).toString();
-    await Future.delayed(const Duration(seconds: 1), () async {
-      print(argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''));
-      list1 = await Authentication.otpPasswordResetVerification(
-          argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''),
-          verificationCode.toString());
-    });
-  }
   @override
   Widget build(BuildContext context) {
     argument =
@@ -123,7 +147,6 @@ class _ResetPasswordOTPState extends State<ResetPasswordOTP> {
 
                       onSubmit: (String code) {
                         verificationCode = code;
-                        print(verificationCode);
                         moveToHome(context);
                       }, // end onSubmit
                     ),
@@ -135,7 +158,26 @@ class _ResetPasswordOTPState extends State<ResetPasswordOTP> {
                       children: [
                         const Text("Didn't Receive the OTP? "),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Authentication.resentOTP(  argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''),);
+
+                            ScaffoldMessenger.of(context)
+                                .hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Otp sent successfully! ",
+                                  style: TextStyle(
+                                      fontSize: 16),
+                                ),
+                                backgroundColor:
+                                Colors.indigo,
+                                duration:
+                                Duration(seconds: 1),
+                              ),
+                            );
+                          },
                           child: const Text(
                             "RESEND OTP",
                             style: TextStyle(

@@ -29,6 +29,13 @@
             {
               "client_id": "745234518617-hkoq0d2ls2glq83754og66v9r7lrtg8l.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "745234518617-0mpino2ua0g3r8ah36st3bc9o9dufmlq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.onlineOrderingSystem"
+              }
             }
           ]
         }

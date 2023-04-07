@@ -17,4 +17,5 @@ class Routes_Name {
   static String ResetPasswordEmail = 'ResetPasswordEmail';
   static String ResetPasswordOTP = 'ResetPasswordOTP';
   static String ResetPasswordValue = 'ResetPasswordValue';
+  static String ProductMainScreen2  = 'ProductMainScreen2';
 }

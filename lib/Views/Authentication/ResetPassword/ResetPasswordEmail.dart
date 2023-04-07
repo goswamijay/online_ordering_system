@@ -1,9 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:online_ordering_system/Controller/ApiConnection/Authentication.dart';
-
-import '../../../Models/ResetPasswordOtpModelClass.dart';
 import '../../../Utils/Routes_Name.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,15 +14,48 @@ class ResetPasswordEmail extends StatefulWidget {
 class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
   TextEditingController resetPasswordEmailController = TextEditingController();
 
-  List<ResetPasswordOtpModelClass> list = [];
-  
+  String emailId = '';
+  String userId = '';
+  int status = 0;
+  String emailExp =
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+
+  forgotPassword(String emailId) async {
+    try {
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/user/forgotPassword');
+      var response = await http.post(
+        uri,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+        body: jsonEncode(
+          {
+            "emailId": emailId,
+          },
+        ),
+      );
+
+      var jsonData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        emailId = jsonData['data']['emailId'];
+        userId = jsonData['data']['_id'];
+        status = jsonData['status'];
+      } else if (response.statusCode == 400) {
+        status = jsonData['status'];
+      }
+    } catch (e) {
+      return e;
+    }
+  }
 
   moveToNext(BuildContext context) async {
-    accessApi();
+    await forgotPassword(resetPasswordEmailController.text);
 
-    Future.delayed(const Duration(seconds: 3), () {
-      print(list.map((e) => e.status));
-      if (list[0].status == "1") {
+    Future.delayed(const Duration(seconds: 0), () {
+      if (status == 1) {
         showDialog(
             context: context,
             builder: (context) {
@@ -37,10 +67,10 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
                       onPressed: () {
                         Navigator.pushNamed(
                             context, Routes_Name.ResetPasswordOTP, arguments: {
-                          'email_id':
-                              resetPasswordEmailController.text.toString(),'id': list.map((e) => e.data.id)}
-              ); }
-                      ),
+                          'email_id': resetPasswordEmailController.text,
+                          'userId': userId
+                        });
+                      }),
                 ],
               );
             });
@@ -49,7 +79,8 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text("This Email Id is not Registered With us kindly register first!"),
+                title: const Text(
+                    "This Email Id is not Registered With us kindly register first!"),
                 actions: [
                   TextButton(
                       child: const Text('Okay'),
@@ -63,16 +94,10 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
     });
   }
 
-  void accessApi() async {
-    list =  await Authentication.resetPassword(resetPasswordEmailController.text);
-
-  }
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final formKey11 = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return SafeArea(
       child: Scaffold(
@@ -91,14 +116,12 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
                     fontSize: 24),
               ),
               Form(
-                key: formKey11,
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: resetPasswordEmailController,
-                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           hintText: "Enter Register Email ID",
                           labelText: "Enter Register Email ID",
@@ -106,8 +129,14 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Email ID can't empty";
-                          } else if (value.length < 10 || value.length > 10) {
-                            return "Mobile number is not valid";
+                          } else {
+                            String emailExp =
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                            RegExp regExp = RegExp(emailExp);
+                            if (regExp.hasMatch(value)) {
+                            } else {
+                              return "Please Enter Valid Email";
+                            }
                           }
                           return null;
                         },
@@ -131,7 +160,7 @@ class _ResetPasswordEmailState extends State<ResetPasswordEmail> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Text(
-                          "Save The Data",
+                          "Forget Password",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

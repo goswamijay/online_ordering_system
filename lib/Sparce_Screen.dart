@@ -16,15 +16,31 @@ class Space_Screen extends StatefulWidget {
 class _Space_ScreenState extends State<Space_Screen> {
   bool _shouldFade = true;
 
+  bool? jwtToken1;
 
+  dataAccess() async {
+    final prefs = await SharedPreferences.getInstance();
+    jwtToken1 = prefs.getBool('LogInBool');
+    print(jwtToken1);
+    print(jwtToken1.toString() != '');
+
+    if (jwtToken1 == true) {
+      print('transfer');
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pushReplacementNamed(context, Routes_Name.HomePage);
+      });
+    } else {
+      navigation();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    navigation();
     animation();
+    dataAccess();
     FirebaseMessaging.instance.getInitialMessage().then(
-          (message) {
+      (message) {
         print("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
           print("New Notification");
@@ -43,7 +59,7 @@ class _Space_ScreenState extends State<Space_Screen> {
 
     // 3. This method only call when App in background and not terminated(not closed)
     FirebaseMessaging.onMessageOpenedApp.listen(
-          (message) {
+      (message) {
         print("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message.notification != null) {
           print(message.notification!.title);
@@ -53,17 +69,15 @@ class _Space_ScreenState extends State<Space_Screen> {
       },
     );
 
-
     // 2. This method only call when App in forground it mean app must be opened
     FirebaseMessaging.onMessage.listen(
-          (message) {
+      (message) {
         print("FirebaseMessaging.onMessage.listen");
         if (message.notification != null) {
           print(message.notification!.title);
           print(message.notification!.body);
           print("message.data11 ${message.data}");
           LocalNotificationService.createanddisplaynotification(message);
-
         }
       },
     );
@@ -71,7 +85,7 @@ class _Space_ScreenState extends State<Space_Screen> {
 
   void navigation() {
     Future.delayed(const Duration(seconds: 3), () {
-   /*   Navigator.pushNamedAndRemoveUntil(
+      /*   Navigator.pushNamedAndRemoveUntil(
           context, Routes_Name.LoginScreen, (route) => false);*/
       Navigator.pushNamedAndRemoveUntil(
           context, Routes_Name.OnBoardingScreen, (route) => false);
@@ -79,18 +93,15 @@ class _Space_ScreenState extends State<Space_Screen> {
   }
 
   void animation() {
-    Future.delayed(
-        const Duration(seconds: 2),
-        () => setState(() {
-              _shouldFade = false;
-            }));
+    if (mounted) {
+      Future.delayed(
+          const Duration(seconds: 2),
+          () => setState(() {
+                _shouldFade = false;
+              }));
+    }
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,10 +121,10 @@ class _Space_ScreenState extends State<Space_Screen> {
                       height: size.height / 1.5,
                       width: size.width / 1.5,
                       image: const AssetImage('assets/space1.gif')),
-                      //image: const AssetImage('assets/logo1.png')),
+                  //image: const AssetImage('assets/logo1.png')),
                 ),
               ),
-            /*  SizedBox(
+              /*  SizedBox(
                 height: size.height / 80,
               ),*/
               Center(
@@ -129,15 +140,13 @@ class _Space_ScreenState extends State<Space_Screen> {
                   ),
                 ),
               ),
-
               Center(
-                child:  AnimatedOpacity(
+                child: AnimatedOpacity(
                     opacity: _shouldFade ? 1 : 0,
                     duration: const Duration(seconds: 1),
                     child: SpinKitThreeBounce(
                       color: Colors.black,
                       size: size.height / 30,
-
                     )),
               ),
             ],

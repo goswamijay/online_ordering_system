@@ -33,9 +33,9 @@ class ProductAllAPI {
       dataList.add(ProductAllAPIData.fromJson(data));
     }
     return ProductAllAPI(
-      status: json['staus'],
-      msg: json['msg'],
-      totalProduct: json['totalProduct'],
+      status: json['staus'] ?? 0,
+      msg: json['msg'] ?? '',
+      totalProduct: json['totalProduct'] ?? 0,
       data: dataList,
     );
   }
@@ -47,9 +47,9 @@ class ProductAllAPIData {
   String description;
   String price;
   String imageUrl;
-  int v;
-  String createdAt;
-  String updatedAt;
+  int quantity;
+  String cartItemId;
+  String watchListItemId;
 
   ProductAllAPIData({
     required this.id,
@@ -57,21 +57,21 @@ class ProductAllAPIData {
     required this.description,
     required this.price,
     required this.imageUrl,
-    required this.v,
-    required this.createdAt,
-    required  this.updatedAt,
+    required this.quantity,
+    required this.cartItemId,
+    required this.watchListItemId
   });
 
   factory ProductAllAPIData.fromJson(Map<String, dynamic> json) {
     return ProductAllAPIData(
-      id: json['_id'],
-      title: json['title'],
-      description: json['description'],
-      price: json['price'],
-      imageUrl: json['imageUrl'],
-      v: json['__v'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      id: json['_id'] ?? '',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      price: json['price'] ?? '',
+      imageUrl: json['imageUrl'] ?? '',
+      quantity: json['quantity'] ?? 0,
+      cartItemId: json['cartItemId'] ?? '',
+      watchListItemId: json['watchListItemId'] ?? ''
     );
   }
 }

@@ -27,7 +27,7 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
     return GetBuilder<GetxCartController>(
       builder: (controller) {
         return Scaffold(
-          drawer: drawerWidget(context, Colors.indigo),
+          drawer: const DrawerWidget(),
           appBar: AppBar(
             leading: Padding(
               padding: const EdgeInsets.only(left: 12.0, top: 12.0),

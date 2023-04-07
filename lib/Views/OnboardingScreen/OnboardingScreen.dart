@@ -16,17 +16,19 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final controller = PageController(viewportFraction: 1, keepPage: true);
 
-  String fcmToken1 = "" ;
-
+  bool? jwtToken1;
 
   dataAccess() async{
     final prefs = await SharedPreferences.getInstance();
-    fcmToken1 = prefs.get('fcmToken1').toString();
-    print(fcmToken1);
-    print(fcmToken1.toString() != "null");
+    jwtToken1 = prefs.getBool('LogInBool');
+    print(jwtToken1);
+    print(jwtToken1.toString() != '');
 
-    if(fcmToken1.toString().isNotEmpty || fcmToken1.toString() != "null" ){
-      Navigator.pushReplacementNamed(context, Routes_Name.HomePage);
+    if(jwtToken1 == true){
+      print('transfer');
+      Future.delayed(const Duration(seconds: 0),(){
+        Navigator.pushReplacementNamed(context, Routes_Name.HomePage);
+      });
     }else{
 
     }

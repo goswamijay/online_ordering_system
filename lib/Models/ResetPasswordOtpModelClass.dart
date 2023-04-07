@@ -1,5 +1,5 @@
 class ResetPasswordOtpModelClass {
-  String status;
+  int status;
   String msg;
   ResetPasswordOtpModelData data;
 
@@ -11,7 +11,7 @@ class ResetPasswordOtpModelClass {
 
   factory ResetPasswordOtpModelClass.fromJson(dynamic json) {
     return ResetPasswordOtpModelClass(
-        status: json['status'] as String, msg: json['msg'], data: ResetPasswordOtpModelData.fromJson(json['data']));
+        status: json['status']  ?? 0, msg: json['msg'] ?? '', data: ResetPasswordOtpModelData.fromJson(json['data']));
   }
 }
 
@@ -20,12 +20,12 @@ class ResetPasswordOtpModelData {
   String name;
   String mobileNo;
   String emailId;
-  String status;
+  int status;
   String jwtToken;
   String fcmToken;
   String createdAt;
   String updatedAt;
-  String v;
+  int v;
 
   ResetPasswordOtpModelData(
       {required this.id,
@@ -41,16 +41,16 @@ class ResetPasswordOtpModelData {
 
   factory ResetPasswordOtpModelData.fromJson(dynamic json) {
     return ResetPasswordOtpModelData(
-      status: json['status'] as String,
-      id: json['_id'] as String,
-      name: json['name'] as String,
-      mobileNo: json['mobileNo'] as String,
-      emailId: json['emailId'] as String,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
-      v: json['__v'] as String,
-      jwtToken: json['jwtToken'] as String,
-      fcmToken: json['fcmToken'] as String,
+      status: json['status'] ?? 0,
+      id: json['_id'] ?? '',
+      name: json['name'] ?? '',
+      mobileNo: json['mobileNo'] ?? '',
+      emailId: json['emailId'] ?? '',
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
+      v: json['__v'] ?? 0,
+      jwtToken: json['jwtToken'] ?? '',
+      fcmToken: json['fcmToken'] ?? '',
     );
   }
 }

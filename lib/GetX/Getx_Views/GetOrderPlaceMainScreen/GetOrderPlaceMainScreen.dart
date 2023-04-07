@@ -6,7 +6,6 @@ import 'package:online_ordering_system/GetX/Getx_Controller/GetxConfirmListContr
 import 'package:online_ordering_system/GetX/Getx_Controller/GetxFavoriteController.dart';
 import 'package:online_ordering_system/GetX/Getx_Models/GetxProductModel.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
-import 'package:online_ordering_system/Views/Product%20Screen/Product%20Main%20Screen.dart';
 
 import '../../../Utils/Drawer.dart';
 import '../../Getx_Controller/GetxCartController.dart';
@@ -24,7 +23,7 @@ class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
   Widget build(BuildContext context) {
     final favoriteController = Get.put(GetxFavoriteController());
     return Scaffold(
-      drawer: drawerWidget(context, Colors.indigo),
+      drawer: const DrawerWidget(),
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12.0, top: 12.0),

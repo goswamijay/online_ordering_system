@@ -38,7 +38,7 @@ class Authentication extends ChangeNotifier {
 
         loginList = [
           LoginModelClass(
-              status: jsonData['status'].toString(),
+              status: jsonData['1'].toString(),
               msg: jsonData['msg'],
               data: LoginData(
                 id: jsonData['data']['_id'].toString(),
@@ -56,9 +56,19 @@ class Authentication extends ChangeNotifier {
         _loginData = loginList;
 
         final prefs = await SharedPreferences.getInstance();
-      //  await prefs.setString('login1', loginData[0].status);
-        await prefs.setString('fcmToken1', loginData[0].data.jwtToken);
-        print(prefs.get('fcmToken1'));
+        await prefs.setString('jwtToken', loginData[0].data.jwtToken);
+        await prefs.setString('LoginEmail', loginData[0].data.emailId);
+        await prefs.setString('LoginName', loginData[0].data.name);
+        await prefs.setString('LoginMobileNo', loginData[0].data.mobileNo);
+        await prefs.setBool('LogInBool', loginData[0].status == "1");
+
+
+
+        print(prefs.get('jwtToken'));
+        print(prefs.get('LoginEmail'));
+        print(prefs.get('LoginName'));
+        print(prefs.get('LogInBool'));
+
         notifyListeners();
       } else {
         var loginList1 = <LoginModelClass>[];
@@ -139,6 +149,10 @@ class Authentication extends ChangeNotifier {
         await prefs.setString('login1', signUpData[0].status);
         await prefs.setString('signUpId', signUpData[0].data.id);
         await prefs.setString('signUpEmail', signUpData[0].data.emailId);
+        await prefs.setString('signUpPassword', password);
+
+        // await prefs.setString('jwtToken', signUpData[0].data.fcmToken);
+
         notifyListeners();
       } else {
         var signUpList1 = <SignupModelClass>[];
@@ -205,9 +219,9 @@ class Authentication extends ChangeNotifier {
         ];
         _otpVerification = otpVerificationData;
 
-        final prefs = await SharedPreferences.getInstance();
+      /*  final prefs = await SharedPreferences.getInstance();
         await prefs.setString(
-            'fcmToken0', otpVerificationData[0].data.jwtToken);
+            'jwtToken', otpVerificationData[0].data.jwtToken);*/
 
         //await prefs.setString('login1', loginData[0].status);
         notifyListeners();
@@ -256,7 +270,6 @@ class Authentication extends ChangeNotifier {
         ),
       );
 
-      print(response.statusCode == 400);
       var jsonData = json.decode(response.body);
 
       if (response.statusCode == 200) {
@@ -330,21 +343,21 @@ class Authentication extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         //Map<String, dynamic> newResponses = jsonDecode(response.body);
-        log(json.decode(response.body));
+        log(jsonData);
 
         forgotPassword = [
           ResetPasswordOtpModelClass(
-              status: jsonData['status'].toString(),
+              status: jsonData['status'] ?? 0,
               msg: jsonData['msg'],
               data: ResetPasswordOtpModelData(
                 id: jsonData['data']['_id'].toString(),
                 name: jsonData['data']['name'].toString(),
                 mobileNo: jsonData['data']['mobileNo'].toString(),
                 emailId: jsonData['data']['emailId'],
-                status: jsonData['data']['status'].toString(),
+                status: jsonData['data']['status'] ?? 0,
                 createdAt: jsonData['data']['createdAt'].toString(),
                 updatedAt: jsonData['data']['updatedAt'].toString(),
-                v: jsonData['data']['__v'].toString(),
+                v: jsonData['data']['__v'] ?? 0,
                 jwtToken: jsonData['data']['jwtToken'].toString(),
                 fcmToken: jsonData['data']['fcmToken'].toString(),
               ))
@@ -353,17 +366,17 @@ class Authentication extends ChangeNotifier {
       } else if (response.statusCode == 400) {
         forgotPassword = [
           ResetPasswordOtpModelClass(
-              status: jsonData['status'].toString(),
+              status: jsonData['status'] ?? 0,
               msg: jsonData['msg'],
               data: ResetPasswordOtpModelData(
                 id: "",
                 name: "",
                 mobileNo: "",
                 emailId: "",
-                status: "",
+                status: 0,
                 createdAt: "",
                 updatedAt: "",
-                v: "",
+                v: 0,
                 jwtToken: "",
                 fcmToken: "",
               ))
@@ -419,5 +432,33 @@ class Authentication extends ChangeNotifier {
       log (e.toString());
     }
     return forgotPassword;
+  }
+
+
+ static Future<void> resentOTP(String userId) async {
+    try {
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/user/resendOtp');
+      var response = await http.post(uri,
+          headers: {
+            'Content-type': 'application/json',
+            "Accept": "application/json",
+            "Access-Control_Allow_Origin": "*"
+          },
+          body: jsonEncode(
+            {"userId": userId,},
+          ));
+      var jsonData = json.decode(response.body);
+      log(jsonData.toString());
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        print(jsonData);
+      } else {
+        final jsonData = json.decode(response.body);
+        print(jsonData);
+      }
+    } catch (error) {
+      rethrow;
+    }
   }
 }

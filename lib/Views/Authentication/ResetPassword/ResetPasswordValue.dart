@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-import '../../../Controller/ApiConnection/Authentication.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../Models/ResetPasswordOtpModelClass.dart';
 import '../../../Utils/Routes_Name.dart';
+import 'package:http/http.dart' as http;
 
 class ResetPasswordValue extends StatefulWidget {
   const ResetPasswordValue({Key? key}) : super(key: key);
@@ -19,11 +21,44 @@ class _ResetPasswordValueState extends State<ResetPasswordValue> {
 
   static String name = "";
   bool changeButton = false;
+  int status = 0;
+
+  resetPassword(String password) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final jwtToken1 = prefs.getString('jwtToken'.toString());
+    try {
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/user/changePassword');
+      var response = await http.post(
+        uri,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "application/json",
+          "Authorization": "Bearer $jwtToken1",
+          "Access-Control_Allow_Origin": "*"
+        },
+        body: jsonEncode(
+          {"newPass": password, "confirmPass": password},
+        ),
+      );
+
+      var jsonData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        status = jsonData['status'];
+      } else if (response.statusCode == 400) {
+        status = jsonData['status'];
+      }
+    } catch (e) {
+      return e;
+    }
+  }
 
   moveToHome(BuildContext context) async {
-    accessApi();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (list1[0].status == "1") {
+   await resetPassword(verificationCodeController.text);
+    Future.delayed(const Duration(seconds: 0), () {
+      if (status == 1) {
         showDialog(
             context: context,
             builder: (context) {
@@ -58,13 +93,6 @@ class _ResetPasswordValueState extends State<ResetPasswordValue> {
     });
   }
 
-  void accessApi() async {
-    await Future.delayed(const Duration(seconds: 1), () async {
-      list1 = await Authentication.resetPasswordValueChange(
-          argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''),
-          verificationCodeController.text);
-    });
-  }
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {

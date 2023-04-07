@@ -48,6 +48,10 @@ dependencies:
   get: ^4.6.5
   smooth_page_indicator: ^1.0.1
   shared_preferences: ^2.0.20
+  pull_to_refresh: ^2.0.0
+  firebase_crashlytics: ^3.1.0
+  shimmer: ^2.0.0
+  lottie: ^2.3.1
 
 
 
@@ -79,6 +83,7 @@ flutter:
     - assets/
     - assets/ItemsPhoto/
     - assets/OnBoarding/
+    - assets/Animation/
     - assets/cart.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see

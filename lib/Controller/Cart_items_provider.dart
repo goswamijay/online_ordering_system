@@ -1,140 +1,191 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:collection/collection.dart';
-import 'package:online_ordering_system/Models/ProductListModelClass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/CartAddItemModelClass.dart';
 import '../Models/FavoriteListModelClass.dart';
 
-class Purchase_items_provider with ChangeNotifier {
-  List<FavoriteListModelClass> _PurchaseList = [];
-
-  List<dynamic> get PurchaseList => _PurchaseList;
-
+class purchase_items_provider with ChangeNotifier {
+  List<FavoriteListModelClass> _purchaseList = [];
+  List<dynamic> get purchaseList => _purchaseList;
   List<CartAddItemModelClass> _addCartItem = [];
-
   List<dynamic> get addCartItem => _addCartItem;
+
+  bool showItemBool = false;
+  bool itemAdded = false;
+
+  showItem(){
+    showItemBool = true;
+    notifyListeners();
+  }
+
 
   Future<void> productAllAPI(String productId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      print('fcmToken');
 
-      final fcmToken1 = prefs.getString('fcmToken1'.toString()) ?? '';
-      final fcmToken0 = prefs.getString('fcmToken0');
-
-      print(productId);
-
-
+      final jwtToken1 = prefs.getString('jwtToken'.toString()) ?? '';
 
       var uri = Uri.parse(
           'https://shopping-app-backend-t4ay.onrender.com/cart/addToCart');
       var response = await http.post(uri, headers: {
         'accept': '*/*',
-        'Authorization': 'Bearer $fcmToken1',
-        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $jwtToken1',
       }, body: {
         "productId": productId,
       });
-      var jsonData = json.decode(response.body);
-      print(jsonData.toString());
-      print(response.statusCode == 201);
       if (response.statusCode == 201) {
         final jsonData = json.decode(response.body);
-        List<CartAddItemModelClass> productList = [];
-        //var productList = ProductAllAPI.fromJson(jsonData);
-        productList = [CartAddItemModelClass.fromJson(jsonData)];
-
-        /*   productList = [
-          ProductAllAPI(
-              status: int.parse(jsonData['staus']).toInt(),
-              msg: jsonData['msg'],
-              totalProduct: 0,
-              data: [ProductAllAPIData(
-                id: jsonData['data']['_id'].toString(),
-                title: jsonData['data']['title'].toString(),
-                description: jsonData['data']['description'].toString(),
-                price: jsonData['data']['price'].toString(),
-                imageUrl: jsonData['data']['imageUrl'].toString(),
-                v: int.parse(jsonData['data']['__v'].toString()),
-                createdAt: jsonData['data']['createdAt'].toString(),
-                updatedAt: jsonData['data']['updatedAt'].toString(),
-              )])
-        ];*/
-
-        _addCartItem = productList ;
-
+        log(jsonData.toString());
         notifyListeners();
       } else {
-        var productList = <CartAddItemModelClass>[];
+        final jsonData = json.decode(response.body);
+        log(jsonData.toString());
+        notifyListeners();
 
-        productList = [
-          CartAddItemModelClass(
-            status: int.parse(jsonData['status']).toInt(),
-            msg: jsonData['msg'],
-            data: CartAddItemData(
-                userId: '',
-                cartId: '',
-                quantity: 0,
-                productCount: 0,
-                productDetails: ProductAllAPIData(
-                  id: '',
-                  title: '',
-                  description: '',
-                  price: '',
-                  imageUrl: '',
-                  v: 0,
-                  createdAt: '',
-                  updatedAt: '',
-                )),
-          )
-        ];
-        _addCartItem = productList;
       }
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
-  void addItemToCart(FavoriteListModelClass ListModel) {
-    _PurchaseList.add(ListModel);
-    notifyListeners();
+
+  Future<void> cartAllDataAPI() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      final jwtToken1 = prefs.getString('jwtToken'.toString()) ?? '';
+
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/cart/getMyCart');
+      var response = await http.get(
+        uri,
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization':' Bearer ${jwtToken1.toString()}',
+          "Accept": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      );
+      var jsonData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+
+        List<CartAddItemModelClass> productList = [];
+        productList = [CartAddItemModelClass.fromJson(jsonData)];
+
+        _addCartItem = productList;
+        log(jsonData.toString());
+        notifyListeners();
+      } else {
+
+        List<CartAddItemModelClass> productList = [];
+        productList = [CartAddItemModelClass.fromJson(jsonData)];
+        log(jsonData.toString());
+        _addCartItem = productList;
+
+
+      }
+    } catch (error) {
+      rethrow;
+    }
   }
 
-  void removeToCart(FavoriteListModelClass ListModel) {
-    _PurchaseList.remove(ListModel);
-    notifyListeners();
+  Future<void> increaseProductQuantity(String cartItemId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      final jwtToken1 = prefs.getString('jwtToken'.toString()) ?? '';
+
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/cart/increaseProductQuantity');
+      var response = await http.post(uri, headers: {
+        'accept': '*/*',
+        'Authorization': 'Bearer $jwtToken1',
+      }, body: {
+        "cartItemId": cartItemId,
+      });
+      var jsonData = json.decode(response.body);
+      log(jsonData.toString());
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        log(jsonData.toString());
+
+        notifyListeners();
+      } else {
+        final jsonData = json.decode(response.body);
+        log(jsonData.toString());
+
+        notifyListeners();
+      }
+    } catch (error) {
+      rethrow;
+    }
   }
 
-  void cleanCartItem() {
-    _PurchaseList.clear();
-    notifyListeners();
+  Future<void> decreaseProductQuantity(String cartItemId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      final jwtToken1 = prefs.getString('jwtToken'.toString()) ?? '';
+
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/cart/decreaseProductQuantity');
+      var response = await http.post(uri, headers: {
+        'accept': '*/*',
+        'Authorization': 'Bearer $jwtToken1',
+      }, body: {
+        "cartItemId": cartItemId,
+      });
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        log(jsonData.toString());
+        notifyListeners();
+      } else {
+        final jsonData = json.decode(response.body);
+        log(jsonData.toString());
+
+        notifyListeners();
+      }
+    } catch (error) {
+      rethrow;
+    }
   }
 
-  int allItemPrice() {
-    Iterable<int> totalPrice = _PurchaseList.map((e) => e.Price * e.Count);
-    totalPrice.toString();
-    final sum = totalPrice.sum;
-    return sum;
+
+  Future<void> removeProductFromCart(String cartItemId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      final jwtToken1 = prefs.getString('jwtToken'.toString()) ?? '';
+
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/cart/removeProductFromCart');
+      var response = await http.post(uri, headers: {
+        'accept': '*/*',
+        'Authorization': 'Bearer $jwtToken1',
+      }, body: {
+        "cartItemId": cartItemId,
+      });
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        log(jsonData.toString());
+
+        notifyListeners();
+      } else {
+        final jsonData = json.decode(response.body);
+        log(jsonData.toString());
+
+        notifyListeners();
+      }
+    } catch (error) {
+      rethrow;
+    }
   }
 
-  void increaseCount(int index) {
-    _PurchaseList[index].Count++;
-    notifyListeners();
-  }
 
-  void decreaseCount(int index) {
-    _PurchaseList[index].Count--;
-    notifyListeners();
-  }
-
-  int allItemCount() {
-    Iterable<int> totalCount = _PurchaseList.map((e) => e.Count);
-    totalCount.toString();
-    final count = totalCount.sum;
-    return count;
-  }
 }
