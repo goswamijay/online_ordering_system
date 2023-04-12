@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Models/FavoriteListModelClass.dart';
+import '../Utils/Routes_Name.dart';
 
 
 
@@ -94,7 +95,7 @@ class FavoriteAddProvider with ChangeNotifier {
     }
   }
 
-  Future<void> favoriteAllDataAPI() async {
+  Future<void> favoriteAllDataAPI(BuildContext context) async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
@@ -114,20 +115,27 @@ class FavoriteAddProvider with ChangeNotifier {
           "Access-Control_Allow_Origin": "*"
         },
       );
-      var jsonData = json.decode(response.body);
+
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
 
-        final favoriteData = favoriteAddItemModelClass.fromJson(jsonData);
+        var favoriteData = favoriteAddItemModelClass.fromJson(jsonData);
 
         _favoriteData = favoriteData;
         log(jsonData.toString());
         notifyListeners();
-      } else {
-
+      } else if(response.statusCode == 400) {
+        var jsonData = json.decode(response.body);
         final favoriteData = favoriteAddItemModelClass.fromJson(jsonData);
 
         _favoriteData = favoriteData;
+      }else if(response.statusCode == 500){
+        Future.delayed(const Duration(seconds: 0),() async{
+          Navigator.pushNamedAndRemoveUntil(context,
+              Routes_Name.LoginScreen, (route) => false);
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.clear();
+        });
       }
     } catch (error) {
       rethrow;

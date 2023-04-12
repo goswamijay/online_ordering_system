@@ -7,7 +7,7 @@ import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:online_ordering_system/Controller/Cart_items_provider.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:provider/provider.dart';
-import '../../Controller/ApiConnection/ApiConnection.dart';
+import '../../Controller/ApiConnection/mainDataProvider.dart';
 import '../../Controller/ChangeControllerClass.dart';
 import '../../Utils/Drawer.dart';
 
@@ -27,10 +27,19 @@ class _ProductMainScreenState extends State<ProductMainScreen>
 
   @override
   void initState() {
-    searchItems = mainData;
     super.initState();
     _scrollController.addListener(_scrollListener);
     accessApi(context);
+    searchFunction();
+  }
+
+  searchFunction() async {
+    final apiConnection1 = Provider.of<ApiConnection>(context, listen: false);
+    final changeControllerClass =
+        Provider.of<ChangeControllerClass>(context, listen: false);
+
+    await apiConnection1.productAllAPI(context);
+    changeControllerClass.searchItems = apiConnection1.productAllApi.data;
   }
 
   @override
@@ -80,36 +89,36 @@ class _ProductMainScreenState extends State<ProductMainScreen>
 
     await apiConnection1.productAllAPI(context);
     _isFabVisible = false;
+    mainData = apiConnection1.productAllApi.data;
 
-    mainData = apiConnection1.productAll.map((e) => e).toList();
+    //mainData = apiConnection1.productAllApi.data.map((e) => e).toList();
     apiConnection1.showItem();
-    cartItem = apiConnection1.productAll[0].totalProduct.toString();
+    cartItem = apiConnection1.productAllApi.totalProduct.toString();
   }
 
-  searchBar(String value){
-    final changeControllerClass = Provider.of<ChangeControllerClass>(context,listen: false);
-    final apiConnection1 = Provider.of<ApiConnection>(context,listen: false);
+  searchBar(String value) {
+    final changeControllerClass =
+        Provider.of<ChangeControllerClass>(context, listen: false);
+    final apiConnection1 = Provider.of<ApiConnection>(context, listen: false);
     {
       changeControllerClass.searchButtonPress();
 
       if (value.isEmpty) {
-        changeControllerClass
-            .searchButtonUnPress();
+        changeControllerClass.searchButtonUnPress();
       }
 
       List<dynamic> result = [];
       if (value.isEmpty) {
-        result =  apiConnection1.productAll[0].data;
+        result = apiConnection1.productAllApi.data;
       } else {
         setState(() {
-          result = apiConnection1.productAll[0].data
+          result = apiConnection1.productAllApi.data
               .where((element) => element.title
-              .toString()
-              .toLowerCase()
-              .contains(value.toLowerCase()))
+                  .toString()
+                  .toLowerCase()
+                  .contains(value.toLowerCase()))
               .toList();
         });
-
       }
 
       if (result.isEmpty) {
@@ -175,7 +184,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                     style: TextStyle(color: Colors.white),
                                   )
                                 : Text(
-                                    apiConnection1.productAll[0].totalProduct
+                                    apiConnection1.productAllApi.totalProduct
                                             .toString() ??
                                         '',
                                     textAlign: TextAlign.center,
@@ -211,13 +220,13 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                   backgroundColor: Colors.white,
                                   itemSize: size.height / 33,
                                   controller: changeControllerClass.controller,
-                                  onChanged:  (value){
+                                  onChanged: (value) {
                                     searchBar(value);
                                   },
-                                    onSuffixTap: () {
-                                      changeControllerClass.searchButtonUnPress();
-                                      changeControllerClass.controller.clear();
-                                    },
+                                  onSuffixTap: () {
+                                    changeControllerClass.searchButtonUnPress();
+                                    changeControllerClass.controller.clear();
+                                  },
                                   onSubmitted: (value) {},
                                   autocorrect: true,
                                 );
@@ -229,7 +238,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                             Container(
                                 alignment: Alignment.centerLeft,
                                 height: size.height / 25,
-                                width: size.width / 12,
+                                width: size.width / 16,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
                                     color: Colors.black),
@@ -335,9 +344,8 @@ class _ProductMainScreenState extends State<ProductMainScreen>
     Size size = MediaQuery.of(context).size;
     final favoriteProvider = Provider.of<FavoriteAddProvider>(context);
     final changeControllerClass = Provider.of<ChangeControllerClass>(context);
-    final cartProvider = Provider.of<purchase_items_provider>(context);
+    final cartProvider = Provider.of<cart_items_provider>(context);
     final mainDataProvider = Provider.of<ApiConnection>(context);
-
 
     return changeControllerClass.listIsEmpty1
         ? Center(
@@ -382,11 +390,33 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                               child: AspectRatio(
                             aspectRatio: 1,
                             child: Image(
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                    child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                              .toInt()
+                                      : null,
+                                ));
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: Icon(
+                                    Icons.error,
+                                    color: Colors.red,
+                                  ),
+                                );
+                              },
                               image: NetworkImage(changeControllerClass
                                   .searchItems[index].imageUrl
                                   .replaceAll('(', '')
                                   .replaceAll(')', '')),
-                              fit: BoxFit.cover,
                               width: size.width / 2,
                               height: size.height / 5,
                             ),
@@ -408,13 +438,19 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                             onTap: () async {
                                               await favoriteProvider
                                                   .removeFavorite(
-                                                  changeControllerClass.searchItems[index]
+                                                      changeControllerClass
+                                                          .searchItems[index]
                                                           .watchListItemId);
 
                                               Future.delayed(
                                                   const Duration(seconds: 0),
-                                                  () {
-                                                    accessApi(context);
+                                                  () async {
+                                                changeControllerClass.controller
+                                                    .clear();
+                                                changeControllerClass
+                                                    .searchButtonUnPress();
+
+                                                await searchFunction();
                                                 ScaffoldMessenger.of(context)
                                                     .hideCurrentSnackBar();
                                                 ScaffoldMessenger.of(context)
@@ -443,15 +479,21 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                             onTap: () async {
                                               await favoriteProvider
                                                   .addInFavorite(
-                                                  changeControllerClass.searchItems[index]
-                                                      .id);
+                                                      changeControllerClass
+                                                          .searchItems[index]
+                                                          .id);
 
                                               Future.delayed(
                                                   const Duration(seconds: 0),
-                                                  () {
-                                                    accessApi(context);
+                                                  () async {
+                                                changeControllerClass.controller
+                                                    .clear();
+                                                changeControllerClass
+                                                    .searchButtonUnPress();
 
-                                                    ScaffoldMessenger.of(context)
+                                                await searchFunction();
+
+                                                ScaffoldMessenger.of(context)
                                                     .hideCurrentSnackBar();
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
@@ -529,12 +571,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                 children: [
                                                   Expanded(
                                                     child: InkWell(
-                                                      onTap: () {
-                                                        /*   cartProvider.PurchaseList[index]
-                                                          .Count++;
-                                                print(cartProvider
-                                                          .PurchaseList[index].Count);*/
-                                                      },
+                                                      onTap: () {},
                                                       child: Container(
                                                         width: size.width,
                                                         height:
@@ -578,9 +615,14 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                             Future.delayed(
                                                                 const Duration(
                                                                     seconds: 0),
-                                                                () {
-                                                              accessApi(
-                                                                  context);
+                                                                () async {
+                                                              changeControllerClass
+                                                                  .controller
+                                                                  .clear();
+                                                              changeControllerClass
+                                                                  .searchButtonUnPress();
+
+                                                              await searchFunction();
                                                             });
                                                           },
                                                           child: CircleAvatar(
@@ -619,9 +661,14 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                             Future.delayed(
                                                                 const Duration(
                                                                     seconds: 0),
-                                                                () {
-                                                              accessApi(
-                                                                  context);
+                                                                () async {
+                                                              changeControllerClass
+                                                                  .controller
+                                                                  .clear();
+                                                              changeControllerClass
+                                                                  .searchButtonUnPress();
+
+                                                              await searchFunction();
                                                             });
                                                           },
                                                           child: CircleAvatar(
@@ -643,14 +690,20 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                 ],
                                               )
                                             : InkWell(
-                                                onTap: () async{
+                                                onTap: () async {
                                                   await cartProvider
                                                       .productAllAPI(
-                                                      changeControllerClass
-                                                          .searchItems[index]
-                                                          .id);
-                                                  accessApi(context);
+                                                          changeControllerClass
+                                                              .searchItems[
+                                                                  index]
+                                                              .id);
+                                                  changeControllerClass
+                                                      .controller
+                                                      .clear();
+                                                  changeControllerClass
+                                                      .searchButtonUnPress();
 
+                                                  await searchFunction();
                                                 },
                                                 child: Container(
                                                   width: size.width,
@@ -711,7 +764,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
   Widget fullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final favoriteProvider = Provider.of<FavoriteAddProvider>(context);
-    final cartProvider = Provider.of<purchase_items_provider>(context);
+    final cartProvider = Provider.of<cart_items_provider>(context);
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -726,9 +779,8 @@ class _ProductMainScreenState extends State<ProductMainScreen>
               return ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: mainData[0].data.length,
+                  itemCount: mainData.length,
                   itemBuilder: (context, index) {
-                    //        bool isSaved = mainDataProvider.isFavorite(index);
                     return InkWell(
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
@@ -737,11 +789,10 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                         Navigator.pushNamed(
                             context, Routes_Name.ProductDetailsScreen,
                             arguments: {
-                              'Price': mainData[0].data[index].price,
-                              'Name': mainData[0].data[index].title,
-                              'ImageURL': mainData[0].data[index].imageUrl,
-                              'ShortDescription':
-                                  mainData[0].data[index].description,
+                              'Price': mainData[index].price,
+                              'Name': mainData[index].title,
+                              'ImageURL': mainData[index].imageUrl,
+                              'ShortDescription': mainData[index].description,
                               'Index': index,
                             });
                       },
@@ -754,12 +805,36 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                     child: AspectRatio(
                                   aspectRatio: 1,
                                   child: Image(
-                                    image: NetworkImage(mainData[0]
-                                        .data[index]
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                          child: CircularProgressIndicator(
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes!
+                                                    .toInt()
+                                            : null,
+                                      ));
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: Icon(
+                                          Icons.error,
+                                          color: Colors.red,
+                                        ),
+                                      );
+                                    },
+                                    image: NetworkImage(mainData[index]
                                         .imageUrl
                                         .replaceAll('(', '')
                                         .replaceAll(')', '')),
-                                    fit: BoxFit.cover,
                                     width: size.width / 2,
                                     height: size.height / 5,
                                   ),
@@ -777,7 +852,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                         Align(
                                           alignment: Alignment.topRight,
                                           child: mainDataProvider
-                                                      .productAll[0]
+                                                      .productAllApi
                                                       .data[index]
                                                       .watchListItemId !=
                                                   ''
@@ -786,7 +861,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                     await favoriteProvider
                                                         .removeFavorite(
                                                             mainDataProvider
-                                                                .productAll[0]
+                                                                .productAllApi
                                                                 .data[index]
                                                                 .watchListItemId);
 
@@ -828,7 +903,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                     await favoriteProvider
                                                         .addInFavorite(
                                                             mainDataProvider
-                                                                .productAll[0]
+                                                                .productAllApi
                                                                 .data[index]
                                                                 .id);
 
@@ -868,7 +943,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                         SizedBox(
                                           width: size.width,
                                           child: AutoSizeText(
-                                            mainData[0].data[index].title,
+                                            mainData[index].title,
                                             maxLines: 1,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w300,
@@ -883,7 +958,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                           child: Align(
                                             alignment: Alignment.topLeft,
                                             child: Text(
-                                              '\$${mainData[0].data[index].price}',
+                                              '\$${mainData[index].price}',
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 25),
@@ -896,7 +971,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                         SizedBox(
                                           width: size.width,
                                           child: AutoSizeText(
-                                            mainData[0].data[index].description,
+                                            mainData[index].description,
                                             maxLines: 2,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w300,
@@ -911,7 +986,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                             Expanded(
                                               child:
                                                   mainDataProvider
-                                                              .productAll[0]
+                                                              .productAllApi
                                                               .data[index]
                                                               .quantity !=
                                                           0
@@ -960,8 +1035,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                                     onTap:
                                                                         () async {
                                                                       await cartProvider.decreaseProductQuantity(mainDataProvider
-                                                                          .productAll[
-                                                                              0]
+                                                                          .productAllApi
                                                                           .data[
                                                                               index]
                                                                           .cartItemId);
@@ -993,8 +1067,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                                   ),
                                                                   Text(
                                                                     mainDataProvider
-                                                                        .productAll[
-                                                                            0]
+                                                                        .productAllApi
                                                                         .data[
                                                                             index]
                                                                         .quantity
@@ -1006,11 +1079,9 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                                   InkWell(
                                                                     onTap:
                                                                         () async {
-                                                                      await cartProvider.increaseProductQuantity(mainData[
-                                                                              0]
-                                                                          .data[
-                                                                              index]
-                                                                          .cartItemId);
+                                                                      await cartProvider
+                                                                          .increaseProductQuantity(
+                                                                              mainData[index].cartItemId);
 
                                                                       Future.delayed(
                                                                           const Duration(

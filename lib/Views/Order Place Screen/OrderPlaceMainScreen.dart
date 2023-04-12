@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../Controller/ApiConnection/ApiConnection.dart';
-import '../../Controller/ChangeControllerClass.dart';
-import '../../Controller/Confirm_Order_Items.dart';
+import '../../Controller/ApiConnection/mainDataProvider.dart';
+import '../../Controller/place_Order_Items.dart';
 import '../../Controller/Cart_items_provider.dart';
 import '../../Utils/Drawer.dart';
 import '../../Utils/Routes_Name.dart';
@@ -32,20 +31,16 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
   accessApi(BuildContext context) async {
     final apiConnection1 =
         Provider.of<PlaceOrderProvider>(context, listen: false);
-    final mainDataProvider =
-    Provider.of<ApiConnection>(context, listen: false);
-    final cartProvider = Provider.of<purchase_items_provider>(context,listen: false);
+    final favoriteProvider =
+    Provider.of<FavoriteAddProvider>(context, listen: false);
 
 
-    mainDataProvider.showItemBool = false;
+    favoriteProvider.showItemBool = false;
     apiConnection1.showItemBool = false;
-    cartProvider.showItemBool = false;
-    await mainDataProvider.productAllAPI(context);
-    await apiConnection1.placeOrderAllDataAPI();
-    await cartProvider.cartAllDataAPI();
+    await favoriteProvider.favoriteAllDataAPI(context);
+    await apiConnection1.placeOrderAllDataAPI(context);
     apiConnection1.showItem();
-    mainDataProvider.showItem();
-    cartProvider.showItem();
+    favoriteProvider.showItem();
   }
 
   @override
@@ -76,7 +71,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
               )),
         ),
         title: const Padding(
-          padding: EdgeInsets.only(top: 5.0),
+          padding: EdgeInsets.only(top: 12.0),
           child: Center(
               child: Text(
             "Order Placed Items",
@@ -149,7 +144,7 @@ class _OrderPlaceMainScreenState extends State<OrderPlaceMainScreen> {
   Widget fullList1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final confirmProvider = Provider.of<PlaceOrderProvider>(context);
-    final cartProvider = Provider.of<purchase_items_provider>(context);
+    final cartProvider = Provider.of<cart_items_provider>(context);
     final mainDataProvider = Provider.of<ApiConnection>(context, listen: false);
 
 

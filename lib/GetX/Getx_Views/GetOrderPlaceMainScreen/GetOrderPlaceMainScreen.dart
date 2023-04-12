@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Controller/GetxConfirmListController.dart';
 import 'package:online_ordering_system/GetX/Getx_Controller/GetxFavoriteController.dart';
-import 'package:online_ordering_system/GetX/Getx_Models/GetxProductModel.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
 
 import '../../../Utils/Drawer.dart';
 import '../../Getx_Controller/GetxCartController.dart';
+import '../../Getx_Utils/GetDrawer.dart';
 
 class GetOrderPlaceMainScreen extends StatefulWidget {
   const GetOrderPlaceMainScreen({Key? key}) : super(key: key);
@@ -20,13 +20,21 @@ class GetOrderPlaceMainScreen extends StatefulWidget {
 
 class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final placeOrderController = Get.put(GetxConfirmListController());
+    placeOrderController.placeOrderAllDataAPI();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final favoriteController = Get.put(GetxFavoriteController());
     return Scaffold(
-      drawer: const DrawerWidget(),
+      drawer: const GetDrawerWidget(),
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.only(left: 12.0, top: 12.0),
+          padding: const EdgeInsets.only(left: 8.0, top: 8.0),
           child: InkWell(
               onTap: () {
                 Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
@@ -86,7 +94,9 @@ class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
                           width: 34 / 2,
                           height: 34 / 2,
                           child: Text(
-                            favoriteController.favoriteData.length.toString(),
+                            favoriteController
+                                .getFavoriteAddItemModelClass.data.length
+                                .toString(),
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: Colors.white),
                           ),
@@ -112,7 +122,7 @@ class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
     final confirmController = Get.put(GetxConfirmListController());
     final cartController = Get.put(GetxCartController());
 
-    return confirmController.confirmData.isEmpty
+    return confirmController.placeOrderModelClass.data.isEmpty
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -126,185 +136,184 @@ class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
               ],
             ),
           )
-        : GetBuilder<GetxConfirmListController>(builder: (controller) {
-          return GetBuilder<GetxCartController>(builder: (controller){
-            return ListView.builder(
-                itemCount: confirmController.confirmData.length,
-                itemBuilder: (context, index) {
-                 /* bool isAddedInCart = cartController.cartData
+        : !confirmController.isLoading.value ? GetBuilder<GetxConfirmListController>(builder: (controller) {
+            return GetBuilder<GetxCartController>(builder: (controller) {
+              return   ListView.builder(
+                  itemCount: confirmController.placeOrderModelClass.data.length,
+                  itemBuilder: (context, index) {
+                    /* bool isAddedInCart = cartController.cartData
                       .contains(confirmController.confirmData[index]);*/
 
-                  bool isAddedInCart = cartController.cartData.any(
-                          (element1) => element1.Name.contains(confirmController.confirmData[index].Name));
-                  return Card(
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Image(
-                                image: AssetImage(confirmController
-                                    .confirmData[index].ImageURL),
-                                width: Get.width / 2,
-                                height: Get.height / 4,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Align(
-                                        alignment: Alignment.topRight,
-                                        child: AutoSizeText(
-                                          // "Order Place Date:- ${DateTime.parse("2023-03-10")}",
-                                          "Order Place Date:- ${confirmController.confirmData[index].dateTime}",
-
-                                          maxLines: 1,
-                                        )),
-                                    SizedBox(
-                                      height: Get.height / 70,
-                                    ),
-                                    SizedBox(
-                                      width: Get.width,
-                                      child: AutoSizeText(
-                                        confirmController
-                                            .confirmData[index].Name,
-                                        maxLines: 1,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 30),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: Get.height / 70,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: SizedBox(
-                                            width: Get.width,
-                                            child: Align(
-                                              alignment: Alignment.topLeft,
-                                              child: Text(
-                                                '₹${confirmController.confirmData[index].Price * confirmController.confirmData[index].Count}',
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 25),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: SizedBox(
-                                            width: Get.width,
-                                            child: Align(
-                                              alignment: Alignment.topLeft,
-                                              child: AutoSizeText(
-                                                'Total Items added:-${confirmController.confirmData[index].Count}',
-                                                style: const TextStyle(
-                                                    fontSize: 18),
-                                                maxLines: 1,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: Get.height / 70,
-                                    ),
-                                    SizedBox(
-                                      width: Get.width,
-                                      child: AutoSizeText(
-                                        confirmController.confirmData[index]
-                                            .ShortDescription,
-                                        maxLines: 2,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 30),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: Get.height / 70,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: isAddedInCart
-                                              ? InkWell(
-                                                  onTap: () {},
-                                                  child: Container(
-                                                    width: Get.width,
-                                                    height: Get.height / 20,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.pink,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0)),
-                                                    child: const Center(
-                                                        child: Text(
-                                                      "Also Add in Cart",
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )),
-                                                  ),
-                                                )
-                                              : InkWell(
-                                                  onTap: () {
-                                                    cartController.addToCart(GetxProduct(
-                                                        Price: confirmController
-                                                            .confirmData[index]
-                                                            .Price,
-                                                        Name: confirmController
-                                                            .confirmData[index]
-                                                            .Name,
-                                                        ShortDescription:
-                                                            confirmController
-                                                                .confirmData[
-                                                                    index]
-                                                                .ShortDescription,
-                                                        ImageURL:
-                                                            confirmController
-                                                                .confirmData[
-                                                                    index]
-                                                                .ImageURL));
-                                                  },
-                                                  child: Container(
-                                                    width: Get.width,
-                                                    height: Get.height / 20,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.indigo,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0)),
-                                                    child: const Center(
-                                                        child: Text(
-                                                      "Again Add to Cart",
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )),
-                                                  ),
-                                                ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
+                    bool isAddedInCart = cartController.cartData.any(
+                        (element1) => element1.Name.contains(
+                            confirmController.confirmData[index].Name));
+                    return Card(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Image(
+                                  image: NetworkImage(confirmController
+                                      .placeOrderModelClass
+                                      .data[index]
+                                      .imageUrl),
+                                  fit: BoxFit.cover,
+                                  width: Get.width / 2,
+                                  height: Get.height / 4,
                                 ),
                               ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                });
-          });});
+                              Expanded(
+                                flex: 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                          alignment: Alignment.topRight,
+                                          child: AutoSizeText(
+                                            // "Order Place Date:- ${DateTime.parse("2023-03-10")}",
+                                            "Order Place Date:- ${confirmController.placeOrderModelClass.data[index].updatedAt}",
+                                            textAlign: TextAlign.end,
+                                            maxLines: 2,
+                                            style: const TextStyle(fontSize: 12),
+                                          )),
+                                      SizedBox(
+                                        height: Get.height / 120,
+                                      ),
+                                      SizedBox(
+                                        width: Get.width,
+                                        child: AutoSizeText(
+                                          confirmController.placeOrderModelClass
+                                              .data[index].title,
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 30),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: Get.height / 80,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: SizedBox(
+                                              width: Get.width,
+                                              child: Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  '\$${confirmController.placeOrderModelClass.data[index].price}',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 25),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: SizedBox(
+                                              width: Get.width,
+                                              child: Align(
+                                                alignment: Alignment.topLeft,
+                                                child: AutoSizeText(
+                                                  'Total Items added:-${confirmController.placeOrderModelClass.data[index].quantity}',
+                                                  style: const TextStyle(
+                                                      fontSize: 18),
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: Get.height / 90,
+                                      ),
+                                      SizedBox(
+                                        width: Get.width,
+                                        child: AutoSizeText(
+                                          confirmController.placeOrderModelClass
+                                              .data[index].description,
+                                          maxLines: 2,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 30),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: Get.height / 90,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: isAddedInCart
+                                                ? InkWell(
+                                                    onTap: () {},
+                                                    child: Container(
+                                                      width: Get.width,
+                                                      height: Get.height / 20,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.pink,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      5.0)),
+                                                      child: const Center(
+                                                          child: Text(
+                                                        "Also Add in Cart",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      )),
+                                                    ),
+                                                  )
+                                                : InkWell(
+                                                    onTap: () {
+                                                      cartController.getAddToCart(
+                                                          confirmController
+                                                              .placeOrderModelClass
+                                                              .data[index]
+                                                              .productId);
+                                                    },
+                                                    child: Container(
+                                                      width: Get.width,
+                                                      height: Get.height / 20,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.indigo,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      5.0)),
+                                                      child: const Center(
+                                                          child: Text(
+                                                        "Again Add to Cart",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      )),
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  });
+            });
+          }):const Center(child: CircularProgressIndicator());
   }
 }

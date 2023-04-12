@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetAccountMainScreen extends StatefulWidget {
   const GetAccountMainScreen({Key? key}) : super(key: key);
@@ -15,12 +16,47 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
   bool changeButton = false;
 
   final _formKey = GlobalKey<FormState>();
+  String email = '';
+  String name1 = '';
+  String mobileNo = '';
+  TextEditingController name0 = TextEditingController();
+  TextEditingController email0 = TextEditingController();
+  TextEditingController mobileNo0 = TextEditingController();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    access(context);
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    name0.dispose();
+    email0.dispose();
+    mobileNo0.dispose();
+  }
+
+
+  access(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      email = prefs.getString('LoginEmail').toString();
+      email0.text = email;
+      name1 = prefs.getString('LoginName').toString();
+      name0.text = name1;
+      mobileNo = prefs.getString('LoginMobileNo').toString();
+      mobileNo0.text = mobileNo;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
+        /*appBar: AppBar(
           leading: Padding(
             padding: const EdgeInsets.only(left: 12.0, top: 12.0),
             child: InkWell(
@@ -66,7 +102,7 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
               ),
             ),
           ],
-        ),
+        ),*/
 
         body: SingleChildScrollView(
           child: Column(
@@ -87,9 +123,9 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
-                        initialValue: "Jay Goswami",
+                        controller: name0,
                         readOnly: true,
                         decoration: const InputDecoration(
                           hintText: "User Name of user",
@@ -98,9 +134,9 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
-                        initialValue: "goswamijay07@gmail.com",
+                        controller: email0,
                         readOnly: true,
                         decoration: const InputDecoration(
                           hintText: "Email Address of user",
@@ -109,28 +145,18 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
-                        keyboardType: TextInputType.number,
+                        controller: mobileNo0,
+                        readOnly: true,
                         decoration: const InputDecoration(
-                          hintText: "Mobile Number",
-                          labelText: "Mobile Number",
+                          hintText: "Mobile No",
+                          labelText: "Mobile No of user",
                         ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Mobile Number can't empty";
-                          } else if (value.length < 10 || value.length > 10) {
-                            return "Mobile number is not valid";
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          name = value;
-                        },
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
                           hintText: "Address of user",
@@ -202,11 +228,24 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Get.toNamed(GetxRoutes_Name.GetxAccountResetPassword);
+                            Navigator.pushNamed(
+                                context, GetxRoutes_Name.GetxAccountResetPassword);
                           },
                           child: const Text("Reset Password",
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
+                        InkWell(
+                          onTap: () async {
+                            SharedPreferences preferences =
+                            await SharedPreferences.getInstance();
+                            await preferences.remove('fcmToken1');
+                            await preferences.clear();
+                            print('clear');
+
+                            Get.offAllNamed(GetxRoutes_Name.GetxLoginScreen);
+                          },
+                          child: const Icon(CupertinoIcons.square_arrow_left),
+                        )
                       ],
                     ),
                     SizedBox(

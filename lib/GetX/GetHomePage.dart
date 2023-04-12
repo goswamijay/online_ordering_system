@@ -37,28 +37,18 @@ class _GetHomePageState extends State<GetHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: PageView(
-                allowImplicitScrolling: true,
-                scrollDirection: Axis.vertical,
-                controller: controller,
-                onPageChanged: (num) {
-                  setState(() {
-                    selectedIndex = num;
-                  });
-                },
-                children:[_widgetOption.elementAt(selectedIndex)]
-            ),), /* Center(
+      body: SafeArea(
+        top: false,
+        child: Stack(
+          children: [
+            Center(
               child: _widgetOption.elementAt(selectedIndex),
-            ),*/
-          // _widgetOption.elementAt(_selectedIndex),
-
-          Container(
-            height: 80,
-          ),
-        ],
+            ),
+            Container(
+              height: 80,
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,

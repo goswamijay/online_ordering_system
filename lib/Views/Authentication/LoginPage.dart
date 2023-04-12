@@ -47,21 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               duration: Duration(seconds: 1),
             ),
           );
-          /* showDialog(
-              context: context,
-              builder: (context) {
-                return  AlertDialog(
-                  title: const Text("Congratulation....!!! "),
-                  content: const Text(''),
-                  actions: [
-                    TextButton(
-                        child: const Text('Okay'),
-                        onPressed: () {
-                             Navigator.pushNamedAndRemoveUntil(context, Routes_Name.HomePage, (route) => false);
-                        }),
-                  ],
-                );
-              });*/
+
         } else if (loginProvider.loginData[0].status == "0") {
           showDialog(
               context: context,

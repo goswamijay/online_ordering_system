@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetxSparceScreen extends StatefulWidget {
   const GetxSparceScreen({Key? key}) : super(key: key);
@@ -20,10 +21,19 @@ class _GetxSparceScreenState extends State<GetxSparceScreen> {
     animation();
     super.initState();
   }
+    bool? jwtToken1;
 
-  void navigation() {
-    Future.delayed(const Duration(seconds: 3), () {
-      Get.toNamed(GetxRoutes_Name.GetxLoginScreen);
+
+    void navigation() {
+    Future.delayed(const Duration(seconds: 3), () async{
+      final prefs = await SharedPreferences.getInstance();
+      jwtToken1 = prefs.getBool('LogInBool');
+      if(jwtToken1 == true){
+        print('transfer');
+          Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
+      }else{
+        Get.toNamed(GetxRoutes_Name.GetOnBoardingScreen);
+      }
     });
   }
 

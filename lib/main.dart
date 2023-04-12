@@ -7,14 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:online_ordering_system/Controller/ApiConnection/Authentication.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
-import 'package:online_ordering_system/Controller/Confirm_Order_Items.dart';
+import 'package:online_ordering_system/Controller/place_Order_Items.dart';
+import 'package:online_ordering_system/GetX/Getx_Main.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:online_ordering_system/Sparce_Screen.dart';
 import 'package:online_ordering_system/Views/Authentication/LoginPage.dart';
 import 'package:online_ordering_system/Views/Authentication/ResetPassword/ResetPasswordOTP.dart';
 import 'package:online_ordering_system/firebase_options.dart';
 import 'package:provider/provider.dart';
-import 'Controller/ApiConnection/ApiConnection.dart';
+import 'Controller/ApiConnection/mainDataProvider.dart';
 import 'Controller/Cart_items_provider.dart';
 import 'Controller/ChangeControllerClass.dart';
 import 'HomePage.dart';
@@ -39,8 +40,6 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -53,7 +52,8 @@ void main() async {
     log(fcmToken!);
   }
 
-  runApp(const MyApp());
+  //runApp(const MyApp());
+  runApp(const GetApp());
 /*  FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => FavoriteAddProvider()),
-        ChangeNotifierProvider(create: (_) => purchase_items_provider()),
+        ChangeNotifierProvider(create: (_) => cart_items_provider()),
         ChangeNotifierProvider(create: (_) => PlaceOrderProvider()),
         ChangeNotifierProvider(create: (_) => ChangeControllerClass()),
         ChangeNotifierProvider(create: (_) => Authentication()),

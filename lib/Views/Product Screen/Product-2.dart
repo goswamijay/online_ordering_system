@@ -7,7 +7,7 @@ import 'package:online_ordering_system/Controller/Cart_items_provider.dart';
 import 'package:online_ordering_system/Utils/Routes_Name.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../Controller/ApiConnection/ApiConnection.dart';
+import '../../Controller/ApiConnection/mainDataProvider.dart';
 import '../../Controller/ChangeControllerClass.dart';
 import '../../Models/FavoriteListModelClass.dart';
 import '../../Models/ProductListModelClass.dart';
@@ -51,7 +51,7 @@ class _ProductMainScreen2State extends State<ProductMainScreen2>
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<purchase_items_provider>(context);
+    final cartProvider = Provider.of<cart_items_provider>(context);
     final changeControllerClass = Provider.of<ChangeControllerClass>(context);
     final apiConnection1 = Provider.of<ApiConnection>(context);
 
@@ -300,7 +300,7 @@ class _ProductMainScreen2State extends State<ProductMainScreen2>
         .of(context)
         .size;
     final favoriteProvider = Provider.of<FavoriteAddProvider>(context);
-    final cartProvider = Provider.of<purchase_items_provider>(context);
+    final cartProvider = Provider.of<cart_items_provider>(context);
     final changeControllerClass = Provider.of<ChangeControllerClass>(context);
 
     return changeControllerClass.listIsEmpty1

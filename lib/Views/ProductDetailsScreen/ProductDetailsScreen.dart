@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:online_ordering_system/Controller/ApiConnection/ApiConnection.dart';
+import 'package:online_ordering_system/Controller/ApiConnection/mainDataProvider.dart';
 import 'package:online_ordering_system/Controller/ApiConnection/Authentication.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final favoriteProvider = Provider.of<FavoriteAddProvider>(context);
-    final cartProvider = Provider.of<purchase_items_provider>(context);
+    final cartProvider = Provider.of<cart_items_provider>(context);
     final mainDataProvider = Provider.of<ApiConnection>(context);
     argument =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -112,7 +112,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       width: size.width,
                       height: size.height / 2,
                       decoration: BoxDecoration(
-                          color: Colors.greenAccent,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(8.0)),
                       child: Image(
                         image: NetworkImage(argument!['ImageURL']),
@@ -125,14 +125,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Align(
                         alignment: Alignment.topRight,
-                        child: mainDataProvider.productAll[0]
+                        child: mainDataProvider.productAllApi
                                     .data[argument!['Index']].watchListItemId !=
                                 ''
                             ? InkWell(
                                 onTap: () async {
                                   await favoriteProvider.removeFavorite(
                                       mainDataProvider
-                                          .productAll[0]
+                                          .productAllApi
                                           .data[argument!['Index']]
                                           .watchListItemId);
 
@@ -158,7 +158,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             : InkWell(
                                 onTap: () async {
                                   await favoriteProvider.addInFavorite(
-                                      mainDataProvider.productAll[0]
+                                      mainDataProvider.productAllApi
                                           .data[argument!['Index']].id);
 
                                   ScaffoldMessenger.of(context)
@@ -283,7 +283,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               Expanded(
                 flex: 2,
                 child: mainDataProvider
-                            .productAll[0].data[argument!['Index']].quantity !=
+                            .productAllApi.data[argument!['Index']].quantity !=
                         0
                     ? InkWell(
                         onTap: () {},

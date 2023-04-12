@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
-import 'package:online_ordering_system/Controller/Confirm_Order_Items.dart';
+import 'package:online_ordering_system/Controller/place_Order_Items.dart';
 import 'package:provider/provider.dart';
-import '../../Controller/ApiConnection/ApiConnection.dart';
+import '../../Controller/ApiConnection/mainDataProvider.dart';
 import '../../Controller/Cart_items_provider.dart';
 import '../../Utils/Drawer.dart';
 import '../../Utils/Routes_Name.dart';
@@ -34,10 +34,10 @@ class _CartMainScreenState extends State<CartMainScreen> {
 
   accessApi(BuildContext context) async {
     final apiConnection1 =
-        Provider.of<purchase_items_provider>(context, listen: false);
+        Provider.of<cart_items_provider>(context, listen: false);
 
     apiConnection1.showItemBool = false;
-    await apiConnection1.cartAllDataAPI();
+    await apiConnection1.cartAllDataAPI(context);
 
     setState(() {
       cartData = apiConnection1.addCartItem.map((e) => e).toList();
@@ -47,7 +47,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<purchase_items_provider>(context);
+    final cartProvider = Provider.of<cart_items_provider>(context);
     final confirmProvider = Provider.of<PlaceOrderProvider>(context);
     final favoriteProvider = Provider.of<FavoriteAddProvider>(context);
 
@@ -338,7 +338,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
   }
 
   Widget fullList1(BuildContext context) {
-    final cartProvider = Provider.of<purchase_items_provider>(context);
+    final cartProvider = Provider.of<cart_items_provider>(context);
     final favoriteProvider = Provider.of<FavoriteAddProvider>(context);
     final apiConnection1 = Provider.of<ApiConnection>(context);
 
@@ -454,22 +454,23 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                               Align(
                                                 alignment: Alignment.topRight,
                                                 child: apiConnection1
-                                                            .productAll[0]
+                                                            .productAllApi
                                                             .data[index]
                                                             .watchListItemId !=
                                                         ''
                                                     ? InkWell(
-                                                        onTap: () async{
+                                                        onTap: () async {
                                                           favoriteProvider
                                                               .removeFavorite(
                                                                   apiConnection1
-                                                                      .productAll[
-                                                                          0]
+                                                                      .productAllApi
                                                                       .data[
                                                                           index]
                                                                       .watchListItemId);
 
-                                                         apiConnection1.productAllAPI(context);
+                                                          apiConnection1
+                                                              .productAllAPI(
+                                                                  context);
                                                         },
                                                         child: const Icon(
                                                           CupertinoIcons
@@ -488,8 +489,10 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                                                       .productDetails
                                                                       .id);
 
-                                                          apiConnection1.productAllAPI(context);
-                                                         // accessApi(context);
+                                                          apiConnection1
+                                                              .productAllAPI(
+                                                                  context);
+                                                          // accessApi(context);
                                                         },
                                                         child: const Icon(
                                                           CupertinoIcons.heart,
@@ -555,14 +558,19 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                                     onPressed: () async {
                                                       await cartProvider
                                                           .removeProductFromCart(
-                                                             cartProvider.addCartItem[0]
+                                                              cartProvider
+                                                                  .addCartItem[
+                                                                      0]
                                                                   .data[index]
                                                                   .id);
                                                       Future.delayed(
                                                           const Duration(
-                                                              milliseconds: 0), () async{
-                                                       await cartProvider.cartAllDataAPI();
-                                                       // accessApi(context);
+                                                              milliseconds: 0),
+                                                          () async {
+                                                        await cartProvider
+                                                            .cartAllDataAPI(
+                                                                context);
+                                                        // accessApi(context);
                                                       });
                                                     },
                                                     icon: const Icon(
@@ -586,9 +594,12 @@ class _CartMainScreenState extends State<CartMainScreen> {
 
                                                         Future.delayed(
                                                             const Duration(
-                                                               milliseconds: 0),
-                                                            () async{
-                                                           await cartProvider.cartAllDataAPI();
+                                                                milliseconds:
+                                                                    0),
+                                                            () async {
+                                                          await cartProvider
+                                                              .cartAllDataAPI(
+                                                                  context);
                                                         });
                                                       },
                                                       child: CircleAvatar(
@@ -603,7 +614,8 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      cartProvider.addCartItem[0]
+                                                      cartProvider
+                                                          .addCartItem[0]
                                                           .data[index]
                                                           .quantity
                                                           .toString(),
@@ -623,10 +635,12 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                                         Future.delayed(
                                                             const Duration(
                                                                 seconds: 0),
-                                                            () async{
-                                                              await cartProvider.cartAllDataAPI();
+                                                            () async {
+                                                          await cartProvider
+                                                              .cartAllDataAPI(
+                                                                  context);
 
-                                                              // accessApi(context);
+                                                          // accessApi(context);
                                                         });
                                                       },
                                                       child: CircleAvatar(

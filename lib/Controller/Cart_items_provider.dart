@@ -7,8 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/CartAddItemModelClass.dart';
 import '../Models/FavoriteListModelClass.dart';
+import '../Utils/Routes_Name.dart';
 
-class purchase_items_provider with ChangeNotifier {
+class cart_items_provider with ChangeNotifier {
   List<FavoriteListModelClass> _purchaseList = [];
   List<dynamic> get purchaseList => _purchaseList;
   List<CartAddItemModelClass> _addCartItem = [];
@@ -53,7 +54,7 @@ class purchase_items_provider with ChangeNotifier {
   }
 
 
-  Future<void> cartAllDataAPI() async {
+  Future<void> cartAllDataAPI(BuildContext context) async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
@@ -70,7 +71,7 @@ class purchase_items_provider with ChangeNotifier {
           "Access-Control_Allow_Origin": "*"
         },
       );
-      var jsonData = json.decode(response.body);
+      //var jsonData = json.decode(response.body);
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
 
@@ -80,15 +81,22 @@ class purchase_items_provider with ChangeNotifier {
         _addCartItem = productList;
         log(jsonData.toString());
         notifyListeners();
-      } else {
-
+      } else if(response.statusCode == 400) {
+        var jsonData = json.decode(response.body);
         List<CartAddItemModelClass> productList = [];
         productList = [CartAddItemModelClass.fromJson(jsonData)];
         log(jsonData.toString());
         _addCartItem = productList;
-
-
+      }else if(response.statusCode == 500){
+        Future.delayed(const Duration(seconds: 0),() async{
+          Navigator.pushNamedAndRemoveUntil(context,
+              Routes_Name.LoginScreen, (route) => false);
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.clear();
+        });
       }
+
+
     } catch (error) {
       rethrow;
     }

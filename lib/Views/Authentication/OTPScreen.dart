@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:online_ordering_system/Controller/ApiConnection/Authentication.dart';
@@ -44,7 +46,7 @@ class _OTPScreenState extends State<OTPScreen> {
     final prefs = await SharedPreferences.getInstance();
     signUpId = prefs.getString('signUpId').toString();
     signUpEmail = prefs.getString('signUpEmail').toString();
-    print(signUpEmail);
+    log(signUpEmail);
 
     otpProvider.otpVerificationMain(
         signUpId.toString().replaceAll('(', '').replaceAll(')', ''),
@@ -151,7 +153,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   },
                   onSubmit: (String code) {
                     verificationCode = code;
-                    print(verificationCode);
+                    log(verificationCode);
                     moveToHome(context);
                   }, // end onSubmit
                 ),

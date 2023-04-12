@@ -1,8 +1,15 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Models/GetxProductModel.dart';
+import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'GetxCartController.dart';
 import 'GetxFavoriteController.dart';
+import 'package:http/http.dart' as http;
 
 class GetxProductController extends GetxController {
   final cartController = Get.put(GetxCartController());
@@ -11,11 +18,60 @@ class GetxProductController extends GetxController {
 
  // RxList productData = [].obs;
   RxList<GetxProduct> productData = <GetxProduct>[].obs;
+  RxList<GetProductAllAPI> mainData = <GetProductAllAPI>[].obs;
+  var isLoading = true.obs;
+
+  GetProductAllAPI getProductAllAPI = GetProductAllAPI(status: 1, msg: '', totalProduct: 0, data: []);
   @override
   void onInit() {
     super.onInit();
-    fetchProductData();
+    productAllAPI();
   }
+
+  Future<void> productAllAPI() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final jwtToken1 = prefs.getString('jwtToken'.toString()) ?? '';
+      log(jwtToken1.toString());
+
+      var uri = Uri.parse(
+          'https://shopping-app-backend-t4ay.onrender.com/product/getAllProduct');
+      var response = await http.get(
+        uri,
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization':' Bearer ${jwtToken1.toString()}',
+          "Accept": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      );
+        var jsonData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        isLoading.value = false;
+        getProductAllAPI = GetProductAllAPI.fromJson(jsonData);
+
+        update();
+      } else if(response.statusCode == 400) {
+
+        final jsonData = json.decode(response.body);
+        getProductAllAPI = GetProductAllAPI.fromJson(jsonData);
+
+        update();
+      }else if(response.statusCode == 500){
+        Future.delayed(const Duration(seconds: 0),() async{
+          Get.offAllNamed(GetxRoutes_Name.GetxLoginScreen);
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.clear();
+        });
+      }
+    } catch (error) {
+      rethrow;
+    }finally{
+      isLoading.value = false;
+    }
+  }
+
 
 
   fetchProductData() {

@@ -13,4 +13,8 @@ class GetxRoutes_Name {
   static String GetxAccountResetPassword = 'AccountResetPassword';
   static String GetxOrderPlaceMainScreen = 'OrderPlaceMainScreen';
   static String GetxDrawerWidget = 'DrawerWidget';
+  static String GetxResestPasswordEmail = 'GetxResestPasswordEmail';
+  static String GetxResestPasswordOTP = 'GetxResestPasswordOTP';
+  static String GetOnBoardingScreen = 'GetOnBoardingScreen';
+
 }

@@ -38,7 +38,7 @@ class Authentication extends ChangeNotifier {
 
         loginList = [
           LoginModelClass(
-              status: jsonData['1'].toString(),
+              status: jsonData['status'].toString(),
               msg: jsonData['msg'],
               data: LoginData(
                 id: jsonData['data']['_id'].toString(),

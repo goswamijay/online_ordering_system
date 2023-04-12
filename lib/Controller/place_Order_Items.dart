@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/ConfirmListModelClass.dart';
 import 'package:http/http.dart' as http;
 
+import '../Utils/Routes_Name.dart';
+
 class PlaceOrderProvider with ChangeNotifier {
    PlaceOrderModelClass _confirmList = PlaceOrderModelClass(
     status: 0,
@@ -21,7 +23,7 @@ class PlaceOrderProvider with ChangeNotifier {
      notifyListeners();
    }
 
-  Future<void> placeOrderAllDataAPI() async {
+  Future<void> placeOrderAllDataAPI(BuildContext context) async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
@@ -41,7 +43,6 @@ class PlaceOrderProvider with ChangeNotifier {
           "Access-Control_Allow_Origin": "*"
         },
       );
-      var jsonData = json.decode(response.body);
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
 
@@ -50,11 +51,20 @@ class PlaceOrderProvider with ChangeNotifier {
         _confirmList = placeData;
         log(jsonData.toString());
         notifyListeners();
-      } else {
+      } else if(response.statusCode == 400){
+        var jsonData = json.decode(response.body);
 
         final placeData = PlaceOrderModelClass.fromJson(jsonData);
 
         _confirmList = placeData;
+      }
+      else if(response.statusCode == 500){
+        Future.delayed(const Duration(seconds: 0),() async{
+          Navigator.pushNamedAndRemoveUntil(context,
+              Routes_Name.LoginScreen, (route) => false);
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.clear();
+        });
       }
     } catch (error) {
       rethrow;
