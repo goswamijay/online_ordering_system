@@ -1116,9 +1116,7 @@ class _ProductMainScreenState extends State<ProductMainScreen>
                                                           onTap: () async {
                                                             await cartProvider
                                                                 .productAllAPI(
-                                                                    mainData[0]
-                                                                        .data[
-                                                                            index]
+                                                                    mainData[index]
                                                                         .id);
 
                                                             Future.delayed(

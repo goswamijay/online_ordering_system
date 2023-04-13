@@ -15,6 +15,8 @@ import 'package:online_ordering_system/Views/Authentication/LoginPage.dart';
 import 'package:online_ordering_system/Views/Authentication/ResetPassword/ResetPasswordOTP.dart';
 import 'package:online_ordering_system/firebase_options.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'Controller/ApiConnection/firebase_api_calling.dart';
 import 'Controller/ApiConnection/mainDataProvider.dart';
 import 'Controller/Cart_items_provider.dart';
 import 'Controller/ChangeControllerClass.dart';
@@ -49,11 +51,13 @@ void main() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
     LocalNotificationService.initialize();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('fcmToken', fcmToken!);
     log(fcmToken!);
   }
 
-  //runApp(const MyApp());
-  runApp(const GetApp());
+ // runApp(const MyApp());
+ runApp(const GetApp());
 /*  FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
@@ -81,7 +85,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PlaceOrderProvider()),
         ChangeNotifierProvider(create: (_) => ChangeControllerClass()),
         ChangeNotifierProvider(create: (_) => Authentication()),
-        ChangeNotifierProvider(create: (_) => ApiConnection())
+        ChangeNotifierProvider(create: (_) => ApiConnection()),
+        ChangeNotifierProvider(create: (_) => FirebaseApiCalling())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

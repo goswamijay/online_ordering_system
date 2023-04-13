@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:online_ordering_system/Controller/Favorite_add_provider.dart';
 import 'package:online_ordering_system/Controller/place_Order_Items.dart';
 import 'package:provider/provider.dart';
+import '../../Controller/ApiConnection/firebase_api_calling.dart';
 import '../../Controller/ApiConnection/mainDataProvider.dart';
 import '../../Controller/Cart_items_provider.dart';
 import '../../Utils/Drawer.dart';
@@ -50,6 +51,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
     final cartProvider = Provider.of<cart_items_provider>(context);
     final confirmProvider = Provider.of<PlaceOrderProvider>(context);
     final favoriteProvider = Provider.of<FavoriteAddProvider>(context);
+    final firebaseApiProvider = Provider.of<FirebaseApiCalling>(context);
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -248,6 +250,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                           () {
                                         accessApi(context);
                                         Navigator.pop(context);
+                                      firebaseApiProvider.sendPushNotification("Online Ordering System", "You added ${cartProvider.addCartItem[0].data.length} Product and Total Price ${cartProvider.addCartItem[0].cartTotal.toStringAsFixed(3)}");
                                         showDialog(
                                             context: context,
                                             builder: (context) {
@@ -259,6 +262,7 @@ class _CartMainScreenState extends State<CartMainScreen> {
                                               );
                                             });
                                       });
+
 
                                       /* FirebaseMessaging.onMessage.listen(
                                         (message) async {
