@@ -167,7 +167,7 @@ class _GetLoginPageState extends State<GetLoginPage> {
                       height: Get.height / 50,
                     ),
                     InkWell(
-                      onTap: () => moveToHome(context),
+                      onTap: () =>  moveToHome(context),
                       child: AnimatedContainer(
                         duration: const Duration(seconds: 1),
                         height: 50,

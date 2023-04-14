@@ -1,11 +1,13 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Models/GetOnBoardingModelClass.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -19,28 +21,39 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   bool? jwtToken1;
 
-  dataAccess() async{
+  dataAccess() async {
     final prefs = await SharedPreferences.getInstance();
     jwtToken1 = prefs.getBool('LogInBool');
     print(jwtToken1);
     print(jwtToken1.toString() != '');
 
-    if(jwtToken1 == true){
+    if (jwtToken1 == true) {
       print('transfer');
-      Future.delayed(const Duration(seconds: 0),(){
+      Future.delayed(const Duration(seconds: 0), () {
         Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
       });
-    }else{
-
-    }
-
+    } else {}
   }
+
+  void permission() async {
+    Map<Permission, PermissionStatus> status = await [
+      Permission.notification,
+
+      //add more permission to request here.
+    ].request();
+    if (status[Permission.notification] == PermissionStatus.denied) {
+      Permission.notification.request();
+      log("Permission Denied");
+      return;
+    } else {}
+  }
+
   @override
   void initState() {
     super.initState();
+    permission();
     //dataAccess();
   }
-
 
   List<OnBoardingModel> onBoardInfo = [
     OnBoardingModel(

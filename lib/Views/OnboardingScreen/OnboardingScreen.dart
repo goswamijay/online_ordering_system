@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -17,6 +20,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final controller = PageController(viewportFraction: 1, keepPage: true);
 
   bool? jwtToken1;
+
+  void permission() async{
+    Map<Permission, PermissionStatus> status = await [
+      Permission.notification,
+
+      //add more permission to request here.
+    ].request();
+    if (status[Permission.notification] == PermissionStatus.denied){
+      Permission.notification.request();
+      log("Permission Denied");
+      return;
+    }else{
+    }
+  }
 
   dataAccess() async{
     final prefs = await SharedPreferences.getInstance();
@@ -37,6 +54,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
     super.initState();
+    permission();
     dataAccess();
   }
 

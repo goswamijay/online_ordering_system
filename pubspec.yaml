@@ -53,6 +53,9 @@ dependencies:
   shimmer: ^2.0.0
   lottie: ^2.3.1
   flutter_launcher_icons: ^0.13.0
+  flutter_offline: ^2.1.0
+  permission_handler: ^10.2.0
+  notification_permissions: ^0.6.1
 
 
 
