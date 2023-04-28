@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
+import 'package:online_ordering_system/GetX/Getx_Utils/LocaleString.dart';
 import 'package:online_ordering_system/GetX/Getx_Views/Authentication/GetLogin.dart';
 import 'package:online_ordering_system/GetX/Getx_Views/Authentication/GetOtpScreen.dart';
 import 'package:online_ordering_system/GetX/Getx_Views/Authentication/GetSignUp.dart';
@@ -23,8 +25,17 @@ class GetApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      translations: LocaleString(),
+      locale: const Locale('en','US'),
       debugShowCheckedModeBanner: false,
       initialRoute: GetxRoutes_Name.GetxSparceScreen1,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.indigo,
+        backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+       // brightness: themeController.isDarkMode.value ? Brightness.dark : Brightness.light,
+      ),
       routes: {
         GetxRoutes_Name.GetxSparceScreen1: (context) => const GetxSparceScreen(),
         GetxRoutes_Name.GetxLoginScreen : (context) => const GetLoginPage(),

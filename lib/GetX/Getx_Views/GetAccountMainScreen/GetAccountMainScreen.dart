@@ -56,54 +56,6 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        /*appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 12.0, top: 12.0),
-            child: InkWell(
-                onTap: () {
-                  Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
-                },
-                hoverColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                child: const CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.arrow_back_ios_new_sharp,
-                    color: Colors.black,
-                  ),
-                )),
-          ),
-
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 12.0, top: 12.0),
-              child: InkWell(
-                onTap: () {
-                },
-                hoverColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                child: SizedBox.fromSize(
-                  size: const Size.fromRadius(20),
-                  child: const CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: FittedBox(
-                      child: Icon(
-                        CupertinoIcons.square_arrow_left,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),*/
-
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -111,9 +63,9 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                   height: Get.height / 2,
                   width: Get.width,
                   image: const AssetImage("assets/account.gif")),
-              const Text(
-                "Account Details",
-                style: TextStyle(
+               Text(
+                'Account Details'.tr,
+                style:const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
@@ -127,9 +79,9 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                       child: TextFormField(
                         controller: name0,
                         readOnly: true,
-                        decoration: const InputDecoration(
-                          hintText: "User Name of user",
-                          labelText: "User Name of user",
+                        decoration:  InputDecoration(
+                          hintText: 'User Name of user'.tr,
+                          labelText: 'User Name of user'.tr,
                         ),
                       ),
                     ),
@@ -138,9 +90,9 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                       child: TextFormField(
                         controller: email0,
                         readOnly: true,
-                        decoration: const InputDecoration(
-                          hintText: "Email Address of user",
-                          labelText: "Email Address of user",
+                        decoration:  InputDecoration(
+                          hintText: 'Email Address of user'.tr,
+                          labelText: 'Email Address of user'.tr,
                         ),
                       ),
                     ),
@@ -149,24 +101,24 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                       child: TextFormField(
                         controller: mobileNo0,
                         readOnly: true,
-                        decoration: const InputDecoration(
-                          hintText: "Mobile No",
-                          labelText: "Mobile No of user",
+                        decoration:  InputDecoration(
+                          hintText: 'Mobile No of user'.tr,
+                          labelText: 'Mobile No of user'.tr,
                         ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: "Address of user",
-                          labelText: "Address of user",
+                        decoration:  InputDecoration(
+                          hintText: 'Address of user'.tr,
+                          labelText: 'Address of user'.tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Address of user can't empty";
+                            return "Address of user can't empty".tr;
                           } else if (value.length < 10) {
-                            return "Address of user is not valid";
+                            return "Address of user is not valid".tr;
                           }
                           return null;
                         },
@@ -184,10 +136,10 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text("Account Details is update"),
+                                title:  Text('Account Details is update'.tr),
                                 actions: [
                                   TextButton(
-                                      child: const Text('Okay'),
+                                      child:  Text('Okay'.tr),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       }),
@@ -211,9 +163,9 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                           Icons.done,
                           color: Colors.white,
                         )
-                            : const Text(
-                          "Save The Data",
-                          style: TextStyle(
+                            :  Text(
+                          "Save The Data".tr,
+                          style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 18),
@@ -231,8 +183,8 @@ class _GetAccountMainScreenState extends State<GetAccountMainScreen> {
                             Navigator.pushNamed(
                                 context, GetxRoutes_Name.GetxAccountResetPassword);
                           },
-                          child: const Text("Reset Password",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          child:  Text("Reset Password".tr,
+                              style:const TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         InkWell(
                           onTap: () async {

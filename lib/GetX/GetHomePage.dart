@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
+import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Views/GetAccountMainScreen/GetAccountMainScreen.dart';
 import '../Utils/notificationservice/local_notification_service.dart';
 import 'Getx_Views/GetCartMainScreen/GetCartMainScreen.dart';
@@ -179,33 +180,33 @@ class _GetHomePageState extends State<GetHomePage> {
           selectedItemColor: Colors.pink,
           unselectedItemColor: Colors.black,
           onTap: _onItemTapped,
-          items: const [
+          items:  [
             BottomNavigationBarItem(
-              icon: Icon(
+              icon: const Icon(
                 CupertinoIcons.home,
               ),
-              label: "Product Screen",
+              label: "Product Screen".tr,
             ),
             BottomNavigationBarItem(
-                icon: Icon(
+                icon: const Icon(
                   CupertinoIcons.cart_fill,
                 ),
-                label: "Cart Screen"),
+                label: "Cart Screen".tr),
             BottomNavigationBarItem(
-                icon: Icon(
+                icon:  const Icon(
                   CupertinoIcons.heart_solid,
                 ),
-                label: "Wishlist Screen"),
+                label: "Wishlist Screen".tr),
             BottomNavigationBarItem(
-                icon: Icon(
+                icon:const Icon(
                   CupertinoIcons.person_alt,
                 ),
-                label: "Account Screen"),
+                label: "Account Screen".tr),
             BottomNavigationBarItem(
-                icon: Icon(
+                icon:const Icon(
                   CupertinoIcons.arrow_up_bin_fill,
                 ),
-                label: "Order List"),
+                label: "Place Order".tr),
           ]),
     );
   }

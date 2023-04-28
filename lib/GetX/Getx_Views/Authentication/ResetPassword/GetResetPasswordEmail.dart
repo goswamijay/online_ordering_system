@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
 
@@ -60,16 +61,17 @@ class _GetResetPasswordEmailState extends State<GetResetPasswordEmail> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text("Verification Code is send Successfully"),
+                title: Text("Verification Code is send Successfully".tr),
                 actions: [
                   TextButton(
-                      child: const Text('Okay'),
+                      child: Text('Okay'.tr),
                       onPressed: () {
                         Navigator.pushNamed(
-                            context, GetxRoutes_Name.GetxResestPasswordOTP, arguments: {
-                          'email_id': resetPasswordEmailController.text,
-                          'userId': userId
-                        });
+                            context, GetxRoutes_Name.GetxResestPasswordOTP,
+                            arguments: {
+                              'email_id': resetPasswordEmailController.text,
+                              'userId': userId
+                            });
                       }),
                 ],
               );
@@ -79,11 +81,12 @@ class _GetResetPasswordEmailState extends State<GetResetPasswordEmail> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text(
-                    "This Email Id is not Registered With us kindly register first!"),
+                title: Text(
+                    "This Email Id is not Registered With us kindly register first!"
+                        .tr),
                 actions: [
                   TextButton(
-                      child: const Text('Okay'),
+                      child: Text('Okay'.tr),
                       onPressed: () {
                         Navigator.of(context).pop();
                       }),
@@ -108,9 +111,9 @@ class _GetResetPasswordEmailState extends State<GetResetPasswordEmail> {
                   height: size.height / 2,
                   width: size.width,
                   image: const AssetImage("assets/forget_password.gif")),
-              const Text(
-                "Email ID",
-                style: TextStyle(
+              Text(
+                "Email ID".tr,
+                style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
@@ -122,20 +125,20 @@ class _GetResetPasswordEmailState extends State<GetResetPasswordEmail> {
                       padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: resetPasswordEmailController,
-                        decoration: const InputDecoration(
-                          hintText: "Enter Register Email ID",
-                          labelText: "Enter Register Email ID",
+                        decoration: InputDecoration(
+                          hintText: "Enter Register Email ID".tr,
+                          labelText: "Enter Register Email ID".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Email ID can't empty";
+                            return "Email ID can't empty".tr;
                           } else {
                             String emailExp =
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                             RegExp regExp = RegExp(emailExp);
                             if (regExp.hasMatch(value)) {
                             } else {
-                              return "Please Enter Valid Email";
+                              return "Please Enter Valid Email".tr;
                             }
                           }
                           return null;
@@ -159,9 +162,9 @@ class _GetResetPasswordEmailState extends State<GetResetPasswordEmail> {
                           color: Colors.deepPurple,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Text(
-                          "Forget Password",
-                          style: TextStyle(
+                        child: Text(
+                          "Forget Password".tr,
+                          style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 18),
@@ -172,13 +175,13 @@ class _GetResetPasswordEmailState extends State<GetResetPasswordEmail> {
                       height: size.height / 20,
                     ),
                     RichText(
-                        text: const TextSpan(children: [
-                          TextSpan(text: ("We will send you an ")),
-                          TextSpan(
-                              text: ("One Time Password "),
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: ("On this Email Id."))
-                        ]))
+                        text: TextSpan(children: [
+                      TextSpan(text: ("We will send you an ".tr)),
+                      TextSpan(
+                          text: ("One Time Password ".tr),
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: ("On this Email Id.".tr))
+                    ]))
                   ],
                 ),
               ),

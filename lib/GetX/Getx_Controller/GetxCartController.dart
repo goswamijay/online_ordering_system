@@ -17,6 +17,8 @@ class GetxCartController extends GetxController {
   GetCartAddItemModelClass getCartAddItemModelClass =
       GetCartAddItemModelClass(status: 0, msg: '', cartTotal: 0, data: []);
     var isLoading = true.obs;
+    bool isLoadingValue = false;
+
 
   @override
   void onInit() {
@@ -24,7 +26,14 @@ class GetxCartController extends GetxController {
     getCartAllDataAPI();
   }
 
+  @override
+  void onReady()
+  {
+    super.onReady();
+    isLoadingValue = false;
+  }
   Future<void> getCartAllDataAPI() async {
+    isLoadingValue = false;
     try {
       final prefs = await SharedPreferences.getInstance();
 
@@ -47,11 +56,12 @@ class GetxCartController extends GetxController {
                 isLoading.value = false;
 
         getCartAddItemModelClass = GetCartAddItemModelClass.fromJson(jsonData);
-
+        isLoadingValue = true;
         update();
       } else if (response.statusCode == 400) {
         final jsonData = json.decode(response.body);
         getCartAddItemModelClass = GetCartAddItemModelClass.fromJson(jsonData);
+        isLoadingValue = true;
         update();
       } else if (response.statusCode == 500) {
         Future.delayed(const Duration(seconds: 0), () async {

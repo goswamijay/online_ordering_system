@@ -55,40 +55,45 @@ class _GetAccountResetPasswordState extends State<GetAccountResetPassword> {
 
   moveToHome(BuildContext context) async {
     await resetPassword(verificationCodeController.text);
-    Future.delayed(const Duration(seconds: 0), () {
-      if (status == 1) {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text(
-                    "Your password has been changed successfully,Please login again!"),
-                actions: [
-                  TextButton(
-                      child: const Text('Okay'),
-                      onPressed: () {
-                        Get.offAllNamed(GetxRoutes_Name.GetxLoginScreen);
-                      }),
-                ],
-              );
-            });
-      } else {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text("Verification Code is Not Current"),
-                actions: [
-                  TextButton(
-                      child: const Text('Okay'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                ],
-              );
-            });
-      }
-    });
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      Future.delayed(const Duration(seconds: 0), () {
+        if (status == 1) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(
+                      'Your password has been changed successfully,Please login again!'
+                          .tr),
+                  actions: [
+                    TextButton(
+                        child: Text('Okay'.tr),
+                        onPressed: () {
+                          Get.offAllNamed(GetxRoutes_Name.GetxLoginScreen);
+                        }),
+                  ],
+                );
+              });
+        } else {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('Verification Code is Not Correct'.tr),
+                  actions: [
+                    TextButton(
+                        child: Text('Okay'.tr),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }),
+                  ],
+                );
+              });
+        }
+      });
+    }
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -104,9 +109,9 @@ class _GetAccountResetPasswordState extends State<GetAccountResetPassword> {
                   height: size.height / 2,
                   width: size.width,
                   image: const AssetImage("assets/forget_password.gif")),
-              const Text(
-                "Reset Password",
-                style: TextStyle(
+               Text(
+                'Reset Password'.tr,
+                style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
@@ -120,15 +125,15 @@ class _GetAccountResetPasswordState extends State<GetAccountResetPassword> {
                       child: TextFormField(
                         controller: verificationCodeController,
                         obscureText: true,
-                        decoration: const InputDecoration(
-                          hintText: "Enter Password",
-                          labelText: "New Password",
+                        decoration:  InputDecoration(
+                          hintText: "Enter Password".tr,
+                          labelText: "New Password".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Password can't empty";
+                            return "Password can't empty".tr;
                           } else if (value.length < 6) {
-                            return "Password is less than 6 letter";
+                            return "Password is less than 6 letter".tr;
                           }
                           return null;
                         },
@@ -154,16 +159,16 @@ class _GetAccountResetPasswordState extends State<GetAccountResetPassword> {
                                   : Icons.visibility_off,
                             ),
                           ),
-                          hintText: "Confirm Password",
-                          labelText: "Confirm Password",
+                          hintText: "Confirm Password".tr,
+                          labelText: "Confirm Password".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Password can't empty";
+                            return "Password can't empty".tr;
                           } else if (value.length < 6) {
-                            return "Password is less than 6 letter";
+                            return "Password is less than 6 letter".tr;
                           } else if (value != name) {
-                            return "Password not matched";
+                            return "Password not matched".tr;
                           }
                           return null;
                         },
@@ -195,9 +200,9 @@ class _GetAccountResetPasswordState extends State<GetAccountResetPassword> {
                           Icons.done,
                           color: Colors.white,
                         )
-                            : const Text(
-                          "Save The Data",
-                          style: TextStyle(
+                            :  Text(
+                          "Save The Data".tr,
+                          style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 18),

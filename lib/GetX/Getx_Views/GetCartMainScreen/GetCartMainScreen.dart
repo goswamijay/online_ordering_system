@@ -34,12 +34,11 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
     final orderPlaceController = Get.put(GetxConfirmListController());
     final firebaseApiCalling = Get.put(GetFirebaseApiCalling());
 
-
     return GetBuilder<GetxCartController>(
       builder: (controller) {
         return GetBuilder<GetxFavoriteController>(builder: (controller) {
-          return GetBuilder<GetFirebaseApiCalling>(builder: (firebaseApiCalling1)
-          {
+          return GetBuilder<GetFirebaseApiCalling>(
+              builder: (firebaseApiCalling1) {
             return Scaffold(
               drawer: const GetDrawerWidget(),
               appBar: AppBar(
@@ -60,13 +59,13 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
                         ),
                       )),
                 ),
-                title: const Padding(
-                  padding: EdgeInsets.only(top: 5.0),
+                title: Padding(
+                  padding: const EdgeInsets.only(top: 5.0),
                   child: Center(
                       child: Text(
-                        "My Cart",
-                        style: TextStyle(color: Colors.black),
-                      )),
+                    'My Cart'.tr,
+                    style: const TextStyle(color: Colors.black),
+                  )),
                 ),
                 centerTitle: true,
                 elevation: 0,
@@ -106,7 +105,8 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
                                   height: 34 / 2,
                                   child: Text(
                                     favoriteController
-                                        .getFavoriteAddItemModelClass.data
+                                        .getFavoriteAddItemModelClass
+                                        .data
                                         .length
                                         .toString(),
                                     textAlign: TextAlign.center,
@@ -155,18 +155,14 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
                               Row(
                                 children: [
                                   Text(
-                                    "Total Items (${cartController
-                                        .getCartAddItemModelClass.data
-                                        .length}) :-",
+                                    "${'Total_Item'.tr} (${cartController.getCartAddItemModelClass.data.length}) :-",
                                     style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   const Spacer(),
                                   Text(
-                                    " \$${cartController
-                                        .getCartAddItemModelClass.cartTotal
-                                        .toStringAsFixed(3)}",
+                                    " \$${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
                                     style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
@@ -176,17 +172,15 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
                               const Spacer(),
                               Row(
                                 children: [
-                                  const Text(
-                                    "Total Price :- ",
-                                    style: TextStyle(
+                                  Text(
+                                    "${'Total_Price'.tr} :-",
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   const Spacer(),
                                   Text(
-                                    " \$${cartController
-                                        .getCartAddItemModelClass.cartTotal
-                                        .toStringAsFixed(3)}",
+                                    " \$${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
                                     style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
@@ -207,44 +201,36 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
                           left: 12.0, right: 12.0, bottom: 6.0, top: 6.0),
                       child: InkWell(
                         onTap: () {
-                          cartController.getCartAddItemModelClass.data
-                              .isNotEmpty
+                          cartController
+                                  .getCartAddItemModelClass.data.isNotEmpty
                               ? Get.defaultDialog(
-                              title: "Confirm to Place Order",
-                              middleText:
-                              "You added ${cartController
-                                  .getCartAddItemModelClass.data
-                                  .length} Product and Total Price ${cartController
-                                  .getCartAddItemModelClass.cartTotal
-                                  .toStringAsFixed(3)}",
-                              backgroundColor: Colors.white,
-                              titleStyle:
-                              const TextStyle(color: Colors.black),
-                              middleTextStyle:
-                              const TextStyle(color: Colors.black),
-                              textConfirm: "Confirm",
-                              textCancel: "Cancel",
-                              cancelTextColor: Colors.black,
-                              confirmTextColor: Colors.white,
-                              buttonColor: Colors.indigo,
-                              barrierDismissible: false,
-                              radius: 10,
-                              onConfirm: () async {
-                                await orderPlaceController.getPlaceOrder(
-                                    cartController.getCartAddItemModelClass
-                                        .data[0].cartId
-                                        .toString(),
-                                    cartController
-                                        .getCartAddItemModelClass.cartTotal
-                                        .toString());
-                                firebaseApiCalling1.sendPushNotification(
-                                    "Online Ordering System",
-                                    "You added ${cartController
-                                        .getCartAddItemModelClass.data
-                                        .length} Product and Total Price ${cartController
-                                        .getCartAddItemModelClass
-                                        .cartTotal.toStringAsFixed(3)}");
-                                Future.delayed(const Duration(seconds: 0),
+                                  title: 'Confirm to Place Order'.tr,
+                                  middleText:
+                                      "${'You added'.tr} ${cartController.getCartAddItemModelClass.data.length} ${'Product and Total Price'.tr} ${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
+                                  backgroundColor: Colors.white,
+                                  titleStyle:
+                                      const TextStyle(color: Colors.black),
+                                  middleTextStyle:
+                                      const TextStyle(color: Colors.black),
+                                  textConfirm: 'Confirm'.tr,
+                                  textCancel: 'Cancel'.tr,
+                                  cancelTextColor: Colors.black,
+                                  confirmTextColor: Colors.white,
+                                  buttonColor: Colors.indigo,
+                                  barrierDismissible: false,
+                                  radius: 10,
+                                  onConfirm: () async {
+                                    await orderPlaceController.getPlaceOrder(
+                                        cartController.getCartAddItemModelClass
+                                            .data[0].cartId
+                                            .toString(),
+                                        cartController
+                                            .getCartAddItemModelClass.cartTotal
+                                            .toString());
+                                    firebaseApiCalling1.sendPushNotification(
+                                        "Online Ordering System",
+                                        "${'You added'.tr} ${cartController.getCartAddItemModelClass.data.length} ${'Product and Total Price'.tr} ${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}");
+                                    Future.delayed(const Duration(seconds: 0),
                                         () {
                                       cartController.getCartAllDataAPI();
                                       Get.back();
@@ -260,41 +246,41 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
                                             );
                                           });
                                     });
-                              },
-                              onCancel: () {
-                                Get.back();
-                              })
+                                  },
+                                  onCancel: () {
+                                    Get.back();
+                                  })
                               : Get.defaultDialog(
-                            title: "No Items Added in Cart",
-                            middleText: "Please add item in cart",
-                            backgroundColor: Colors.white,
-                            titleStyle:
-                            const TextStyle(color: Colors.black),
-                            middleTextStyle:
-                            const TextStyle(color: Colors.black),
-                            textConfirm: "Okay",
-                            cancelTextColor: Colors.black,
-                            confirmTextColor: Colors.white,
-                            buttonColor: Colors.indigo,
-                            barrierDismissible: false,
-                            radius: 10,
-                            onConfirm: () {
-                              Get.back();
-                            },
-                          );
+                                  title: 'No Items added in cart ....!'.tr,
+                                  middleText: 'Please add item in cart'.tr,
+                                  backgroundColor: Colors.white,
+                                  titleStyle:
+                                      const TextStyle(color: Colors.black),
+                                  middleTextStyle:
+                                      const TextStyle(color: Colors.black),
+                                  textConfirm: 'Okay'.tr,
+                                  cancelTextColor: Colors.black,
+                                  confirmTextColor: Colors.white,
+                                  buttonColor: Colors.indigo,
+                                  barrierDismissible: false,
+                                  radius: 10,
+                                  onConfirm: () {
+                                    Get.back();
+                                  },
+                                );
                         },
                         child: Container(
                           height: Get.height / 15,
                           decoration: BoxDecoration(
                               color: Colors.indigo,
                               borderRadius: BorderRadius.circular(16)),
-                          child: const Center(
+                          child: Center(
                               child: Text(
-                                "Place Order ",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              )),
+                            'Place Order'.tr,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )),
                         ),
                       ),
                     ),
@@ -322,16 +308,16 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-              //  Image.asset("assets/cart.gif"),
+                //  Image.asset("assets/cart.gif"),
                 Image.asset(
                   "assets/cart1.png",
                   height: Get.height / 2,
                   width: Get.width / 2,
                 ),
-                const Center(
+                Center(
                   child: Text(
-                    "No Items added in cart ....!",
-                    style: TextStyle(color: Colors.black, fontSize: 20),
+                    'No Items added in cart ....!'.tr,
+                    style: const TextStyle(color: Colors.black, fontSize: 20),
                   ),
                 ),
               ],
@@ -340,297 +326,309 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
         : GetBuilder<GetxCartController>(builder: (controller) {
             return GetBuilder<GetxProductController>(builder: (controller) {
               return GetBuilder<GetxFavoriteController>(builder: (controller) {
-                return  !cartController.isLoading.value ?ListView.builder(
-                    // physics: const NeverScrollableScrollPhysics(),
-                    //  shrinkWrap: true,
+                return !cartController.isLoading.value
+                    ? ListView.builder(
+                        // physics: const NeverScrollableScrollPhysics(),
+                        //  shrinkWrap: true,
 
-                    itemCount:
-                        cartController.getCartAddItemModelClass.data.length,
-                    itemBuilder: (context, index) {
-
-                      return Card(
-                        child: Column(
-                          children: [
-                            Row(
+                        itemCount:
+                            cartController.getCartAddItemModelClass.data.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 12.0),
-                                        child: Image(
-                                          image: NetworkImage(cartController
-                                              .getCartAddItemModelClass
-                                              .data[index]
-                                              .productDetails!
-                                              .imageUrl),
-                                          width: Get.width / 2,
-                                          height: Get.height / 5,
-                                        ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 12.0),
+                                            child: Image(
+                                              image: NetworkImage(cartController
+                                                  .getCartAddItemModelClass
+                                                  .data[index]
+                                                  .productDetails!
+                                                  .imageUrl),
+                                              width: Get.width / 2,
+                                              height: Get.height / 5,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8.0,
-                                        right: 5.0,
-                                        bottom: 8.0,
-                                        top: 8.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0,
+                                            right: 5.0,
+                                            bottom: 8.0,
+                                            top: 8.0),
+                                        child: Column(
                                           children: [
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: productController
-                                                          .getProductAllAPI
-                                                          .data[index]
-                                                          .watchListItemId !=
-                                                      ''
-                                                  ? InkWell(
-                                                      onTap: () async {
-                                                        await favoriteController
-                                                            .getRemoveFavorite(
-                                                                productController
-                                                                    .getProductAllAPI
-                                                                    .data[index]
-                                                                    .watchListItemId);
-                                                        Future.delayed(
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    0),
-                                                            () async {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .hideCurrentSnackBar();
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                            const SnackBar(
-                                                              content: Text(
-                                                                "Product Remove From Favorite!",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        16),
-                                                              ),
-                                                              backgroundColor:
-                                                                  Colors.indigo,
-                                                              duration:
-                                                                  Duration(
-                                                                      seconds:
-                                                                          1),
-                                                            ),
-                                                          );
-                                                          await productController
-                                                              .productAllAPI();
-                                                        });
-                                                      },
-                                                      child: const Icon(
-                                                        CupertinoIcons
-                                                            .heart_solid,
-                                                        size: 16,
-                                                        color: Colors.red,
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: productController
+                                                              .getProductAllAPI
+                                                              .data[index]
+                                                              .watchListItemId !=
+                                                          ''
+                                                      ? InkWell(
+                                                          onTap: () async {
+                                                            await favoriteController
+                                                                .getRemoveFavorite(
+                                                                    productController
+                                                                        .getProductAllAPI
+                                                                        .data[
+                                                                            index]
+                                                                        .watchListItemId);
+                                                            Future.delayed(
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        0),
+                                                                () async {
+                                                              ScaffoldMessenger
+                                                                      .of(context)
+                                                                  .hideCurrentSnackBar();
+                                                              ScaffoldMessenger
+                                                                      .of(context)
+                                                                  .showSnackBar(
+                                                                SnackBar(
+                                                                  content: Text(
+                                                                    'Product Remove From Favorite!'
+                                                                        .tr,
+                                                                    style: const TextStyle(
+                                                                        fontSize:
+                                                                            16),
+                                                                  ),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .indigo,
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ),
+                                                              );
+                                                              await productController
+                                                                  .productAllAPI();
+                                                            });
+                                                          },
+                                                          child: const Icon(
+                                                            CupertinoIcons
+                                                                .heart_solid,
+                                                            size: 16,
+                                                            color: Colors.red,
+                                                          ),
+                                                        )
+                                                      : InkWell(
+                                                          onTap: () async {
+                                                            await favoriteController
+                                                                .getAddInFavorite(
+                                                                    cartController
+                                                                        .getCartAddItemModelClass
+                                                                        .data[
+                                                                            index]
+                                                                        .productDetails!
+                                                                        .id);
+                                                            Future.delayed(
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        0),
+                                                                () async {
+                                                              ScaffoldMessenger
+                                                                      .of(context)
+                                                                  .hideCurrentSnackBar();
+                                                              ScaffoldMessenger
+                                                                      .of(context)
+                                                                  .showSnackBar(
+                                                                SnackBar(
+                                                                  content: Text(
+                                                                    'Product Added To Favorite!'
+                                                                        .tr,
+                                                                    style: const TextStyle(
+                                                                        fontSize:
+                                                                            16),
+                                                                  ),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .indigo,
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                ),
+                                                              );
+                                                              await productController
+                                                                  .productAllAPI();
+                                                            });
+                                                          },
+                                                          child: const Icon(
+                                                            CupertinoIcons
+                                                                .heart,
+                                                            size: 16,
+                                                          ),
+                                                        ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              width: Get.width,
+                                              child: AutoSizeText(
+                                                cartController
+                                                    .getCartAddItemModelClass
+                                                    .data[index]
+                                                    .productDetails!
+                                                    .title,
+                                                maxLines: 1,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: 30),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: Get.height / 70,
+                                            ),
+                                            SizedBox(
+                                              width: Get.width,
+                                              child: AutoSizeText(
+                                                cartController
+                                                    .getCartAddItemModelClass
+                                                    .data[index]
+                                                    .productDetails!
+                                                    .description,
+                                                maxLines: 2,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: 30),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: Get.height / 70,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: SizedBox(
+                                                    width: Get.width,
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: AutoSizeText(
+                                                        '\$${cartController.getCartAddItemModelClass.data[index].productDetails!.price}',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 25),
+                                                        maxLines: 1,
                                                       ),
-                                                    )
-                                                  : InkWell(
-                                                      onTap: () async {
-                                                        await favoriteController
-                                                            .getAddInFavorite(
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: IconButton(
+                                                      onPressed: () async {
+                                                        await cartController
+                                                            .removeProductFromCart(
                                                                 cartController
                                                                     .getCartAddItemModelClass
                                                                     .data[index]
-                                                                    .productDetails!
                                                                     .id);
-                                                        Future.delayed(
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    0),
-                                                            () async {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .hideCurrentSnackBar();
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                            const SnackBar(
-                                                              content: Text(
-                                                                "Product Added To Favorite!",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        16),
-                                                              ),
-                                                              backgroundColor:
-                                                                  Colors.indigo,
-                                                              duration:
-                                                                  Duration(
-                                                                      seconds:
-                                                                          1),
-                                                            ),
-                                                          );
-                                                          await productController
-                                                              .productAllAPI();
-                                                        });
+                                                        await cartController
+                                                            .getCartAllDataAPI();
                                                       },
-                                                      child: const Icon(
-                                                        CupertinoIcons.heart,
-                                                        size: 16,
-                                                      ),
-                                                    ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: Get.width,
-                                          child: AutoSizeText(
-                                            cartController
-                                                .getCartAddItemModelClass
-                                                .data[index]
-                                                .productDetails!
-                                                .title,
-                                            maxLines: 1,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 30),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: Get.height / 70,
-                                        ),
-                                        SizedBox(
-                                          width: Get.width,
-                                          child: AutoSizeText(
-                                            cartController
-                                                .getCartAddItemModelClass
-                                                .data[index]
-                                                .productDetails!
-                                                .description,
-                                            maxLines: 2,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 30),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: Get.height / 70,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: SizedBox(
-                                                width: Get.width,
-                                                child: Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: AutoSizeText(
-                                                    '\$${cartController.getCartAddItemModelClass.data[index].productDetails!.price}',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 25),
-                                                    maxLines: 1,
-                                                  ),
+                                                      icon: const Icon(
+                                                          CupertinoIcons
+                                                              .delete)),
                                                 ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: IconButton(
-                                                  onPressed: () async {
-                                                    await cartController
-                                                        .removeProductFromCart(
-                                                            cartController
-                                                                .getCartAddItemModelClass
-                                                                .data[index]
-                                                                .id);
-                                                    await cartController
-                                                        .getCartAllDataAPI();
-                                                  },
-                                                  icon: const Icon(
-                                                      CupertinoIcons.delete)),
-                                            ),
-                                            Expanded(
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  InkWell(
-                                                    //onTap: CartProvider.decrement(CartProvider.PurchaseList[index].Count),
-                                                    onTap: () async {
-                                                      await cartController
-                                                          .decreaseProductQuantity(
-                                                              cartController
-                                                                  .getCartAddItemModelClass
-                                                                  .data[index]
-                                                                  .id);
-                                                      await cartController
-                                                          .getCartAllDataAPI();
-                                                    },
-
-                                                    child: CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.grey[200],
-                                                      radius: 14,
-                                                      child: const Center(
-                                                          child: Icon(
-                                                        Icons.remove,
-                                                        color: Colors.black,
-                                                      )),
-                                                    ),
+                                                Expanded(
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          await cartController
+                                                              .decreaseProductQuantity(
+                                                                  cartController
+                                                                      .getCartAddItemModelClass
+                                                                      .data[
+                                                                          index]
+                                                                      .id);
+                                                          await cartController
+                                                              .getCartAllDataAPI();
+                                                        },
+                                                        child: CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.grey[200],
+                                                          radius: 14,
+                                                          child: const Center(
+                                                              child: Icon(
+                                                            Icons.remove,
+                                                            color: Colors.black,
+                                                          )),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        cartController
+                                                            .getCartAddItemModelClass
+                                                            .data[index]
+                                                            .quantity
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          await cartController
+                                                              .increaseProductQuantity(
+                                                                  cartController
+                                                                      .getCartAddItemModelClass
+                                                                      .data[
+                                                                          index]
+                                                                      .id);
+                                                          await cartController
+                                                              .getCartAllDataAPI();
+                                                        },
+                                                        child: CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.grey[200],
+                                                          radius: 14,
+                                                          child: const Center(
+                                                              child: Icon(
+                                                            Icons.add,
+                                                            color: Colors.black,
+                                                          )),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                  Text(
-                                                    cartController
-                                                        .getCartAddItemModelClass
-                                                        .data[index]
-                                                        .quantity
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      await cartController
-                                                          .increaseProductQuantity(
-                                                              cartController
-                                                                  .getCartAddItemModelClass
-                                                                  .data[index]
-                                                                  .id);
-                                                      await cartController
-                                                          .getCartAllDataAPI();
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.grey[200],
-                                                      radius: 14,
-                                                      child: const Center(
-                                                          child: Icon(
-                                                        Icons.add,
-                                                        color: Colors.black,
-                                                      )),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )
+                                                )
+                                              ],
+                                            ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
-                        ),
-                      );
-                    }) :const CircularProgressIndicator();
+                            ),
+                          );
+                        })
+                    : const CircularProgressIndicator();
               });
             });
           });

@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:online_ordering_system/GetX/Getx_Models/GetxProductModel.dart';
 
 import '../../Getx_Controller/GetxCartController.dart';
 import '../../Getx_Controller/GetxFavoriteController.dart';
@@ -140,13 +139,13 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
                                   ScaffoldMessenger.of(context)
                                       .hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                     SnackBar(
                                       content: Text(
-                                        "Product Remove From Favorite!",
-                                        style: TextStyle(fontSize: 16),
+                                        "Product Remove From Favorite!".tr,
+                                        style:const TextStyle(fontSize: 16),
                                       ),
                                       backgroundColor: Colors.indigo,
-                                      duration: Duration(seconds: 1),
+                                      duration:const Duration(seconds: 1),
                                     ),
                                   );
                                 },
@@ -169,13 +168,13 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
                                   ScaffoldMessenger.of(context)
                                       .hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                     SnackBar(
                                       content: Text(
-                                        "Product Added To Favorite!",
-                                        style: TextStyle(fontSize: 16),
+                                        "Product Added To Favorite!".tr,
+                                        style:const TextStyle(fontSize: 16),
                                       ),
                                       backgroundColor: Colors.indigo,
-                                      duration: Duration(seconds: 1),
+                                      duration: const Duration(seconds: 1),
                                     ),
                                   );
                                 },
@@ -269,10 +268,10 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
                           decoration: BoxDecoration(
                               color: Colors.pink,
                               borderRadius: BorderRadius.circular(5.0)),
-                          child: const Center(
+                          child:  Center(
                               child: Text(
-                                "Also Add in Cart",
-                                style: TextStyle(
+                                "Added in Cart".tr,
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
                               )),
@@ -289,16 +288,18 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
                                   .id);
                           await productController.productAllAPI();
                         },
+                        onDoubleTap: () {},
+                        onLongPress: () {},
                         child: Container(
                           width: Get.width,
                           height: Get.height / 15,
                           decoration: BoxDecoration(
                               color: Colors.indigo,
                               borderRadius: BorderRadius.circular(5.0)),
-                          child: const Center(
+                          child:  Center(
                               child: Text(
-                                "Add to Cart",
-                                style: TextStyle(
+                                "Add to Cart".tr,
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
                               )),

@@ -59,9 +59,9 @@ class _GetDrawerWidgetState extends State<GetDrawerWidget> {
               currentAccountPicture: const CircleAvatar(backgroundImage: NetworkImage('https://cdn-icons-png.flaticon.com/512/21/21104.png')),
             ),
             ListTile(
-              title: const Text(
-                'Product Screen',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'Product Screen'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(CupertinoIcons.home),
               onTap: () {
@@ -71,9 +71,9 @@ class _GetDrawerWidgetState extends State<GetDrawerWidget> {
 
 
             ListTile(
-              title: const Text(
-                'Cart Screen',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'Cart Screen'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(CupertinoIcons.cart_fill),
               onTap: () {
@@ -82,9 +82,9 @@ class _GetDrawerWidgetState extends State<GetDrawerWidget> {
             ),
 
             ListTile(
-              title: const Text(
-                'Wishlist Screen',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'Wishlist Screen'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(CupertinoIcons.heart_solid),
               onTap: () {
@@ -93,9 +93,9 @@ class _GetDrawerWidgetState extends State<GetDrawerWidget> {
             ),
 
             ListTile(
-              title: const Text(
-                'Account Screen',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'Account Screen'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(CupertinoIcons.person_alt),
               onTap: () {
@@ -104,9 +104,9 @@ class _GetDrawerWidgetState extends State<GetDrawerWidget> {
             ),
 
             ListTile(
-              title: const Text(
-                'Order List Screen',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'Order List Screen'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(CupertinoIcons.arrow_up_bin_fill),
               onTap: () {
@@ -115,42 +115,42 @@ class _GetDrawerWidgetState extends State<GetDrawerWidget> {
             ),
             const Divider(thickness: 2),
             ListTile(
-              title: const Text(
-                'Send feedback',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'Send feedback'.tr,
+                style:const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(Icons.email_rounded),
               onTap: () {},
             ),
             ListTile(
-              title: const Text(
-                'Tips',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'Tips'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(Icons.tips_and_updates_outlined),
               onTap: () {},
             ),
             ListTile(
-              title: const Text(
-                'Setting',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'Setting'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(CupertinoIcons.settings),
               onTap: () {},
             ),
             ListTile(
-              title: const Text(
-                'About',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'About'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(CupertinoIcons.info),
               onTap: () {},
             ),
             const Divider(thickness: 2),
             ListTile(
-              title: const Text(
-                'Log Out',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              title:  Text(
+                'Log Out'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               leading: const Icon(CupertinoIcons.square_arrow_left),
               onTap: () async {
@@ -160,18 +160,18 @@ class _GetDrawerWidgetState extends State<GetDrawerWidget> {
               },
             ),
             const Divider(thickness: 2),
-            const Align(
+             Align(
               alignment: Alignment.bottomRight,
               child:  Padding(
-                padding: EdgeInsets.all(3.0),
-                child: Text('Version: 1.0'),
+                padding:const EdgeInsets.all(3.0),
+                child: Text('Version: 1.0'.tr),
               ),
             ),
-            const Align(
+             Align(
               alignment: Alignment.bottomRight,
               child:  Padding(
-                padding: EdgeInsets.all(3.0),
-                child: Text('Developed By-Jay Goswami'),
+                padding:const EdgeInsets.all(3.0),
+                child: Text('Developed By-Jay Goswami'.tr),
               ),
             ),
             const SizedBox(

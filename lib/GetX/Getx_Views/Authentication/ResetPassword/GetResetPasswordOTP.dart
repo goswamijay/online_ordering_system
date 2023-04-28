@@ -29,7 +29,7 @@ class _GetResetPasswordOTPState extends State<GetResetPasswordOTP> {
   resetPasswordOTP(String userId, String otp) async {
     try {
       var uri = Uri.parse(
-          'https://shopping-app-backend-t4ay.onrender.com/user/verifyOtpOnRegister');
+          'https://shopping-app-backend-t4ay.onrender.com/user/verifyOtpOnForgotPassword');
       var response = await http.post(
         uri,
         headers: {
@@ -48,7 +48,6 @@ class _GetResetPasswordOTPState extends State<GetResetPasswordOTP> {
         status = jsonData['status'];
       } else if (response.statusCode == 400) {
         status = jsonData['status'];
-        print(status);
       }
     } catch (e) {
       return e;
@@ -64,10 +63,10 @@ class _GetResetPasswordOTPState extends State<GetResetPasswordOTP> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title:  Text("Verification Code is Verified Successfully & New Password will send into your ${argument!['email_id'].toString()} id."),
+                title:  Text("${'Verification Code is Verified Successfully & New Password will send into your'.tr} ${argument!['email_id'].toString()} id."),
                 actions: [
                   TextButton(
-                      child: const Text('Okay'),
+                      child:  Text('Okay'.tr),
                       onPressed: () {
                         //Navigator.pushNamed(context, Routes_Name.ResetPasswordValue, arguments: {'id': list1[0].data.jwtToken});
                         Navigator.pushNamedAndRemoveUntil(
@@ -81,10 +80,10 @@ class _GetResetPasswordOTPState extends State<GetResetPasswordOTP> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text("Verification Code is Not Current"),
+                title:  Text("Verification Code is Not Current".tr),
                 actions: [
                   TextButton(
-                      child: const Text('Okay'),
+                      child:  Text('Okay'.tr),
                       onPressed: () {
                         Navigator.of(context).pop();
                       }),
@@ -116,15 +115,15 @@ class _GetResetPasswordOTPState extends State<GetResetPasswordOTP> {
                     SizedBox(
                       height: size.height / 20,
                     ),
-                    const Text(
-                      "OTP Verification",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                     Text(
+                      "OTP Verification".tr,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                     SizedBox(
                       height: size.height / 30,
                     ),
                     Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      const Text("Enter the OTP sent to:-"),
+                       Text("Enter the OTP sent to:-".tr),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         //crossAxisAlignment: CrossAxisAlignment.center,
@@ -161,7 +160,7 @@ class _GetResetPasswordOTPState extends State<GetResetPasswordOTP> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Didn't Receive the OTP? "),
+                         Text("Didn't Receive the OTP? ".tr),
                         InkWell(
                           onTap: () {
                             getSignUpOtpVerification1.resentOTP(  argument!['id'].toString().replaceAll('(', '').replaceAll(')', ''),);
@@ -170,22 +169,22 @@ class _GetResetPasswordOTPState extends State<GetResetPasswordOTP> {
                                 .hideCurrentSnackBar();
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(
-                              const SnackBar(
+                               SnackBar(
                                 content: Text(
-                                  "Otp sent successfully! ",
-                                  style: TextStyle(
+                                  "Otp sent successfully! ".tr,
+                                  style: const TextStyle(
                                       fontSize: 16),
                                 ),
                                 backgroundColor:
                                 Colors.indigo,
                                 duration:
-                                Duration(seconds: 1),
+                                const Duration(seconds: 1),
                               ),
                             );
                           },
-                          child: const Text(
-                            "RESEND OTP",
-                            style: TextStyle(
+                          child:  Text(
+                            "RESEND OTP".tr,
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, color: Colors.pink),
                           ),
                         ),

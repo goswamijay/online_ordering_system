@@ -47,7 +47,7 @@ void main() async {
 
   if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.web) {
   } else {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+   // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
     final fcmToken = await FirebaseMessaging.instance.getToken();
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
     LocalNotificationService.initialize();

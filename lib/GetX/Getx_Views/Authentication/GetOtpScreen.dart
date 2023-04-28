@@ -48,10 +48,10 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text("Verification Code is Verified Successfully"),
+                title: Text("Verification Code is Verified Successfully".tr),
                 actions: [
                   TextButton(
-                      child: const Text('Okay'),
+                      child: Text('Okay'.tr),
                       onPressed: () async {
                         await getSignUpOtpVerification1.getLoginUser(
                             signUpEmail, signUpPassword);
@@ -73,10 +73,10 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text("Verification Code is Not Current"),
+                title:  Text("Verification Code is Not Current".tr),
                 actions: [
                   TextButton(
-                      child: const Text('Okay'),
+                      child:  Text('Okay'.tr),
                       onPressed: () {
                         Navigator.of(context).pop();
                       }),
@@ -105,15 +105,15 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
                 SizedBox(
                   height: Get.height / 20,
                 ),
-                const Text(
-                  "OTP Verification",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                 Text(
+                  "OTP Verification".tr,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
                 SizedBox(
                   height: Get.height / 30,
                 ),
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const Text("Enter the OTP sent to:-"),
+                   Text("Enter the OTP sent to:-".tr),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     //crossAxisAlignment: CrossAxisAlignment.center,
@@ -151,7 +151,7 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Didn't Receive the OTP? "),
+                     Text("Didn't Receive the OTP? ".tr),
                     InkWell(
                       onTap: () {
                         getSignUpOtpVerification1.resentOTP(
@@ -162,19 +162,19 @@ class _GetOtpScreenState extends State<GetOtpScreen> {
                         );
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                           SnackBar(
                             content: Text(
-                              "Otp sent successfully! ",
-                              style: TextStyle(fontSize: 16),
+                              "Otp sent successfully! ".tr,
+                              style: const TextStyle(fontSize: 16),
                             ),
                             backgroundColor: Colors.indigo,
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                           ),
                         );
                       },
-                      child: const Text(
-                        "RESEND OTP",
-                        style: TextStyle(
+                      child:  Text(
+                        "RESEND OTP".tr,
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.pink),
                       ),
                     ),

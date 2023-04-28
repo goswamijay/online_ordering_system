@@ -50,12 +50,12 @@ class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
                 ),
               )),
         ),
-        title: const Padding(
-          padding: EdgeInsets.only(top: 12.0),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 12.0),
           child: Center(
               child: Text(
-            "Order Placed Items",
-            style: TextStyle(color: Colors.black),
+            "Order Placed Items".tr,
+            style: const TextStyle(color: Colors.black),
           )),
         ),
         centerTitle: true,
@@ -120,7 +120,6 @@ class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
 
   Widget fullList1(BuildContext context) {
     final confirmController = Get.put(GetxConfirmListController());
-    final cartController = Get.put(GetxCartController());
 
     return confirmController.placeOrderModelClass.data.isEmpty
         ? Center(
@@ -129,124 +128,128 @@ class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset("assets/oops.png"),
-                const Text(
-                  "No any items purchase....!",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
+                Text(
+                  "No any items purchase....!".tr,
+                  style: const TextStyle(color: Colors.black, fontSize: 20),
                 ),
               ],
             ),
           )
-        : !confirmController.isLoading.value ? GetBuilder<GetxConfirmListController>(builder: (controller) {
-            return GetBuilder<GetxCartController>(builder: (controller) {
-              return   ListView.builder(
-                  itemCount: confirmController.placeOrderModelClass.data.length,
-                  itemBuilder: (context, index) {
-                    /* bool isAddedInCart = cartController.cartData
-                      .contains(confirmController.confirmData[index]);*/
-
-                    bool isAddedInCart = cartController.cartData.any(
-                        (element1) => element1.Name.contains(
-                            confirmController.confirmData[index].Name));
-                    return Card(
-                      child: Column(
-                        children: [
-                          Row(
+        : !confirmController.isLoading.value
+            ? GetBuilder<GetxConfirmListController>(builder: (controller) {
+                return GetBuilder<GetxCartController>(builder: (controller) {
+                  return ListView.builder(
+                      itemCount:
+                          confirmController.placeOrderModelClass.data.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: Column(
                             children: [
-                              Expanded(
-                                child: Image(
-                                  image: NetworkImage(confirmController
-                                      .placeOrderModelClass
-                                      .data[index]
-                                      .imageUrl),
-                                  fit: BoxFit.cover,
-                                  width: Get.width / 2,
-                                  height: Get.height / 4,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      Align(
-                                          alignment: Alignment.topRight,
-                                          child: AutoSizeText(
-                                            // "Order Place Date:- ${DateTime.parse("2023-03-10")}",
-                                            "Order Place Date:- ${confirmController.placeOrderModelClass.data[index].updatedAt}",
-                                            textAlign: TextAlign.end,
-                                            maxLines: 2,
-                                            style: const TextStyle(fontSize: 12),
-                                          )),
-                                      SizedBox(
-                                        height: Get.height / 120,
-                                      ),
-                                      SizedBox(
-                                        width: Get.width,
-                                        child: AutoSizeText(
-                                          confirmController.placeOrderModelClass
-                                              .data[index].title,
-                                          maxLines: 1,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 30),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: Get.height / 80,
-                                      ),
-                                      Row(
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Image(
+                                      image: NetworkImage(confirmController
+                                          .placeOrderModelClass
+                                          .data[index]
+                                          .imageUrl),
+                                      // fit: BoxFit.cover,
+                                      width: Get.width / 2,
+                                      height: Get.height / 5,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
                                         children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: SizedBox(
-                                              width: Get.width,
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  '\$${confirmController.placeOrderModelClass.data[index].price}',
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 25),
-                                                ),
-                                              ),
+                                          Align(
+                                              alignment: Alignment.topRight,
+                                              child: AutoSizeText(
+                                                // "Order Place Date:- ${DateTime.parse("2023-03-10")}",
+                                                "${'Order Place Date'.tr}:- ${confirmController.placeOrderModelClass.data[index].updatedAt}",
+                                                textAlign: TextAlign.end,
+                                                maxLines: 2,
+                                                style: const TextStyle(
+                                                    fontSize: 12),
+                                              )),
+                                          SizedBox(
+                                            height: Get.height / 120,
+                                          ),
+                                          SizedBox(
+                                            width: Get.width,
+                                            child: AutoSizeText(
+                                              confirmController
+                                                  .placeOrderModelClass
+                                                  .data[index]
+                                                  .title,
+                                              maxLines: 1,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 30),
                                             ),
                                           ),
-                                          Expanded(
-                                            child: SizedBox(
-                                              width: Get.width,
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: AutoSizeText(
-                                                  'Total Items added:-${confirmController.placeOrderModelClass.data[index].quantity}',
-                                                  style: const TextStyle(
-                                                      fontSize: 18),
-                                                  maxLines: 1,
+                                          SizedBox(
+                                            height: Get.height / 80,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: SizedBox(
+                                                  width: Get.width,
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(
+                                                      '\$${confirmController.placeOrderModelClass.data[index].price}',
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 25),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
+                                              Expanded(
+                                                child: SizedBox(
+                                                  width: Get.width,
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: AutoSizeText(
+                                                      '${'Total Items added'.tr}:-${confirmController.placeOrderModelClass.data[index].quantity}',
+                                                      style: const TextStyle(
+                                                          fontSize: 18),
+                                                      maxLines: 1,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: Get.height / 90,
+                                          ),
+                                          SizedBox(
+                                            width: Get.width,
+                                            child: AutoSizeText(
+                                              confirmController
+                                                  .placeOrderModelClass
+                                                  .data[index]
+                                                  .description,
+                                              maxLines: 3,
+                                              textAlign: TextAlign.justify,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 25),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: Get.height / 90,
-                                      ),
-                                      SizedBox(
-                                        width: Get.width,
-                                        child: AutoSizeText(
-                                          confirmController.placeOrderModelClass
-                                              .data[index].description,
-                                          maxLines: 2,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 30),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: Get.height / 90,
-                                      ),
-                                      Row(
+                                          SizedBox(
+                                            height: Get.height / 90,
+                                          ),
+                                          /*  Row(
                                         children: [
                                           Expanded(
                                             child: isAddedInCart
@@ -302,18 +305,19 @@ class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
                                                   ),
                                           ),
                                         ],
-                                      )
-                                    ],
-                                  ),
-                                ),
+                                      )*/
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
                               )
                             ],
-                          )
-                        ],
-                      ),
-                    );
-                  });
-            });
-          }):const Center(child: CircularProgressIndicator());
+                          ),
+                        );
+                      });
+                });
+              })
+            : const Center(child: CircularProgressIndicator());
   }
 }

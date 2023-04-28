@@ -20,12 +20,20 @@ class GetxProductController extends GetxController {
   RxList<GetxProduct> productData = <GetxProduct>[].obs;
   RxList<GetProductAllAPI> mainData = <GetProductAllAPI>[].obs;
   var isLoading = true.obs;
+  bool isLoadingItem = false;
 
   GetProductAllAPI getProductAllAPI = GetProductAllAPI(status: 1, msg: '', totalProduct: 0, data: []);
   @override
   void onInit() {
     super.onInit();
     productAllAPI();
+  }
+
+  @override
+  void onReady(){
+    super.onReady();
+    isLoading.value = false;
+    isLoadingItem = false;
   }
 
   Future<void> productAllAPI() async {
@@ -49,6 +57,7 @@ class GetxProductController extends GetxController {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         isLoading.value = false;
+        isLoadingItem = true;
         getProductAllAPI = GetProductAllAPI.fromJson(jsonData);
 
         update();
@@ -56,7 +65,7 @@ class GetxProductController extends GetxController {
 
         final jsonData = json.decode(response.body);
         getProductAllAPI = GetProductAllAPI.fromJson(jsonData);
-
+        isLoadingItem = true;
         update();
       }else if(response.statusCode == 500){
         Future.delayed(const Duration(seconds: 0),() async{

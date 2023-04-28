@@ -36,13 +36,13 @@ class _GetLoginPageState extends State<GetLoginPage> {
         if (loginController.getLoginModelClass.status == "1") {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+             SnackBar(
               content: Text(
-                "Login Successfully",
-                style: TextStyle(fontSize: 16),
+                "Login Successfully".tr,
+                style: const TextStyle(fontSize: 16),
               ),
               backgroundColor: Colors.indigo,
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
             ),
           );
           await Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
@@ -51,12 +51,12 @@ class _GetLoginPageState extends State<GetLoginPage> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text("Please Register in App"),
-                  content: const Text(
-                      'Your email id is not verified kindly register again with same details and verify your account to use app!'),
+                  title:  Text("Please Register in App".tr),
+                  content:  Text(
+                      'Your email id is not verified kindly register again with same details and verify your account to use app!'.tr),
                   actions: [
                     TextButton(
-                        child: const Text('Okay'),
+                        child:  Text('Okay'.tr),
                         onPressed: () {
                           Navigator.of(context).pop();
                         }),
@@ -83,9 +83,9 @@ class _GetLoginPageState extends State<GetLoginPage> {
                   height: Get.height / 2.5,
                   width: Get.width,
                   image: const AssetImage("assets/hey.png")),
-              const Text(
-                "Welcome Back",
-                style: TextStyle(
+               Text(
+                "Welcome Back".tr,
+                style:const  TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
@@ -98,20 +98,20 @@ class _GetLoginPageState extends State<GetLoginPage> {
                       padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: loginEmailIdController,
-                        decoration: const InputDecoration(
-                          hintText: "User Name",
-                          labelText: "Username",
+                        decoration:  InputDecoration(
+                          hintText: "User Name".tr,
+                          labelText: "Username".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Username can't empty";
+                            return "Username can't empty".tr;
                           } else {
                             String emailExp =
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                             RegExp regExp = RegExp(emailExp);
                             if (regExp.hasMatch(value)) {
                             } else {
-                              return "Please Enter Valid Email";
+                              return "Please Enter Valid Email".tr;
                             }
                           }
                           return null;
@@ -136,14 +136,14 @@ class _GetLoginPageState extends State<GetLoginPage> {
                                   : Icons.visibility_off,
                             ),
                           ),
-                          hintText: "Enter Password",
-                          labelText: "Password",
+                          hintText: "Enter Password".tr,
+                          labelText: "Password".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Password can't empty";
+                            return "Password can't empty".tr;
                           } else if (value.length < 6) {
-                            return "Password is less than 6 letter";
+                            return "Password is less than 6 letter".tr;
                           }
                           return null;
                         },
@@ -157,9 +157,9 @@ class _GetLoginPageState extends State<GetLoginPage> {
                               Get.toNamed(
                                   GetxRoutes_Name.GetxResestPasswordEmail);
                             },
-                            child: const Text(
-                              "Reset Password",
-                              style: TextStyle(color: Colors.indigo),
+                            child:  Text(
+                              "Reset Password".tr,
+                              style: const TextStyle(color: Colors.indigo),
                             ))
                       ],
                     ),
@@ -184,9 +184,9 @@ class _GetLoginPageState extends State<GetLoginPage> {
                                 Icons.done,
                                 color: Colors.white,
                               )
-                            : const Text(
-                                "Login",
-                                style: TextStyle(
+                            :  Text(
+                                "Login".tr,
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18),
@@ -197,13 +197,13 @@ class _GetLoginPageState extends State<GetLoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Don't have an account? "),
+                         Text("Don't have an account? ".tr),
                         InkWell(
                           onTap: () {
                             Get.toNamed(GetxRoutes_Name.GetxSignUpScreen);
                           },
-                          child: const Text("SignUp",
-                              style: TextStyle(
+                          child:  Text("SignUp".tr,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.pink,
                               )),

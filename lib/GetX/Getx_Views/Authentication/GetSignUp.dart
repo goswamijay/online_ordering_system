@@ -44,12 +44,12 @@ class _GetSignUpState extends State<GetSignUp> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text("Your account is Register"),
+                  title: Text("Your account is Register".tr),
                   content: Text(
-                      'You will Received OTP in your ${signupEmailController.text}'),
+                      '${'You will Received OTP in your'.tr} ${signupEmailController.text}'),
                   actions: [
                     TextButton(
-                        child: const Text('Okay'),
+                        child: Text('Okay'.tr),
                         onPressed: () {
                           Navigator.pushNamed(
                             context,
@@ -64,11 +64,11 @@ class _GetSignUpState extends State<GetSignUp> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text("Your account is already Register"),
-                  content: const Text('Please login this account'),
+                  title: Text("Your account is already Register".tr),
+                  content: Text('Please login this account'.tr),
                   actions: [
                     TextButton(
-                        child: const Text('Okay'),
+                        child: Text('Okay'.tr),
                         onPressed: () {
                           Navigator.of(context).pop();
                         }),
@@ -77,7 +77,6 @@ class _GetSignUpState extends State<GetSignUp> {
               });
         }
       });
-      //Get.toNamed(GetxRoutes_Name.GetxOTPScreen,arguments: {'email_id': email.toString()});
       setState(() {
         changeButton = false;
       });
@@ -95,9 +94,9 @@ class _GetSignUpState extends State<GetSignUp> {
                   height: Get.height / 2.7,
                   width: Get.width,
                   image: const AssetImage("assets/signup.png")),
-              const Text(
-                "Welcome",
-                style: TextStyle(
+              Text(
+                "Welcome".tr,
+                style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 24),
@@ -110,13 +109,13 @@ class _GetSignUpState extends State<GetSignUp> {
                       padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: signupNameController,
-                        decoration: const InputDecoration(
-                          hintText: "User Name",
-                          labelText: "User Name",
+                        decoration: InputDecoration(
+                          hintText: "User Name".tr,
+                          labelText: "User Name".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "User Name can't empty";
+                            return "User Name can't empty".tr;
                           }
                           return null;
                         },
@@ -129,20 +128,20 @@ class _GetSignUpState extends State<GetSignUp> {
                       padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
                         controller: signupEmailController,
-                        decoration: const InputDecoration(
-                          hintText: "Email Id",
-                          labelText: "Email Id",
+                        decoration: InputDecoration(
+                          hintText: "Email Id".tr,
+                          labelText: "Email Id".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Email Id can't empty";
+                            return "Email Id can't empty".tr;
                           } else {
                             String emailExp =
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                             RegExp regExp = RegExp(emailExp);
                             if (regExp.hasMatch(value)) {
                             } else {
-                              return "Please Enter Valid Email";
+                              return "Please Enter Valid Email".tr;
                             }
                           }
                           return null;
@@ -157,15 +156,15 @@ class _GetSignUpState extends State<GetSignUp> {
                       child: TextFormField(
                         controller: signupMobileController,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: "Mobile Number",
-                          labelText: "Mobile Number",
+                        decoration: InputDecoration(
+                          hintText: "Mobile Number".tr,
+                          labelText: "Mobile Number".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Mobile Number can't empty";
+                            return "Mobile Number can't empty".tr;
                           } else if (value.length < 10 || value.length > 10) {
-                            return "Mobile number is not valid";
+                            return "Mobile number is not valid".tr;
                           }
                           return null;
                         },
@@ -179,15 +178,15 @@ class _GetSignUpState extends State<GetSignUp> {
                       child: TextFormField(
                         controller: signupPasswordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
-                          hintText: "Enter Password",
-                          labelText: "Password",
+                        decoration: InputDecoration(
+                          hintText: "Enter Password".tr,
+                          labelText: "Password".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Password can't empty";
+                            return "Password can't empty".tr;
                           } else if (value.length < 6) {
-                            return "Password is less than 6 letter";
+                            return "Password is less than 6 letter".tr;
                           }
                           return null;
                         },
@@ -213,16 +212,16 @@ class _GetSignUpState extends State<GetSignUp> {
                                   : Icons.visibility_off,
                             ),
                           ),
-                          hintText: "Confirm Password",
-                          labelText: "Confirm Password",
+                          hintText: "Confirm Password".tr,
+                          labelText: "Confirm Password".tr,
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Password can't empty";
+                            return "Password can't empty".tr;
                           } else if (value.length < 6) {
-                            return "Password is less than 6 letter";
+                            return "Password is less than 6 letter".tr;
                           } else if (value != password1) {
-                            return "Password not matched";
+                            return "Password not matched".tr;
                           }
                           return null;
                         },
@@ -245,34 +244,34 @@ class _GetSignUpState extends State<GetSignUp> {
                           /*  shape: changeButton? BoxShape.circle : BoxShape.rectangle,*/
                           color: Colors.deepPurple,
                           borderRadius:
-                          BorderRadius.circular(changeButton ? 50 : 8),
+                              BorderRadius.circular(changeButton ? 50 : 8),
                         ),
                         child: changeButton
                             ? const Icon(
-                          Icons.done,
-                          color: Colors.white,
-                        )
-                            : const Text(
-                          "Sign UP",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                        ),
+                                Icons.done,
+                                color: Colors.white,
+                              )
+                            : Text(
+                                "SignUp".tr,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("You have an account? "),
+                        Text("You have an account? ".tr),
                         InkWell(
                           onTap: () {
                             Navigator.pushNamed(
                                 context, GetxRoutes_Name.GetxLoginScreen);
                           },
-                          child: const Text("LogIn",
-                              style: TextStyle(
+                          child: Text("Login".tr,
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.pink)),
                         ),
@@ -282,13 +281,13 @@ class _GetSignUpState extends State<GetSignUp> {
                       height: 20,
                     ),
                     RichText(
-                        text: const TextSpan(children: [
-                          TextSpan(text: ("We will send you an ")),
-                          TextSpan(
-                              text: ("One Time Password "),
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: ("On this Email Id."))
-                        ]))
+                        text: TextSpan(children: [
+                      TextSpan(text: ("We will send you an ".tr)),
+                      TextSpan(
+                          text: ("One Time Password ".tr),
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: ("On this Email Id.".tr))
+                    ]))
                   ],
                 ),
               ),

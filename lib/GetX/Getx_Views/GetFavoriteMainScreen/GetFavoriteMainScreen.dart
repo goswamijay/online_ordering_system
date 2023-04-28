@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
 
-import '../../../Utils/Drawer.dart';
 import '../../Getx_Controller/GetxCartController.dart';
 import '../../Getx_Controller/GetxFavoriteController.dart';
 import '../../Getx_Controller/GetxProductController.dart';
@@ -29,7 +28,6 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
   @override
   Widget build(BuildContext context) {
     final cartController = Get.put(GetxCartController());
-    final favoriteController = Get.put(GetxFavoriteController());
     return Scaffold(
       drawer: const GetDrawerWidget(),
       appBar: AppBar(
@@ -50,12 +48,12 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
                 ),
               )),
         ),
-        title: const Padding(
-          padding: EdgeInsets.only(top: 5.0),
+        title:  Padding(
+          padding:const EdgeInsets.only(top: 5.0),
           child: Center(
               child: Text(
-            "Favorite Items",
-            style: TextStyle(color: Colors.black),
+            'Favorite Items'.tr,
+            style: const TextStyle(color: Colors.black),
           )),
         ),
         centerTitle: true,
@@ -129,7 +127,6 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
     Size size = MediaQuery.of(context).size;
     final cartController = Get.put(GetxCartController());
     final favoriteController = Get.put(GetxFavoriteController());
-    final productController = Get.put(GetxProductController());
 
     return favoriteController.getFavoriteAddItemModelClass.data.isEmpty
         ? Container(
@@ -143,9 +140,9 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset("assets/favourite.gif"),
-                const Text(
-                  "Not any items added in Favorite ....!",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
+                 Text(
+                  'Not any items added in Favorite ....!'.tr,
+                  style: const TextStyle(color: Colors.black, fontSize: 20),
                 ),
               ],
             ),
@@ -213,15 +210,15 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
                                                       ScaffoldMessenger.of(
                                                               context)
                                                           .showSnackBar(
-                                                        const SnackBar(
+                                                         SnackBar(
                                                           content: Text(
-                                                            "Product Remove From Favorite!",
-                                                            style: TextStyle(
+                                                            'Product Remove From Favorite!'.tr,
+                                                            style:  const TextStyle(
                                                                 fontSize: 16),
                                                           ),
                                                           backgroundColor:
                                                               Colors.indigo,
-                                                          duration: Duration(
+                                                          duration: const  Duration(
                                                               seconds: 1),
                                                         ),
                                                       );
@@ -230,7 +227,7 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
                                                   child: const Icon(
                                                     CupertinoIcons.heart_solid,
                                                     color: Colors.red,
-                                                    size: 16,
+                                                    size: 18,
                                                   ),
                                                 )
                                               : InkWell(
@@ -241,22 +238,22 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
                                                     ScaffoldMessenger.of(
                                                             context)
                                                         .showSnackBar(
-                                                      const SnackBar(
+                                                       SnackBar(
                                                         content: Text(
-                                                          "Product Added To Favorite!",
-                                                          style: TextStyle(
+                                                          'Product Added To Favorite!'.tr,
+                                                          style: const TextStyle(
                                                               fontSize: 16),
                                                         ),
                                                         backgroundColor:
                                                             Colors.indigo,
-                                                        duration: Duration(
+                                                        duration:const Duration(
                                                             seconds: 1),
                                                       ),
                                                     );
                                                   },
                                                   child: const Icon(
                                                     CupertinoIcons.heart,
-                                                    size: 16,
+                                                    size: 18,
                                                   ),
                                                 ),
                                         ),
@@ -330,10 +327,10 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           5.0)),
-                                                          child: const Center(
+                                                          child:  Center(
                                                               child: Text(
-                                                            "Also Add in Cart",
-                                                            style: TextStyle(
+                                                            'Added in Cart'.tr,
+                                                            style:const TextStyle(
                                                                 color: Colors
                                                                     .white,
                                                                 fontWeight:
@@ -360,10 +357,10 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           5.0)),
-                                                          child: const Center(
+                                                          child:  Center(
                                                               child: Text(
-                                                            "Add to Cart",
-                                                            style: TextStyle(
+                                                            'Add to Cart'.tr,
+                                                            style: const TextStyle(
                                                                 color: Colors
                                                                     .white,
                                                                 fontWeight:

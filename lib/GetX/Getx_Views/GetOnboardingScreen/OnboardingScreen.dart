@@ -57,18 +57,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   List<OnBoardingModel> onBoardInfo = [
     OnBoardingModel(
-        title: 'Choose Product',
+        title: 'Choose Product'.tr,
         description:
-            'You Can Easily Find \n The Product You Want From Our Various Products!',
+            'You Can Easily Find \n The Product You Want From Our Various Products!'.tr,
         imagePath: 'assets/OnBoarding/i.png'),
     OnBoardingModel(
-        title: 'Add item in cart',
+        title: 'Add item in cart'.tr,
         description:
-            'You can easy to add item in \n cart and wishlist and purchase product!',
+            'You can easy to add item in \n cart and wishlist and purchase product!'.tr,
         imagePath: 'assets/OnBoarding/ii.png'),
     OnBoardingModel(
-        title: 'Get Your Order',
-        description: 'Open The Doors, Your Order is Now Ready For You!',
+        title: 'Get Your Order'.tr,
+        description: 'Open The Doors, Your Order is Now Ready For You!'.tr,
         imagePath: 'assets/OnBoarding/iii.png'),
   ];
   @override
@@ -123,9 +123,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     color: Colors.deepPurple,
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  child: const Text(
-                    "Continue",
-                    style: TextStyle(
+                  child:  Text(
+                    "Continue".tr,
+                    style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
