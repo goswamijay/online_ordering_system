@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Models/GetxProductModel.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
@@ -53,7 +51,6 @@ class GetxProductController extends GetxController {
           "Access-Control_Allow_Origin": "*"
         },
       );
-        var jsonData = json.decode(response.body);
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         isLoading.value = false;

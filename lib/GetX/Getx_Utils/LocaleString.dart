@@ -4,16 +4,16 @@ class LocaleString extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
-          'non_search_item_title': 'Best Selling',
-          'search_item_title': 'Search Items',
+          'Best Selling': 'Best Selling',
+          'Search Items': 'Search Items',
           'Add to Cart': 'Add to Cart',
           'Added in Cart': 'Added in Cart',
           'Search Item is not available ....!':
               'Search Item is not available ....!',
 
           ////CART LIST DATA
-          'Total_Item': 'Total Items',
-          'Total_Price': 'Total Price',
+          'Total Item': 'Total Items',
+          'Total Price': 'Total Price',
           'My Cart': 'My Cart',
           'Place Order': 'Place Order',
           'No Items added in cart ....!': 'No Items added in cart ....!',
@@ -152,16 +152,16 @@ class LocaleString extends Translations {
           "YOU ARE OFFLINE": "YOU ARE OFFLINE",
         },
         'hi_IN': {
-          'non_search_item_title': 'सबसे ज्यादा बिकने वाले वस्तु',
-          'search_item_title': 'वस्तु खोजें',
+          'Best Selling': 'सबसे ज्यादा बिकने वाले वस्तु',
+          'Search Items': 'वस्तु खोजें',
           'Add to Cart': 'कार्ट में जोड़ें',
           'Added in Cart': 'कार्ट में जोड़ा गया है',
           'Search Item is not available ....!':
               'सर्च आइटम उपलब्ध नहीं है....!!',
 
           ////CART LIST DATA
-          'Total_Item': 'कुल आइटम',
-          'Total_Price': 'कुल कीमत',
+          'Total Item': 'कुल आइटम',
+          'Total Price': 'कुल कीमत',
           'My Cart': 'मेरा कार्ट',
           'Place Order': 'आइटम की पुष्टि करें',
           'No Items added in cart ....!':

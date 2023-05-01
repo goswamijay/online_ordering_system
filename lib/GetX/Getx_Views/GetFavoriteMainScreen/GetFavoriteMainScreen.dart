@@ -28,95 +28,101 @@ class _GetFavoriteMainScreenState extends State<GetFavoriteMainScreen> {
   @override
   Widget build(BuildContext context) {
     final cartController = Get.put(GetxCartController());
-    return Scaffold(
-      drawer: const GetDrawerWidget(),
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-          child: InkWell(
-              onTap: () {
-                Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
-              },
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              child: const CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.arrow_back_ios_new_sharp,
-                  color: Colors.black,
-                ),
-              )),
-        ),
-        title:  Padding(
-          padding:const EdgeInsets.only(top: 5.0),
-          child: Center(
-              child: Text(
-            'Favorite Items'.tr,
-            style: const TextStyle(color: Colors.black),
-          )),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: [
-          Padding(
-              padding: const EdgeInsets.only(right: 12.0, top: 12.0),
-              child:  GetBuilder<GetxCartController>(builder: (controller) {
-                return  InkWell(
-                  onTap: () {
-                    Get.toNamed(
-                        GetxRoutes_Name.GetxCartMainScreen);
-                  },
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  child: SizedBox.fromSize(
-                    size: const Size.fromRadius(20),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: <Widget>[
-                        const CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: FittedBox(
-                            child: Icon(
-                              CupertinoIcons.cart_fill,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          child: Center(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.red[900]),
-                              width: 34 / 2,
-                              height: 34 / 2,
-                              child: Text(
-                                cartController.getCartAddItemModelClass.data.length
-                                    .toString(),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    color: Colors.white),
+    return WillPopScope(
+      onWillPop: () async{
+        Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
+        return false;
+      },
+      child: Scaffold(
+        drawer: const GetDrawerWidget(),
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+            child: InkWell(
+                onTap: () {
+                  Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
+                },
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                child: const CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.arrow_back_ios_new_sharp,
+                    color: Colors.black,
+                  ),
+                )),
+          ),
+          title:  Padding(
+            padding:const EdgeInsets.only(top: 5.0),
+            child: Center(
+                child: Text(
+              'Favorite Items'.tr,
+              style: const TextStyle(color: Colors.black),
+            )),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          actions: [
+            Padding(
+                padding: const EdgeInsets.only(right: 12.0, top: 12.0),
+                child:  GetBuilder<GetxCartController>(builder: (controller) {
+                  return  InkWell(
+                    onTap: () {
+                      Get.toNamed(
+                          GetxRoutes_Name.GetxCartMainScreen);
+                    },
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    child: SizedBox.fromSize(
+                      size: const Size.fromRadius(20),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[
+                          const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: FittedBox(
+                              child: Icon(
+                                CupertinoIcons.cart_fill,
+                                color: Colors.black,
                               ),
                             ),
                           ),
-                        )
-                      ],
+                          Positioned(
+                            right: 0,
+                            child: Center(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.red[900]),
+                                width: 34 / 2,
+                                height: 34 / 2,
+                                child: Text(
+                                  cartController.getCartAddItemModelClass.data.length
+                                      .toString(),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),),
-        ],
-      ),
-      backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Center(
-            child: fullList1(context),
+                  );
+                }),),
+          ],
+        ),
+        backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Center(
+              child: fullList1(context),
+            ),
           ),
         ),
       ),

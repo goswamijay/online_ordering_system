@@ -39,253 +39,259 @@ class _GetCartMainScreenState extends State<GetCartMainScreen> {
         return GetBuilder<GetxFavoriteController>(builder: (controller) {
           return GetBuilder<GetFirebaseApiCalling>(
               builder: (firebaseApiCalling1) {
-            return Scaffold(
-              drawer: const GetDrawerWidget(),
-              appBar: AppBar(
-                leading: Padding(
-                  padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-                  child: InkWell(
-                      onTap: () {
-                        Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
-                      },
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_sharp,
-                          color: Colors.black,
-                        ),
-                      )),
-                ),
-                title: Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: Center(
-                      child: Text(
-                    'My Cart'.tr,
-                    style: const TextStyle(color: Colors.black),
-                  )),
-                ),
-                centerTitle: true,
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 12.0, top: 12.0),
+            return WillPopScope(
+              onWillPop: () async{
+                Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
+                return false;
+              },
+              child: Scaffold(
+                drawer: const GetDrawerWidget(),
+                appBar: AppBar(
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                     child: InkWell(
-                      onTap: () {
-                        Get.toNamed(GetxRoutes_Name.GetxFavoriteMainScreen);
-                      },
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      child: SizedBox.fromSize(
-                        size: const Size.fromRadius(20),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: <Widget>[
-                            const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: FittedBox(
-                                child: Icon(
-                                  CupertinoIcons.heart_solid,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              right: 0,
-                              child: Center(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.red[900]),
-                                  width: 34 / 2,
-                                  height: 34 / 2,
-                                  child: Text(
-                                    favoriteController
-                                        .getFavoriteAddItemModelClass
-                                        .data
-                                        .length
-                                        .toString(),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                        onTap: () {
+                          Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
+                        },
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.arrow_back_ios_new_sharp,
+                            color: Colors.black,
+                          ),
+                        )),
                   ),
-                ],
-              ),
-              // backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
-              backgroundColor: Colors.white,
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 9,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                          color: Color.fromRGBO(246, 244, 244, 1),
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(16.0),
-                              topLeft: Radius.circular(16.0))),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: fullList1(context),
-                      ),
-                    ),
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Center(
+                        child: Text(
+                      'My Cart'.tr,
+                      style: const TextStyle(color: Colors.black),
+                    )),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromRGBO(246, 244, 244, 1),
-                      ),
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "${'Total_Item'.tr} (${cartController.getCartAddItemModelClass.data.length}) :-",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    " \$${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              Row(
-                                children: [
-                                  Text(
-                                    "${'Total_Price'.tr} :-",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    " \$${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              )
-                            ],
-                          )),
-                    ),
-                  ),
-                ],
-              ),
-              bottomNavigationBar: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 12.0, right: 12.0, bottom: 6.0, top: 6.0),
+                  centerTitle: true,
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12.0, top: 12.0),
                       child: InkWell(
                         onTap: () {
-                          cartController
-                                  .getCartAddItemModelClass.data.isNotEmpty
-                              ? Get.defaultDialog(
-                                  title: 'Confirm to Place Order'.tr,
-                                  middleText:
-                                      "${'You added'.tr} ${cartController.getCartAddItemModelClass.data.length} ${'Product and Total Price'.tr} ${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
-                                  backgroundColor: Colors.white,
-                                  titleStyle:
-                                      const TextStyle(color: Colors.black),
-                                  middleTextStyle:
-                                      const TextStyle(color: Colors.black),
-                                  textConfirm: 'Confirm'.tr,
-                                  textCancel: 'Cancel'.tr,
-                                  cancelTextColor: Colors.black,
-                                  confirmTextColor: Colors.white,
-                                  buttonColor: Colors.indigo,
-                                  barrierDismissible: false,
-                                  radius: 10,
-                                  onConfirm: () async {
-                                    await orderPlaceController.getPlaceOrder(
-                                        cartController.getCartAddItemModelClass
-                                            .data[0].cartId
-                                            .toString(),
-                                        cartController
-                                            .getCartAddItemModelClass.cartTotal
-                                            .toString());
-                                    firebaseApiCalling1.sendPushNotification(
-                                        "Online Ordering System",
-                                        "${'You added'.tr} ${cartController.getCartAddItemModelClass.data.length} ${'Product and Total Price'.tr} ${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}");
-                                    Future.delayed(const Duration(seconds: 0),
-                                        () {
-                                      cartController.getCartAllDataAPI();
-                                      Get.back();
-
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              content: Lottie.asset(
-                                                  height: 100,
-                                                  width: 100,
-                                                  'assets/Animation/placeholder.json'),
-                                            );
-                                          });
-                                    });
-                                  },
-                                  onCancel: () {
-                                    Get.back();
-                                  })
-                              : Get.defaultDialog(
-                                  title: 'No Items added in cart ....!'.tr,
-                                  middleText: 'Please add item in cart'.tr,
-                                  backgroundColor: Colors.white,
-                                  titleStyle:
-                                      const TextStyle(color: Colors.black),
-                                  middleTextStyle:
-                                      const TextStyle(color: Colors.black),
-                                  textConfirm: 'Okay'.tr,
-                                  cancelTextColor: Colors.black,
-                                  confirmTextColor: Colors.white,
-                                  buttonColor: Colors.indigo,
-                                  barrierDismissible: false,
-                                  radius: 10,
-                                  onConfirm: () {
-                                    Get.back();
-                                  },
-                                );
+                          Get.toNamed(GetxRoutes_Name.GetxFavoriteMainScreen);
                         },
-                        child: Container(
-                          height: Get.height / 15,
-                          decoration: BoxDecoration(
-                              color: Colors.indigo,
-                              borderRadius: BorderRadius.circular(16)),
-                          child: Center(
-                              child: Text(
-                            'Place Order'.tr,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          )),
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        child: SizedBox.fromSize(
+                          size: const Size.fromRadius(20),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: <Widget>[
+                              const CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: FittedBox(
+                                  child: Icon(
+                                    CupertinoIcons.heart_solid,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                child: Center(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.red[900]),
+                                    width: 34 / 2,
+                                    height: 34 / 2,
+                                    child: Text(
+                                      favoriteController
+                                          .getFavoriteAddItemModelClass
+                                          .data
+                                          .length
+                                          .toString(),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                // backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
+                backgroundColor: Colors.white,
+                body: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 9,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            color: Color.fromRGBO(246, 244, 244, 1),
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(16.0),
+                                topLeft: Radius.circular(16.0))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: fullList1(context),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(246, 244, 244, 1),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "${'Total Item'.tr} (${cartController.getCartAddItemModelClass.data.length}) :-",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      " \$${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "${'Total Price'.tr} :-",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      " \$${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
+                bottomNavigationBar: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12.0, right: 12.0, bottom: 6.0, top: 6.0),
+                        child: InkWell(
+                          onTap: () {
+                            cartController
+                                    .getCartAddItemModelClass.data.isNotEmpty
+                                ? Get.defaultDialog(
+                                    title: 'Confirm to Place Order'.tr,
+                                    middleText:
+                                        "${'You added'.tr} ${cartController.getCartAddItemModelClass.data.length} ${'Product and Total Price'.tr} ${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
+                                    backgroundColor: Colors.white,
+                                    titleStyle:
+                                        const TextStyle(color: Colors.black),
+                                    middleTextStyle:
+                                        const TextStyle(color: Colors.black),
+                                    textConfirm: 'Confirm'.tr,
+                                    textCancel: 'Cancel'.tr,
+                                    cancelTextColor: Colors.black,
+                                    confirmTextColor: Colors.white,
+                                    buttonColor: Colors.indigo,
+                                    barrierDismissible: false,
+                                    radius: 10,
+                                    onConfirm: () async {
+                                      await orderPlaceController.getPlaceOrder(
+                                          cartController.getCartAddItemModelClass
+                                              .data[0].cartId
+                                              .toString(),
+                                          cartController
+                                              .getCartAddItemModelClass.cartTotal
+                                              .toString());
+                                      firebaseApiCalling1.sendPushNotification(
+                                          "Online Ordering System",
+                                          "${'You added'.tr} ${cartController.getCartAddItemModelClass.data.length} ${'Product and Total Price'.tr} ${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}");
+                                      Future.delayed(const Duration(seconds: 0),
+                                          () {
+                                        cartController.getCartAllDataAPI();
+                                        Get.back();
+
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Lottie.asset(
+                                                    height: 100,
+                                                    width: 100,
+                                                    'assets/Animation/placeholder.json'),
+                                              );
+                                            });
+                                      });
+                                    },
+                                    onCancel: () {
+                                      Get.back();
+                                    })
+                                : Get.defaultDialog(
+                                    title: 'No Items added in cart ....!'.tr,
+                                    middleText: 'Please add item in cart'.tr,
+                                    backgroundColor: Colors.white,
+                                    titleStyle:
+                                        const TextStyle(color: Colors.black),
+                                    middleTextStyle:
+                                        const TextStyle(color: Colors.black),
+                                    textConfirm: 'Okay'.tr,
+                                    cancelTextColor: Colors.black,
+                                    confirmTextColor: Colors.white,
+                                    buttonColor: Colors.indigo,
+                                    barrierDismissible: false,
+                                    radius: 10,
+                                    onConfirm: () {
+                                      Get.back();
+                                    },
+                                  );
+                          },
+                          child: Container(
+                            height: Get.height / 15,
+                            decoration: BoxDecoration(
+                                color: Colors.indigo,
+                                borderRadius: BorderRadius.circular(16)),
+                            child: Center(
+                                child: Text(
+                              'Place Order'.tr,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           });

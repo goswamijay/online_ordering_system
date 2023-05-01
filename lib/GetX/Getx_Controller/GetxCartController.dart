@@ -16,7 +16,7 @@ class GetxCartController extends GetxController {
   RxInt totalPrice1 = 0.obs;
   GetCartAddItemModelClass getCartAddItemModelClass =
       GetCartAddItemModelClass(status: 0, msg: '', cartTotal: 0, data: []);
-    var isLoading = true.obs;
+    var isLoading = false.obs;
     bool isLoadingValue = false;
 
 

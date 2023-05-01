@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Controller/GetxConfirmListController.dart';
 import 'package:online_ordering_system/GetX/Getx_Controller/GetxFavoriteController.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
-
-import '../../../Utils/Drawer.dart';
 import '../../Getx_Controller/GetxCartController.dart';
 import '../../Getx_Utils/GetDrawer.dart';
 
@@ -30,90 +28,96 @@ class _GetOrderPlaceMainScreenState extends State<GetOrderPlaceMainScreen> {
   @override
   Widget build(BuildContext context) {
     final favoriteController = Get.put(GetxFavoriteController());
-    return Scaffold(
-      drawer: const GetDrawerWidget(),
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-          child: InkWell(
-              onTap: () {
-                Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
-              },
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              child: const CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.arrow_back_ios_new_sharp,
-                  color: Colors.black,
-                ),
-              )),
-        ),
-        title: Padding(
-          padding: const EdgeInsets.only(top: 12.0),
-          child: Center(
-              child: Text(
-            "Order Placed Items".tr,
-            style: const TextStyle(color: Colors.black),
-          )),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12.0, top: 12.0),
+    return WillPopScope(
+    onWillPop: () async{
+      Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
+      return false;
+    },
+      child: Scaffold(
+        drawer: const GetDrawerWidget(),
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
             child: InkWell(
-              onTap: () {
-                Get.toNamed(GetxRoutes_Name.GetxFavoriteMainScreen);
-              },
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              child: SizedBox.fromSize(
-                size: const Size.fromRadius(20),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: FittedBox(
-                        child: Icon(
-                          CupertinoIcons.heart_solid,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 0,
-                      child: Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.red[900]),
-                          width: 34 / 2,
-                          height: 34 / 2,
-                          child: Text(
-                            favoriteController
-                                .getFavoriteAddItemModelClass.data.length
-                                .toString(),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.white),
+                onTap: () {
+                  Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
+                },
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                child: const CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.arrow_back_ios_new_sharp,
+                    color: Colors.black,
+                  ),
+                )),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: Center(
+                child: Text(
+              "Order Placed Items".tr,
+              style: const TextStyle(color: Colors.black),
+            )),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 12.0, top: 12.0),
+              child: InkWell(
+                onTap: () {
+                  Get.toNamed(GetxRoutes_Name.GetxFavoriteMainScreen);
+                },
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                child: SizedBox.fromSize(
+                  size: const Size.fromRadius(20),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: FittedBox(
+                          child: Icon(
+                            CupertinoIcons.heart_solid,
+                            color: Colors.black,
                           ),
                         ),
                       ),
-                    )
-                  ],
+                      Positioned(
+                        right: 0,
+                        child: Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.red[900]),
+                            width: 34 / 2,
+                            height: 34 / 2,
+                            child: Text(
+                              favoriteController
+                                  .getFavoriteAddItemModelClass.data.length
+                                  .toString(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: fullList1(context),
+          ],
+        ),
+        backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: fullList1(context),
+        ),
       ),
     );
   }

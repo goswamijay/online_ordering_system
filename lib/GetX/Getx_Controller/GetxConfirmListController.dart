@@ -1,11 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../Models/ConfirmListModelClass.dart';
-import '../Getx_Models/GetxConfirmOrderModel.dart';
 import 'package:http/http.dart' as http;
 
 import '../Getx_Utils/Getx_Routes_Name.dart';
@@ -75,7 +72,7 @@ class GetxConfirmListController extends GetxController {
         update();
       } else if (response.statusCode == 400) {
         final jsonData = json.decode(response.body);
-           isLoading.value = false;
+        isLoading.value = false;
         placeOrderModelClass = PlaceOrderModelClass.fromJson(jsonData);
         update();
       } else if (response.statusCode == 500) {
@@ -87,7 +84,7 @@ class GetxConfirmListController extends GetxController {
       }
     } catch (error) {
       rethrow;
-    }finally {
+    } finally {
       isLoading.value = false;
     }
   }

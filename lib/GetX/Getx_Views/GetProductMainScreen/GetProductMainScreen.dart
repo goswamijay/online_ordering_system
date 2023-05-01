@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Controller/GetxFavoriteController.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Getx_Controller/GetxCartController.dart';
 import '../../Getx_Controller/GetxControllerClass.dart';
 import '../../Getx_Controller/GetxProductController.dart';
@@ -79,199 +81,243 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
     {'name': 'हिंदी', 'locale': const Locale('hi', 'IN')},
   ];
 
+  saveLocale(Locale locale) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String localeString = jsonEncode({
+      'languageCode': locale.languageCode,
+      'countryCode': locale.countryCode,
+    });
+    await prefs.setString('locale', localeString);
+  }
+
+  DateTime? _lastPressedAt;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        drawer: const GetDrawerWidget(),
-        // backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
-        appBar: AppBar(
-            iconTheme: const IconThemeData(color: Colors.black),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0, right: 12.0),
-                child: GetBuilder<GetxProductController>(builder: (controller) {
-                  return InkWell(
-                    onTap: () {
-                      Get.toNamed(GetxRoutes_Name.GetxCartMainScreen);
-                    },
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    child: SizedBox.fromSize(
-                      size: const Size.fromRadius(20),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: <Widget>[
-                          const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: FittedBox(
-                              child: Icon(
-                                CupertinoIcons.cart_fill,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            child: Center(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.red[900]),
-                                width: 34 / 2,
-                                height: 34 / 2,
-                                child: Text(
-                                  productController
-                                      .getProductAllAPI.totalProduct
-                                      .toString(),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(color: Colors.white),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: WillPopScope(
+          onWillPop: () async {
+            final now = DateTime.now();
+            if (_lastPressedAt == null ||
+                now.difference(_lastPressedAt!) > const Duration(seconds: 2)) {
+              _lastPressedAt = now;
+              Get.rawSnackbar(
+                messageText: const Text(
+                  'Press back again to exit',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+                icon: const Icon(CupertinoIcons.back),
+                backgroundColor: Colors.white,
+                //colorText: Colors.black,
+                snackPosition: SnackPosition.BOTTOM,
+              );
+              return false;
+            }
+            return true;
+          },
+          child: Scaffold(
+            key: _scaffoldKey,
+            drawer: const GetDrawerWidget(),
+            // backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
+            appBar: AppBar(
+                iconTheme: const IconThemeData(color: Colors.black),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12.0, right: 12.0),
+                    child: GetBuilder<GetxProductController>(
+                        builder: (controller) {
+                      return InkWell(
+                        onTap: () {
+                          Get.toNamed(GetxRoutes_Name.GetxCartMainScreen);
+                        },
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        child: SizedBox.fromSize(
+                          size: const Size.fromRadius(20),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: <Widget>[
+                              const CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: FittedBox(
+                                  child: Icon(
+                                    CupertinoIcons.cart_fill,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-              )
-            ]),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Column(
-                      children: [
-                        Row(
+                              Positioned(
+                                right: 0,
+                                child: Center(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.red[900]),
+                                    width: 34 / 2,
+                                    height: 34 / 2,
+                                    child: Text(
+                                      productController
+                                          .getProductAllAPI.totalProduct
+                                          .toString(),
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                  )
+                ]),
+            body: SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
                           children: [
-                            Expanded(
-                              child: CupertinoSearchTextField(
-                                backgroundColor: Colors.white,
-                                itemSize: Get.height / 33,
-                                controller: searchController,
-                                onChanged: (value) {
-                                  if (value.isEmpty) {
-                                    buttonController.searchButton.value = false;
-                                    setState(() {});
-                                  } else {
-                                    buttonController.searchButton.value = true;
-                                    onSearchTextChanged(value);
-                                    setState(() {});
-                                  }
-                                },
-                                onSuffixTap: () {
-                                  buttonController.searchButton.value = false;
-                                  searchController.clear();
-                                  setState(() {});
-                                },
-                                onSubmitted: (value) {},
-                                autocorrect: true,
-                              ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CupertinoSearchTextField(
+                                    backgroundColor: Colors.white,
+                                    itemSize: Get.height / 33,
+                                    controller: searchController,
+                                    onChanged: (value) {
+                                      if (value.isEmpty) {
+                                        buttonController.searchButton.value =
+                                            false;
+                                        setState(() {});
+                                      } else {
+                                        buttonController.searchButton.value =
+                                            true;
+                                        onSearchTextChanged(value);
+                                        setState(() {});
+                                      }
+                                    },
+                                    onSuffixTap: () {
+                                      buttonController.searchButton.value =
+                                          false;
+                                      searchController.clear();
+                                      setState(() {});
+                                    },
+                                    onSubmitted: (value) {},
+                                    autocorrect: true,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Get.width / 80,
+                                ),
+                                InkWell(
+                                  onTap: () => {
+                                    buildDialog(context),
+                                  },
+                                  child: Container(
+                                    height: Get.height / 25,
+                                    width: Get.width / 16,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.black),
+                                    child: const Icon(
+                                      Icons.translate_outlined,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                             SizedBox(
-                              width: Get.width / 80,
+                              height: Get.height / 50,
                             ),
-                            InkWell(
-                              onTap: () => {
-                                buildDialog(context),
-                              },
-                              child: Container(
-                                height: Get.height / 25,
-                                width: Get.width / 16,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.black),
-                                child: const Icon(
-                                  CupertinoIcons.line_horizontal_3_decrease,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                            )
+                            GetBuilder<GetControllerClass>(
+                                builder: (buttonController) {
+                              return CarouselSlider(
+                                options: CarouselOptions(
+                                    aspectRatio: 2.0,
+                                    enlargeCenterPage: true,
+                                    scrollDirection: Axis.horizontal,
+                                    autoPlay: true,
+                                    height: 180,
+                                    onPageChanged: (index, reason) {
+                                      buttonController.updateIndex(index);
+                                    }),
+                                items: imgList
+                                    .map((item) => Center(
+                                        child: Image.network(item,
+                                            fit: BoxFit.cover,
+                                            width: Get.width / 1.1)))
+                                    .toList(),
+                              );
+                            }),
+                            GetBuilder<GetControllerClass>(
+                                builder: (buttonController) {
+                              return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: imgList.map((e) {
+                                    int index = imgList.indexOf(e);
+                                    return Container(
+                                      width: 8,
+                                      height: 8,
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 2),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: buttonController.photoIndex1 ==
+                                                index
+                                            ? const Color.fromRGBO(0, 0, 0, 0.9)
+                                            : const Color.fromRGBO(
+                                                0, 0, 0, 0.4),
+                                      ),
+                                    );
+                                  }).toList());
+                            }),
+                            SizedBox(
+                              height: Get.height / 120,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    !buttonController.searchButton.value
+                                        ? 'Best Selling'.tr
+                                        : 'Search Items'.tr,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  )),
+                            ),
+                            SizedBox(
+                              height: Get.height / 80,
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 0.0, right: 0.0),
+                                child: Center(
+                                  child: !buttonController.searchButton.value
+                                      ? fullList1(context)
+                                      : customList(context),
+                                )),
                           ],
                         ),
-                        SizedBox(
-                          height: Get.height / 50,
-                        ),
-                        GetBuilder<GetControllerClass>(
-                            builder: (buttonController) {
-                          return CarouselSlider(
-                            options: CarouselOptions(
-                                aspectRatio: 2.0,
-                                enlargeCenterPage: true,
-                                scrollDirection: Axis.horizontal,
-                                autoPlay: true,
-                                height: 180,
-                                onPageChanged: (index, reason) {
-                                  buttonController.updateIndex(index);
-                                }),
-                            items: imgList
-                                .map((item) => Center(
-                                    child: Image.network(item,
-                                        fit: BoxFit.cover,
-                                        width: Get.width / 1.1)))
-                                .toList(),
-                          );
-                        }),
-                        GetBuilder<GetControllerClass>(
-                            builder: (buttonController) {
-                          return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: imgList.map((e) {
-                                int index = imgList.indexOf(e);
-                                return Container(
-                                  width: 8,
-                                  height: 8,
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 2),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: buttonController.photoIndex1 == index
-                                        ? const Color.fromRGBO(0, 0, 0, 0.9)
-                                        : const Color.fromRGBO(0, 0, 0, 0.4),
-                                  ),
-                                );
-                              }).toList());
-                        }),
-                        SizedBox(
-                          height: Get.height / 120,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
-                          child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                !buttonController.searchButton.value
-                                    ? 'non_search_item_title'.tr
-                                    : 'search_item_title'.tr,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                              )),
-                        ),
-                        SizedBox(
-                          height: Get.height / 80,
-                        ),
-                        Padding(
-                            padding:
-                                const EdgeInsets.only(left: 0.0, right: 0.0),
-                            child: Center(
-                              child: !buttonController.searchButton.value
-                                  ? fullList1(context)
-                                  : customList(context),
-                            )),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -905,6 +951,14 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                                                         InkWell(
                                                                           onTap:
                                                                               () async {
+                                                                            Get.rawSnackbar(
+                                                                              messageText: const Text(
+                                                                                'Item Quantity is Decrease... Please Wait.....!!!!',
+                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                                                              ),
+                                                                              backgroundColor: Colors.indigo,
+                                                                              snackPosition: SnackPosition.BOTTOM,
+                                                                            );
                                                                             await cartController.decreaseProductQuantity(productController.getProductAllAPI.data[index].cartItemId);
 
                                                                             Future.delayed(const Duration(milliseconds: 0),
@@ -939,7 +993,14 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                                                           onTap:
                                                                               () async {
                                                                             await cartController.increaseProductQuantity(productController.getProductAllAPI.data[index].cartItemId);
-
+                                                                            Get.rawSnackbar(
+                                                                              messageText: const Text(
+                                                                                'Item Quantity is Increase... Please Wait.....!!!!',
+                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                                                              ),
+                                                                              backgroundColor: Colors.indigo,
+                                                                              snackPosition: SnackPosition.BOTTOM,
+                                                                            );
                                                                             productController.productAllAPI();
                                                                           },
                                                                           child:
@@ -966,6 +1027,14 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                                                   productController
                                                                           .isLoadingItem =
                                                                       false;
+                                                                  Get.rawSnackbar(
+                                                                    messageText: const Text(
+                                                                      'Item will be Added in Cart... Please Wait.....!!!!',
+                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                                                    ),
+                                                                    backgroundColor: Colors.indigo,
+                                                                    snackPosition: SnackPosition.BOTTOM,
+                                                                  );
                                                                   await cartController.getAddToCart(
                                                                       productController
                                                                           .getProductAllAPI
@@ -1046,6 +1115,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                     return GestureDetector(
                       onTap: () {
                         updateLocale(locale1[index]['locale']);
+                        saveLocale(locale1[index]['locale']);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

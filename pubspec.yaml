@@ -57,6 +57,7 @@ dependencies:
   permission_handler: ^10.2.0
   notification_permissions: ^0.6.1
   easy_localization: ^3.0.1
+  fluttertoast: ^8.2.1
 
 
 
