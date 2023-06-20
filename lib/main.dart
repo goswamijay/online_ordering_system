@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -47,17 +48,24 @@ void main() async {
 
   if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.web) {
   } else {
-   // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
     final fcmToken = await FirebaseMessaging.instance.getToken();
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
     LocalNotificationService.initialize();
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('fcmToken', fcmToken!);
     log(fcmToken!);
-  }
 
- // runApp(const MyApp());
- runApp(const GetApp());
+    String? localeString = prefs.getString('locale');
+    Locale initialLocale = const Locale('en', 'US');
+    if (localeString != null) {
+      Map<String, dynamic> localeMap = jsonDecode(localeString);
+      initialLocale =
+          Locale(localeMap['languageCode'], localeMap['countryCode']);
+    }
+
+    // runApp(const MyApp());
+    runApp(GetApp(initialLocale: initialLocale));
 /*  FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
@@ -66,6 +74,7 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };*/
+  }
 }
 
 class MyApp extends StatefulWidget {

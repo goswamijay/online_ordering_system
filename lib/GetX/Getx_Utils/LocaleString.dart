@@ -134,7 +134,6 @@ class LocaleString extends Translations {
           "RESEND OTP": "RESEND OTP",
           "Search": "Search",
 
-
           ////PASSWORD RESET EMAIL
           "Email ID": "Email ID",
           "Enter Register Email ID": "Enter Register Email ID",
@@ -296,6 +295,149 @@ class LocaleString extends Translations {
           'Please check your internet connection.':
               'कृपया अपने इंटरनेट कनेक्शन की जाँच करें।',
           "YOU ARE OFFLINE": "आप संपर्क में नहीं हैं",
+        },
+        'ar_AA': {
+          'Best Selling': 'أفضل مبيعات',
+          'Search Items': 'عناصر البحث',
+          'Add to Cart': 'أضف إلى السلة',
+          'Added in Cart': 'أضيف في عربة التسوق',
+          'Search Item is not available ....!': 'عنصر البحث غير متوفر ....!',
+
+          ////CART LIST DATA
+          'Total Item': 'إجمالي البند',
+          'Total Price': 'السعر الكلي',
+          'My Cart': 'عربة التسوق الخاصة بي',
+          'Place Order': 'مكان الامر',
+          'No Items added in cart ....!':
+              'لا توجد عناصر مضافة في سلة التسوق ....!',
+          'Please add item in cart': 'الرجاء إضافة عنصر في عربة التسوق',
+          'Okay': 'تمام',
+          'Cancel': 'يلغي',
+          'Confirm': 'يتأكد',
+          'Confirm to Place Order': 'تأكيد لتقديم الطلب',
+          'You added': 'أضفت',
+          'Product and Total Price': 'المنتج والسعر الإجمالي',
+          'Product Remove From Favorite!': 'إزالة المنتج من المفضلة!',
+          'Product Added To Favorite!': 'تمت إضافة المنتج إلى المفضلة!',
+
+          ////FAVORITE LIST DATA
+          'Favorite Items': 'العناصر المفضلة',
+          'Not any items added in Favorite ....!':
+              'لم تتم إضافة أي عناصر في المفضلة ....!',
+
+          ////ACCOUNT DETAILS
+          'Account Details': 'تفاصيل الحساب',
+          'User Name of user': 'اسم المستخدم الخاص بالمستخدم',
+          'Email Address of user': 'عنوان البريد الإلكتروني للمستخدم',
+          'Mobile No of user': 'رقم الجوال للمستخدم',
+          'Address of user': 'Address of user',
+          "Address of user can't empty": "عنوان المستخدم لا يمكن أن يفرغ",
+          'Address of user is not valid': 'عنوان المستخدم غير صالح',
+          'Account Details is update': 'يتم تحديث تفاصيل الحساب',
+          'Save The Data': 'احفظ البيانات',
+          'Reset Password': 'إعادة تعيين كلمة المرور',
+
+          ////RESET PASSWORD
+          'Your password has been changed successfully,Please login again!':
+              'تم تغيير كلمة المرور الخاصة بك بنجاح ، يرجى تسجيل الدخول مرة أخرى!',
+          'Verification Code is Not Correct': 'رمز التحقق غير صحيح',
+          "Enter Password": "أدخل كلمة المرور",
+          "New Password": "كلمة المرور الجديدة",
+          "Password can't empty": "لا يمكن إفراغ كلمة المرور",
+          "Password is less than 6 letter": "كلمة المرور أقل من 6 أحرف",
+          "Confirm Password": "تأكيد كلمة المرور",
+          " Password can't empty": "كلمة المرور لا يمكن أن تفرغ",
+          "Password not matched": "كلمة المرور غير متطابقة",
+
+          ////PLACE ORDER ITEMS
+          'Order Placed Items': 'طلب العناصر الموضوعة',
+          'No any items purchase....!': 'لا شراء أي سلع ....!',
+          'Order Place Date': 'تاريخ مكان الطلب',
+          'Total Items added': 'إجمالي العناصر المضافة',
+
+          ////DRAWER ITEMS
+          'Product Screen': 'شاشة المنتج',
+          'Cart Screen': 'شاشة عربة التسوق',
+          'Wishlist Screen': 'شاشة قائمة الرغبات',
+          'Account Screen': 'شاشة الحساب',
+          'Order List Screen': 'شاشة قائمة الطلبات',
+          'Send feedback': 'ارسل رأيك',
+          'Tips': 'نصائح',
+          'Setting': 'جلسة',
+          'About': 'عن',
+          'Log Out': 'تسجيل خروج',
+          'Version: 1.0': 'الإصدار: 1.0.1',
+          'Developed By-Jay Goswami': 'تم تطويره بواسطة جاي جوسوامي',
+          "Search": "يبحث",
+
+          ////ONBOARDING SCREEN
+          'Choose Product': 'اختر المنتج',
+          'You Can Easily Find \n The Product You Want From Our Various Products!':
+              'يمكنك بسهولة العثور على \ n المنتج الذي تريده من منتجاتنا المختلفة!',
+          'Add item in cart': 'إضافة عنصر في عربة التسوق',
+          'You can easy to add item in \n cart and wishlist and purchase product!':
+              'يمكنك بسهولة إضافة عنصر في \ n سلة التسوق وقائمة الرغبات وشراء المنتج!',
+          'Get Your Order': 'احصل على طلبك',
+          'Open The Doors, Your Order is Now Ready For You!':
+              'افتح الأبواب ، طلبك جاهز الآن لك!',
+          'Continue': 'يكمل',
+
+          ////LOGIN
+
+          "Login Successfully": "تم تسجيل الدخول بنجاح",
+          "Please Register in App": "الرجاء التسجيل في التطبيق",
+          'Your email id is not verified kindly register again with same details and verify your account to use app!':
+              'لم يتم التحقق من معرف البريد الإلكتروني الخاص بك ، يرجى التسجيل مرة أخرى بنفس التفاصيل والتحقق من حسابك لاستخدام التطبيق!',
+          "Welcome Back": "مرحبًا بعودتك",
+          "User Name": "اسم المستخدم",
+          "Username": "اسم المستخدم",
+          "Username can't empty": "اسم المستخدم لا يمكن أن يفرغ",
+          "Please Enter Valid Email": "الرجاء إدخال بريد إلكتروني صحيح",
+          "Password": "كلمة المرور",
+          "Login": "تسجيل الدخول",
+          "Don't have an account? ": "ليس لديك حساب؟ ",
+          "SignUp": "اشتراك",
+
+          ////SIGNUP
+          "Your account is Register": "حسابك هو تسجيل",
+          "You will Received OTP in your": " سوف تتلقى OTP في ملف",
+          "Your account is already Register": "حسابك مسجل بالفعل",
+          'Please login this account': 'الرجاء تسجيل الدخول هذا الحساب',
+          'Email Id': 'عنوان الايميل',
+          "Email Id can't empty": "لا يمكن إفراغ معرّف البريد الإلكتروني",
+          'Welcome': 'مرحباً',
+          "Mobile Number": "رقم الهاتف المحمول",
+          "Mobile Number can't empty": "رقم الجوال لا يمكن أن يفرغ",
+          "Mobile number is not valid": "رقم الجوال غير صحيح",
+          "You have an account? ": "لديك حساب؟ ",
+          "We will send you an ": "سوف نرسل لك ",
+          "One Time Password ": "كلمة السر لمرة واحدة",
+          "On this Email Id.": "في معرف البريد الإلكتروني هذا. ",
+
+          ////OTP VERIFICATION
+          "Verification Code is Verified Successfully":
+              "تم التحقق من رمز التحقق بنجاح",
+          "Verification Code is Not Current": "رمز التحقق ليس ساريًا",
+          "OTP Verification": "التحقق من OTP",
+          "Enter the OTP sent to:-": "أدخل OTP المرسل إلى: -",
+          "Didn't Receive the OTP? ": "لم تستلم كلمة المرور لمرة واحدة؟ ",
+          "Otp sent successfully! ": "تم إرسال OTP بنجاح! ",
+          "RESEND OTP": "إعادة إرسال OTP",
+
+          ////PASSWORD RESET EMAIL
+          "Email ID": "عنوان الايميل",
+          "Enter Register Email ID": "أدخل تسجيل معرف البريد الإلكتروني",
+          "Verification Code is send Successfully": "تم إرسال رمز التحقق بنجاح",
+          "This Email Id is not Registered With us kindly register first!":
+              "معرف البريد الإلكتروني هذا غير مسجل معنا ، يرجى التسجيل أولاً!",
+
+          "Verification Code is Verified Successfully & New Password will send into your":
+              " تم التحقق من رمز التحقق بنجاح وسيتم إرسال كلمة المرور الجديدة إلى",
+
+          'No Internet Connection': 'لا يوجد اتصال بالإنترنت',
+          'Please check your internet connection.':
+              'الرجاء التحقق من اتصال الانترنت الخاص بك.',
+          "YOU ARE OFFLINE": "انت غير متصل",
         }
       };
 }

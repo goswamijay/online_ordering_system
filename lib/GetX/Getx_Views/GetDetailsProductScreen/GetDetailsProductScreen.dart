@@ -27,7 +27,7 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
 
     return GetBuilder<GetxFavoriteController>(builder: (controller) {
       return GetBuilder<GetxCartController>(builder: (controller) {
-        return GetBuilder<GetxProductController>(builder: (controller){
+        return GetBuilder<GetxProductController>(builder: (controller) {
           return SafeArea(
             child: Scaffold(
               backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
@@ -35,8 +35,8 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
                 child: Column(
                   children: [
                     Padding(
-                      padding:
-                      const EdgeInsets.only(left: 12.0, top: 12.0, right: 12.0),
+                      padding: const EdgeInsets.only(
+                          left: 12.0, top: 12.0, right: 12.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -57,7 +57,6 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
                           InkWell(
                             onTap: () {
                               Get.toNamed(GetxRoutes_Name.GetxCartMainScreen);
-
                             },
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
@@ -86,10 +85,12 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
                                         width: 34 / 2,
                                         height: 34 / 2,
                                         child: Text(
-                                          productController.getProductAllAPI.totalProduct.toString(),
+                                          productController
+                                              .getProductAllAPI.totalProduct
+                                              .toString(),
                                           textAlign: TextAlign.center,
-                                          style:
-                                          const TextStyle(color: Colors.white),
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         ),
                                       ),
                                     ),
@@ -123,66 +124,71 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
                             child: Align(
                               alignment: Alignment.topRight,
                               child: productController
-                                  .getProductAllAPI
-                                  .data[argument!['Index']]
-                                  .watchListItemId !=
-                                  ''
+                                          .getProductAllAPI
+                                          .data[argument!['Index']]
+                                          .watchListItemId !=
+                                      ''
                                   ? InkWell(
-                                onTap: () async{
-                                await  favoriteController
-                                      .getRemoveFavorite(
-                                      productController
-                                          .getProductAllAPI
-                                          .data[argument!['Index']]
-                                          .watchListItemId);
-                                await productController.productAllAPI();
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                     SnackBar(
-                                      content: Text(
-                                        "Product Remove From Favorite!".tr,
-                                        style:const TextStyle(fontSize: 16),
+                                      onTap: () async {
+                                        await favoriteController
+                                            .getRemoveFavorite(productController
+                                                .getProductAllAPI
+                                                .data[argument!['Index']]
+                                                .watchListItemId);
+                                        await productController.productAllAPI();
+                                        ScaffoldMessenger.of(context)
+                                            .hideCurrentSnackBar();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              "Product Remove From Favorite!"
+                                                  .tr,
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                            ),
+                                            backgroundColor: Colors.indigo,
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          ),
+                                        );
+                                      },
+                                      child: const Icon(
+                                        CupertinoIcons.heart_solid,
+                                        color: Colors.red,
+                                        size: 20,
                                       ),
-                                      backgroundColor: Colors.indigo,
-                                      duration:const Duration(seconds: 1),
-                                    ),
-                                  );
-                                },
-                                child: const Icon(
-                                  CupertinoIcons.heart_solid,
-                                  color: Colors.red,
-                                  size: 20,
-                                ),
-                              )
+                                    )
                                   : InkWell(
-                                onTap: () async {
-                                  await favoriteController
-                                      .getAddInFavorite(
-                                      productController
-                                          .getProductAllAPI
-                                          .data[argument!['Index']]
-                                          .id);
-                                  await productController.productAllAPI();
+                                      onTap: () async {
+                                        await favoriteController
+                                            .getAddInFavorite(productController
+                                                .getProductAllAPI
+                                                .data[argument!['Index']]
+                                                .id);
+                                        await productController.productAllAPI();
 
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                     SnackBar(
-                                      content: Text(
-                                        "Product Added To Favorite!".tr,
-                                        style:const TextStyle(fontSize: 16),
+                                        ScaffoldMessenger.of(context)
+                                            .hideCurrentSnackBar();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              "Product Added To Favorite!".tr,
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                            ),
+                                            backgroundColor: Colors.indigo,
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          ),
+                                        );
+                                      },
+                                      child: const Icon(
+                                        CupertinoIcons.heart,
+                                        size: 20,
                                       ),
-                                      backgroundColor: Colors.indigo,
-                                      duration: const Duration(seconds: 1),
                                     ),
-                                  );
-                                },
-                                child: const Icon(
-                                  CupertinoIcons.heart,
-                                  size: 20,
-                                ),
-                              ),
                             ),
                           ),
                         ],
@@ -255,56 +261,50 @@ class _GetDetailsProductScreenState extends State<GetDetailsProductScreen> {
                     const SizedBox(width: 20),
                     Expanded(
                       flex: 2,
-                      child: productController
-                          .getProductAllAPI
-                          .data[argument!['Index']]
-                          .quantity !=
-                          0
+                      child: productController.getProductAllAPI
+                                  .data[argument!['Index']].quantity !=
+                              0
                           ? InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: Get.width,
-                          height: Get.height / 15,
-                          decoration: BoxDecoration(
-                              color: Colors.pink,
-                              borderRadius: BorderRadius.circular(5.0)),
-                          child:  Center(
-                              child: Text(
-                                "Added in Cart".tr,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              )),
-                        ),
-                      )
+                              onTap: () {},
+                              child: Container(
+                                width: Get.width,
+                                height: Get.height / 15,
+                                decoration: BoxDecoration(
+                                    color: Colors.pink,
+                                    borderRadius: BorderRadius.circular(5.0)),
+                                child: Center(
+                                    child: Text(
+                                  "Added in Cart".tr,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                              ),
+                            )
                           : InkWell(
-                        onTap: () async{
-                          await cartController
-                              .getAddToCart(
-                              productController
-                                  .getProductAllAPI
-                                  .data[
-                              argument!['Index']]
-                                  .id);
-                          await productController.productAllAPI();
-                        },
-                        onDoubleTap: () {},
-                        onLongPress: () {},
-                        child: Container(
-                          width: Get.width,
-                          height: Get.height / 15,
-                          decoration: BoxDecoration(
-                              color: Colors.indigo,
-                              borderRadius: BorderRadius.circular(5.0)),
-                          child:  Center(
-                              child: Text(
-                                "Add to Cart".tr,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              )),
-                        ),
-                      ),
+                              onTap: () async {
+                                await cartController.getAddToCart(
+                                    productController.getProductAllAPI
+                                        .data[argument!['Index']].id);
+                                await productController.productAllAPI();
+                              },
+                              onDoubleTap: () {},
+                              onLongPress: () {},
+                              child: Container(
+                                width: Get.width,
+                                height: Get.height / 15,
+                                decoration: BoxDecoration(
+                                    color: Colors.indigo,
+                                    borderRadius: BorderRadius.circular(5.0)),
+                                child: Center(
+                                    child: Text(
+                                  "Add to Cart".tr,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                              ),
+                            ),
                     )
                   ],
                 ),

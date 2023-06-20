@@ -19,7 +19,8 @@ class GetProductMainScreen extends StatefulWidget {
   State<GetProductMainScreen> createState() => _GetProductMainScreenState();
 }
 
-class _GetProductMainScreenState extends State<GetProductMainScreen> {
+class _GetProductMainScreenState extends State<GetProductMainScreen>
+    with TickerProviderStateMixin {
   final productController = Get.put(GetxProductController());
   final cartController = Get.put(GetxCartController());
   GetControllerClass buttonController = Get.put(GetControllerClass());
@@ -30,12 +31,16 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
   TextEditingController searchController = TextEditingController();
 
   List<dynamic> searchItems = [];
+  int currentIndex = 0;
+  TabController? _tabController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     searchItemChange();
+    _tabController = TabController(vsync: this, length: 3);
     productController.productAllAPI();
   }
 
@@ -47,6 +52,28 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
 
   searchItemChange() {
     searchItems = productController.getProductAllAPI.data;
+  }
+
+  void appleListData(String text) {
+    text = 'apple';
+    List<dynamic> result = [];
+    if (text.isEmpty) {
+      result = productController.getProductAllAPI.data;
+    } else {
+      result = productController.getProductAllAPI.data
+          .where((element) => element.title
+              .toString()
+              .toLowerCase()
+              .contains(text.toLowerCase()))
+          .toList();
+    }
+
+    if (result.isEmpty) {
+      buttonController.listIsEmpty.value = true;
+    } else {
+      buttonController.listIsEmpty.value = false;
+    }
+    searchItems = result;
   }
 
   void onSearchTextChanged(String text) {
@@ -79,10 +106,13 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
   final List locale1 = [
     {'name': 'ENGLISH', 'locale': const Locale('en', 'US')},
     {'name': 'हिंदी', 'locale': const Locale('hi', 'IN')},
+    {'name': 'عربي', 'locale': const Locale('ar', 'AA')},
+
+
   ];
 
   saveLocale(Locale locale) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     String localeString = jsonEncode({
       'languageCode': locale.languageCode,
       'countryCode': locale.countryCode,
@@ -288,6 +318,43 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                             SizedBox(
                               height: Get.height / 120,
                             ),
+                           /* const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Categories",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  )),
+                            ),
+                            SizedBox(
+                              height: Get.height / 60,
+                            ),
+                            TabBar(
+                              controller: _tabController,
+                              tabs: [
+                                tabItemWidget1('assets/apple.png', "Apple"),
+                                tabItemWidget1(
+                                    'assets/samsung.png', "Samsung"),
+                                tabItemWidget1('assets/realme.png', "Realme"),
+                                *//*  tabItemWidget1(
+                                    'assets/one_plus.png', "One Plus"),
+                                tabItemWidget1('assets/mi.png', "Mi"),
+                                tabItemWidget1('assets/apple.png', "Apple"),
+                                tabItemWidget1('assets/apple.png', "Apple"),*//*
+                              ],
+                              indicatorColor: Colors.blue,
+                              indicatorSize: TabBarIndicatorSize.label,
+                              labelColor: Colors.black,
+                              unselectedLabelColor: Colors.black87,
+                              isScrollable: true,
+                            ),
+
+                            SizedBox(
+                              height: Get.height / 120,
+                            ),*/
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
                               child: Align(
@@ -302,7 +369,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                   )),
                             ),
                             SizedBox(
-                              height: Get.height / 80,
+                              height: Get.height / 120,
                             ),
                             Padding(
                                 padding: const EdgeInsets.only(
@@ -953,7 +1020,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                                                               () async {
                                                                             Get.rawSnackbar(
                                                                               messageText: const Text(
-                                                                                'Item Quantity is Decrease... Please Wait.....!!!!',
+                                                                                'Item Quantity will be Decrease... Please Wait.....!!!!',
                                                                                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                                                               ),
                                                                               backgroundColor: Colors.indigo,
@@ -995,7 +1062,7 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                                                             await cartController.increaseProductQuantity(productController.getProductAllAPI.data[index].cartItemId);
                                                                             Get.rawSnackbar(
                                                                               messageText: const Text(
-                                                                                'Item Quantity is Increase... Please Wait.....!!!!',
+                                                                                'Item Quantity will be Increase... Please Wait.....!!!!',
                                                                                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                                                               ),
                                                                               backgroundColor: Colors.indigo,
@@ -1028,12 +1095,21 @@ class _GetProductMainScreenState extends State<GetProductMainScreen> {
                                                                           .isLoadingItem =
                                                                       false;
                                                                   Get.rawSnackbar(
-                                                                    messageText: const Text(
+                                                                    messageText:
+                                                                        const Text(
                                                                       'Item will be Added in Cart... Please Wait.....!!!!',
-                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
                                                                     ),
-                                                                    backgroundColor: Colors.indigo,
-                                                                    snackPosition: SnackPosition.BOTTOM,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .indigo,
+                                                                    snackPosition:
+                                                                        SnackPosition
+                                                                            .BOTTOM,
                                                                   );
                                                                   await cartController.getAddToCart(
                                                                       productController

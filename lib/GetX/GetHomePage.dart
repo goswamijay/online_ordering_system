@@ -22,7 +22,6 @@ class GetHomePage extends StatefulWidget {
 class _GetHomePageState extends State<GetHomePage> {
   int selectedIndex = 0;
   PageController controller = PageController();
-  int _curr = 0;
 
   @override
   void initState() {
@@ -123,18 +122,18 @@ class _GetHomePageState extends State<GetHomePage> {
                       duration: const Duration(milliseconds: 300),
                       color: connected ? Colors.green : Colors.indigo,
                       child: connected
-                          ? Row(
+                          ? const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const <Widget>[
+                              children: <Widget>[
                                 Text(
                                   "YOU ARE OFFLINE",
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ],
                             )
-                          : Row(
+                          : const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const <Widget>[
+                              children: <Widget>[
                                 Text(
                                   "YOU ARE OFFLINE",
                                   style: TextStyle(color: Colors.white),

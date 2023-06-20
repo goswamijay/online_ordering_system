@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
@@ -9,7 +8,6 @@ import 'package:online_ordering_system/GetX/Getx_Views/Authentication/GetSignUp.
 import 'package:online_ordering_system/GetX/Getx_Views/Authentication/ResetPassword/GetResetPasswordOTP.dart';
 import 'package:online_ordering_system/GetX/Getx_Views/GetAccountMainScreen/GetAccountResetPassword.dart';
 import 'package:online_ordering_system/GetX/Getx_Views/GetCartMainScreen/GetCartMainScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Getx_Controller/getAllControllerBinding.dart';
 import 'Getx_Sparce_Screen.dart';
@@ -21,33 +19,9 @@ import 'Getx_Views/GetFavoriteMainScreen/GetFavoriteMainScreen.dart';
 import 'Getx_Views/GetOnboardingScreen/OnboardingScreen.dart';
 import 'Getx_Views/GetOrderPlaceMainScreen/GetOrderPlaceMainScreen.dart';
 
-class GetApp extends StatefulWidget {
-  const GetApp({Key? key}) : super(key: key);
-
-  @override
-  State<GetApp> createState() => _GetAppState();
-}
-
-class _GetAppState extends State<GetApp> {
-  late Locale _locale;
-
-  @override
-  void initState() {
-    super.initState();
-    getLocale();
-  }
-
-  getLocale() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? localeString = prefs.getString('locale');
-    if (localeString != null) {
-      Map<String, dynamic> localeMap = jsonDecode(localeString);
-      setState(() {
-        _locale = Locale(localeMap['languageCode'], localeMap['countryCode']);
-      });
-    }
-  }
-
+class GetApp extends StatelessWidget {
+  const GetApp({Key? key,required this.initialLocale}) : super(key: key);
+  final Locale initialLocale;
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -61,14 +35,12 @@ class _GetAppState extends State<GetApp> {
 
       //Translation ENG AND HINDI
       translations: LocaleString(),
-      locale: _locale,
+      locale: initialLocale,
       debugShowCheckedModeBanner: false,
       initialRoute: GetxRoutes_Name.GetxSparceScreen1,
       theme: ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.indigo,
-        backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        visualDensity: VisualDensity.adaptivePlatformDensity, colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.indigo).copyWith(background: const Color.fromRGBO(246, 244, 244, 1)),
         // brightness: themeController.isDarkMode.value ? Brightness.dark : Brightness.light,
       ),
       routes: {
