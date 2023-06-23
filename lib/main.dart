@@ -17,6 +17,7 @@ import 'package:online_ordering_system/Views/Authentication/ResetPassword/ResetP
 import 'package:online_ordering_system/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Bloc/BlocMainScreen.dart';
 import 'Controller/ApiConnection/firebase_api_calling.dart';
 import 'Controller/ApiConnection/mainDataProvider.dart';
 import 'Controller/Cart_items_provider.dart';
@@ -65,7 +66,8 @@ void main() async {
     }
 
     // runApp(const MyApp());
-    runApp(GetApp(initialLocale: initialLocale));
+  //  runApp(GetApp(initialLocale: initialLocale));
+    runApp(const BlocMainScreen());
 /*  FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
