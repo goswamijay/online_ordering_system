@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_ordering_system/Bloc/BlocOTPScreen/BlocOTPScreen.dart';
+import 'package:online_ordering_system/Bloc/BlocProductMainScreen/BlocProductMainScreen.dart';
 import 'package:online_ordering_system/Bloc/BlocSignupScreen/BlocSignupScreen.dart';
 
 import '../BlocSparceScreen/Bloc_Splash_Screen.dart';
@@ -141,11 +142,7 @@ class _BlocLoginScreenState extends State<BlocLoginScreen> {
                               SnackBar(content: Text(state.loginStateMessage)));
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (_) {
-                            return const BlocOTPScreen(
-                              signUpId: '',
-                              signUpEmail: '',
-                              signUpPassword: '',
-                            );
+                            return const BlocProductMainScreen();
                           }));
                         } else if (state is LoginUserFailState) {
                           ScaffoldMessenger.of(context).hideCurrentSnackBar();
