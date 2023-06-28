@@ -44,6 +44,8 @@ class OtpScreenCubit extends Cubit<OtpScreenState> {
         final jsonData = json.decode(response.body);
         blocSignupModelClass = BlocSignupModelClass.fromJson(jsonData);
         emit(OtpVerifiedSuccessfullyState());
+        emit(OtpVerifiedLoadingState());
+
       } else {
         final jsonData = json.decode(response.body);
         blocSignupModelClass = BlocSignupModelClass.fromJson(jsonData);

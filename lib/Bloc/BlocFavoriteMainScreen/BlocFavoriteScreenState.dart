@@ -2,6 +2,9 @@ abstract class BlocFavoriteScreenState{}
 
 class BlocFavoriteInitialState extends BlocFavoriteScreenState {}
 
+class BlocFavoriteInitial1State extends BlocFavoriteScreenState {}
+
+
 class BlocFavoriteLoadingState extends BlocFavoriteScreenState {}
 
 class BlocFavoriteAllItemGetState extends BlocFavoriteScreenState {}

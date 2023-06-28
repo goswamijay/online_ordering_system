@@ -60,7 +60,7 @@ class BlocCartScreenCubit extends Cubit<BlocCartScreenState> {
 
   Future<void> addToCart(String productId) async {
     try {
-      emit(BlocCartLoadingState());
+      emit(BlocCartItemLoadingState());
       final prefs = await SharedPreferences.getInstance();
 
       final jwtToken1 = prefs.getString('jwtToken'.toString()) ?? '';
@@ -82,10 +82,9 @@ class BlocCartScreenCubit extends Cubit<BlocCartScreenState> {
         log(jsonData.toString());
         emit(BlocCartAddToCartFailState());
       }
+      emit(BlocCartInitial1State());
     } catch (error) {
       rethrow;
-    } finally {
-      emit(BlocCartInitial1State());
     }
   }
 
@@ -114,10 +113,9 @@ class BlocCartScreenCubit extends Cubit<BlocCartScreenState> {
         log(jsonData.toString());
         emit(BlocCartDecreaseFailState());
       }
+      emit(BlocCartInitial1State());
     } catch (error) {
       rethrow;
-    } finally {
-      emit(BlocCartInitial1State());
     }
   }
 
@@ -148,10 +146,9 @@ class BlocCartScreenCubit extends Cubit<BlocCartScreenState> {
         log(jsonData.toString());
         emit(BlocCartIncreaseFailState());
       }
+      emit(BlocCartInitial1State());
     } catch (error) {
       rethrow;
-    } finally {
-      emit(BlocCartInitial1State());
     }
   }
 
@@ -180,6 +177,7 @@ class BlocCartScreenCubit extends Cubit<BlocCartScreenState> {
         log(jsonData.toString());
         emit(BlocCartRemoveToCartFailState());
       }
+      emit(BlocCartInitial1State());
     } catch (error) {
       rethrow;
     }

@@ -1,18 +1,3 @@
-class BlocProduct {
-  int price;
-  String name;
-  String shortDescription;
-  String imageURL;
-  int count;
-
-  BlocProduct(
-      {required this.price,
-      required this.name,
-      required this.shortDescription,
-      required this.imageURL,
-      this.count = 1});
-}
-
 class BlocProductAllAPI {
   int status;
   String msg;
@@ -34,7 +19,7 @@ class BlocProductAllAPI {
       status: json['staus'] ?? 0,
       msg: json['msg'] ?? '',
       totalProduct: json['totalProduct'] ?? 0,
-      data: dataList,
+      data: dataList ?? [],
     );
   }
 }

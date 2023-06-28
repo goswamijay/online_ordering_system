@@ -1,35 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:online_ordering_system/Bloc/BlocLoginScreen/LoginPageState.dart';
-import 'package:online_ordering_system/Bloc/BlocOTPScreen/OtpScreenCubit.dart';
-import 'package:online_ordering_system/Bloc/BlocOTPScreen/OtpScreenState.dart';
+import 'package:online_ordering_system/Bloc/BlocLoginScreen/BlocLoginScreen.dart';
+import 'package:online_ordering_system/Bloc/BlocResetPasswordScreen/BlocResetPasswordCubit.dart';
+import 'package:online_ordering_system/Bloc/BlocResetPasswordScreen/BlocResetPasswordState.dart';
 
-import '../BlocLoginScreen/LoginPageCubit.dart';
-import '../BlocResetPasswordScreen/BlocResetPasswordCubit.dart';
-import '../BlocResetPasswordScreen/BlocResetPasswordState.dart';
-
-class BlocOTPScreen extends StatefulWidget {
-  final String signUpId;
-  final String signUpEmail;
-  final String signUpPassword;
-  const BlocOTPScreen(
-      {super.key,
-      required this.signUpId,
-      required this.signUpEmail,
-      required this.signUpPassword});
-
-  @override
-  State<BlocOTPScreen> createState() => _BlocOTPScreenState();
-}
-
-class _BlocOTPScreenState extends State<BlocOTPScreen> {
-  String verificationCode = '';
-  TextEditingController otp = TextEditingController();
+class BlocResetPasswordOTPScreen extends StatelessWidget {
+  const BlocResetPasswordOTPScreen({
+    super.key,
+    required this.email,
+    required this.id,
+  });
+  final String email;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController otp = TextEditingController();
+    String verificationCode = '';
+    int status = 0;
     Size size = MediaQuery.of(context).size;
+    BlocResetPasswordCubit blocResetPasswordCubit =
+        BlocProvider.of<BlocResetPasswordCubit>(context);
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -57,9 +50,10 @@ class _BlocOTPScreenState extends State<BlocOTPScreen> {
                   const Text("Enter the OTP sent to:-"),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    //crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        widget.signUpEmail.toString(),
+                        email.toString(),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       IconButton(
@@ -73,22 +67,53 @@ class _BlocOTPScreenState extends State<BlocOTPScreen> {
                 SizedBox(
                   height: size.height / 30,
                 ),
-                BlocConsumer<LoginCubit, LoginState>(
-                    builder: (builder, state) {
-                      return BlocConsumer<OtpScreenCubit, OtpScreenState>(
-                          listener: (BuildContext context, state) {
-                        if (state is OtpVerifiedSuccessfullyState) {
-                          AlertDialog(
-                            title: const Text(
-                                "Verification Code is Verified Successfully"),
+                BlocConsumer<BlocResetPasswordCubit,
+                    BlocResetPasswordScreenState>(builder: (builder, state) {
+                  BlocResetPasswordCubit controller =
+                      BlocProvider.of<BlocResetPasswordCubit>(context);
+                  if (state is BlocResetPasswordLoadingState) {
+                    return const CircularProgressIndicator();
+                  }
+                  return OtpTextField(
+                    numberOfFields: 4,
+                    borderColor: const Color(0xFF512DA8),
+                    showFieldAsBox: true,
+                    onCodeChanged: (String code) {},
+
+                    onSubmit: (String code) {
+                      verificationCode = code;
+                      controller.forgetPasswordOTP(id, verificationCode);
+                    }, // end onSubmit
+                  );
+                }, listener: (listener, state) {
+                  if (state is BlocResetPasswordVerifiedSuccessfullyState) {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(
+                                "${'Verification Code is Verified Successfully & New Password will send into your'} ${email.toString()} id."),
                             actions: [
                               TextButton(
                                   child: const Text('Okay'),
-                                  onPressed: () async {}),
+                                  onPressed: () {
+                                    //Navigator.pushNamed(context, Routes_Name.ResetPasswordValue, arguments: {'id': list1[0].data.jwtToken});
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const BlocLoginScreen()),
+                                      (route) => false,
+                                    );
+                                  }),
                             ],
                           );
-                        } else if (state is OtpVerifiedFailedState) {
-                          AlertDialog(
+                        });
+                  } else if (state is BlocResetPasswordVerifiedFailState) {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
                             title:
                                 const Text("Verification Code is Not Current"),
                             actions: [
@@ -99,34 +124,9 @@ class _BlocOTPScreenState extends State<BlocOTPScreen> {
                                   }),
                             ],
                           );
-                        } else if (state is OtpVerifiedLoadingState) {
-                          BlocProvider.of<LoginCubit>(context).getLoginUser(
-                              widget.signUpEmail, widget.signUpPassword);
-                        }
-                      }, builder: (BuildContext context, state) {
-                        if (state is OtpLoadingState) {
-                          return const CircularProgressIndicator();
-                        }
-
-                        return OtpTextField(
-                          numberOfFields: 4,
-                          borderColor: const Color(0xFF512DA8),
-                          showFieldAsBox: true,
-                          onCodeChanged: (String code) {
-                            verificationCode = code;
-                          },
-                          onSubmit: (String code) {
-                            verificationCode = code;
-                            print(verificationCode);
-                            BlocProvider.of<OtpScreenCubit>(context)
-                                .getSignUpOtpVerification(
-                                    widget.signUpId, verificationCode);
-                            // moveToHome(context);
-                          }, // end onSubmit
-                        );
-                      });
-                    },
-                    listener: (listener, state) {}),
+                        });
+                  }
+                }),
                 SizedBox(
                   height: size.height / 20,
                 ),
@@ -137,14 +137,12 @@ class _BlocOTPScreenState extends State<BlocOTPScreen> {
                     BlocConsumer<BlocResetPasswordCubit,
                         BlocResetPasswordScreenState>(
                       builder: (builder, state) {
-                        BlocResetPasswordCubit blocResetPasswordCubit =
-                        BlocProvider.of<BlocResetPasswordCubit>(context);
                         if(state is BlocResetPasswordResendOTPLoadingState){
                           return const CircularProgressIndicator();
                         }
                         return InkWell(
                           onTap: () {
-                            blocResetPasswordCubit.resentOTP(widget.signUpId);
+                            blocResetPasswordCubit.resentOTP(id);
 
                           },
                           child: const Text(

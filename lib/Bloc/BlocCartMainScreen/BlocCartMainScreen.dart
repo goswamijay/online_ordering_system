@@ -10,20 +10,37 @@ import 'package:online_ordering_system/Bloc/BlocFavoriteMainScreen/BlocFavoriteM
 import 'package:online_ordering_system/Bloc/BlocFavoriteMainScreen/BlocFavoriteScreenCubit.dart';
 import 'package:online_ordering_system/Bloc/BlocFavoriteMainScreen/BlocFavoriteScreenState.dart';
 import 'package:online_ordering_system/Bloc/BlocHomePage.dart';
+import 'package:online_ordering_system/Bloc/BlocOrderPlaceMainScreen/BlocOrderPlaceScreenState.dart';
 import 'package:online_ordering_system/Bloc/BlocProductMainScreen/BlocProductMainScreenCubit.dart';
 import 'package:online_ordering_system/Bloc/BlocProductMainScreen/BlocProductMainScreenState.dart';
 
-class BlocCartMainScreen extends StatelessWidget {
+import '../BlocFirebase/BlocFirebaseApiCalling.dart';
+import '../BlocLoginScreen/BlocLoginScreen.dart';
+import '../BlocOrderPlaceMainScreen/BlocOrderPlaceScreenCubit.dart';
+import '../Utils/BlocDrawer.dart';
+
+class BlocCartMainScreen extends StatefulWidget {
   const BlocCartMainScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<BlocCartMainScreen> createState() => _BlocCartMainScreenState();
+}
+
+class _BlocCartMainScreenState extends State<BlocCartMainScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     BlocCartScreenCubit cartController =
         BlocProvider.of<BlocCartScreenCubit>(context);
     cartController.getCartAllDataAPI();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    //final orderPlaceController = Get.put(GetxConfirmListController());
+    BlocOrderPlaceScreenCubit orderPlaceController =
+        BlocProvider.of<BlocOrderPlaceScreenCubit>(context);
 
     return BlocConsumer<BlocCartScreenCubit, BlocCartScreenState>(
       builder: (builder, state) {
@@ -37,20 +54,26 @@ class BlocCartMainScreen extends StatelessWidget {
 
             return WillPopScope(
                 onWillPop: () async {
-                  //  Get.offAllNamed(GetxRoutes_Name.GetxHomePage);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => const BlocHomePage()),
+                    (route) => false,
+                  );
                   return false;
                 },
                 child: Scaffold(
-                  // drawer: const GetDrawerWidget(),
+                  drawer: const BlocDrawerWidget(),
                   appBar: AppBar(
                     leading: Padding(
                       padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                       child: InkWell(
                           onTap: () {
-                            Navigator.pop(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const BlocHomePage()));
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const BlocHomePage()),
+                              (route) => false,
+                            );
                           },
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
@@ -139,17 +162,30 @@ class BlocCartMainScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         flex: 9,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              color: Color.fromRGBO(246, 244, 244, 1),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(16.0),
-                                  topLeft: Radius.circular(16.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: fullList1(context),
-                          ),
-                        ),
+                        child: BlocConsumer<BlocCartScreenCubit,
+                                BlocCartScreenState>(
+                            builder: (builder, state) {
+                              if (state is BlocCartLoadingState) {
+                                return Center(
+                                    child:
+                                        LoadingAnimationWidget.fourRotatingDots(
+                                  color: Colors.indigo,
+                                  size: 40,
+                                ));
+                              }
+                              return Container(
+                                decoration: const BoxDecoration(
+                                    color: Color.fromRGBO(246, 244, 244, 1),
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(16.0),
+                                        topLeft: Radius.circular(16.0))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: fullList1(context),
+                                ),
+                              );
+                            },
+                            listener: (listener, state) {}),
                       ),
                       Expanded(
                         flex: 1,
@@ -234,31 +270,54 @@ class BlocCartMainScreen extends StatelessWidget {
                                                     context); // Close the dialog
                                               },
                                             ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                /*await orderPlaceController
-                                                    .getPlaceOrder(
-                                                  cartController
-                                                      .getCartAddItemModelClass
-                                                      .data[0]
-                                                      .cartId
-                                                      .toString(),
-                                                  cartController
-                                                      .getCartAddItemModelClass
-                                                      .cartTotal
-                                                      .toString(),
-                                                );*/
-                                                /* firebaseApiCalling1.sendPushNotification(
-                                            "Online Ordering System",
-                                            "${'You added'} ${cartController.getCartAddItemModelClass.data.length} ${'Product and Total Price'} ${cartController.getCartAddItemModelClass.cartTotal.toStringAsFixed(3)}",
-                                          );*/
-                                                Future.delayed(
-                                                    const Duration(seconds: 0),
-                                                    () {
-                                                  cartController
-                                                      .getCartAllDataAPI();
-                                                  Navigator.of(context).pop();
+                                            BlocConsumer<
+                                                BlocOrderPlaceScreenCubit,
+                                                BlocOrderPlaceScreenState>(
+                                              builder: (builder, state) {
+                                                if (state
+                                                    is BlocOrderPlaceAddLoadingState) {
+                                                  return const CircularProgressIndicator();
+                                                }
+                                                return TextButton(
+                                                  onPressed: () async {
+                                                    await BlocProvider.of<
+                                                                BlocOrderPlaceScreenCubit>(
+                                                            context)
+                                                        .getPlaceOrder(
+                                                            cartController
+                                                                .blocCartAddItemModelClass
+                                                                .data[0]
+                                                                .cartId
+                                                                .toString(),
+                                                            cartController
+                                                                .blocCartAddItemModelClass
+                                                                .cartTotal
+                                                                .toString());
 
+                                                    BlocFirebaseApiCalling
+                                                        .sendPushNotification(
+                                                            "Online Ordering System",
+                                                            "${'You added'} ${cartController.blocCartAddItemModelClass.data.length} ${'Product and Total Price'} ${cartController.blocCartAddItemModelClass.cartTotal.toStringAsFixed(3)}");
+
+                                                    Navigator.of(context).pop();
+                                                    await cartController
+                                                        .getCartAllDataAPI();
+                                                  },
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Colors.indigo),
+                                                  ),
+                                                  child: const Text(
+                                                    'Confirm',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                );
+                                              },
+                                              listener: (listener, state) {
+                                                if (state
+                                                    is BlocOrderPlaceAddSuccessfullyState) {
                                                   showDialog(
                                                     context: context,
                                                     builder: (context) {
@@ -271,18 +330,9 @@ class BlocCartMainScreen extends StatelessWidget {
                                                       );
                                                     },
                                                   );
-                                                });
+                                                } else if (state
+                                                    is BlocOrderPlaceAddLoadingState) {}
                                               },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.indigo),
-                                              ),
-                                              child: const Text(
-                                                'Confirm',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
                                             ),
                                           ],
                                         );
@@ -380,398 +430,406 @@ class BlocCartMainScreen extends StatelessWidget {
           )
         : BlocConsumer<BlocCartScreenCubit, BlocCartScreenState>(
             builder: (builder, state) {
-              if (state is BlocCartLoadingState) {
-                return Center(
-                    child: LoadingAnimationWidget.fourRotatingDots(
-                  color: Colors.indigo,
-                  size: 40,
-                ));
-              }
-              return BlocConsumer<BlocProductMainScreenCubit,
-                      BlocProductMainScreenState>(
-                  builder: (builder, state) {
-                    return BlocConsumer<BlocFavoriteScreenCubit,
-                            BlocFavoriteScreenState>(
-                        builder: (builder, state) {
-                          return ListView.builder(
-                              itemCount: cartController
-                                  .blocCartAddItemModelClass.data.length,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
+            if (state is BlocCartLoadingState) {
+              return Center(
+                  child: LoadingAnimationWidget.fourRotatingDots(
+                color: Colors.indigo,
+                size: 40,
+              ));
+            }
+            return BlocConsumer<BlocProductMainScreenCubit,
+                    BlocProductMainScreenState>(
+                builder: (builder, state) {
+                  return BlocConsumer<BlocFavoriteScreenCubit,
+                          BlocFavoriteScreenState>(
+                      builder: (builder, state) {
+                        return ListView.builder(
+                            itemCount: cartController
+                                .blocCartAddItemModelClass.data.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 12.0),
+                                                child: Image(
+                                                  image: NetworkImage(cartController
+                                                      .blocCartAddItemModelClass
+                                                      .data[index]
+                                                      .productDetails!
+                                                      .imageUrl),
+                                                  width: size.width / 2,
+                                                  height: size.height / 5,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0,
+                                                right: 5.0,
+                                                bottom: 8.0,
+                                                top: 8.0),
                                             child: Column(
                                               children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 12.0),
-                                                  child: Image(
-                                                    image: NetworkImage(
-                                                        cartController
-                                                            .blocCartAddItemModelClass
-                                                            .data[index]
-                                                            .productDetails!
-                                                            .imageUrl),
-                                                    width: size.width / 2,
-                                                    height: size.height / 5,
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.topRight,
+                                                      child: productController
+                                                                  .getProductAllAPI
+                                                                  .data[index]
+                                                                  .watchListItemId !=
+                                                              ''
+                                                          ? InkWell(
+                                                              onTap: () async {
+                                                                await favoriteController.getRemoveFavorite(
+                                                                    productController
+                                                                        .getProductAllAPI
+                                                                        .data[
+                                                                            index]
+                                                                        .watchListItemId);
+                                                                Future.delayed(
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            0),
+                                                                    () async {
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .hideCurrentSnackBar();
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                    const SnackBar(
+                                                                      content:
+                                                                          Text(
+                                                                        'Product Remove From Favorite!',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                16),
+                                                                      ),
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .indigo,
+                                                                      duration: Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                    ),
+                                                                  );
+                                                                  await productController
+                                                                      .productAllAPI();
+                                                                });
+                                                              },
+                                                              child: const Icon(
+                                                                CupertinoIcons
+                                                                    .heart_solid,
+                                                                size: 16,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            )
+                                                          : InkWell(
+                                                              onTap: () async {
+                                                                await favoriteController.getAddInFavorite(
+                                                                    cartController
+                                                                        .blocCartAddItemModelClass
+                                                                        .data[
+                                                                            index]
+                                                                        .productDetails!
+                                                                        .id);
+                                                                Future.delayed(
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            0),
+                                                                    () async {
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .hideCurrentSnackBar();
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                    const SnackBar(
+                                                                      content:
+                                                                          Text(
+                                                                        'Product Added To Favorite!',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                16),
+                                                                      ),
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .indigo,
+                                                                      duration: Duration(
+                                                                          seconds:
+                                                                              1),
+                                                                    ),
+                                                                  );
+                                                                  await productController
+                                                                      .productAllAPI();
+                                                                });
+                                                              },
+                                                              child: const Icon(
+                                                                CupertinoIcons
+                                                                    .heart,
+                                                                size: 16,
+                                                              ),
+                                                            ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: size.width,
+                                                  child: AutoSizeText(
+                                                    cartController
+                                                        .blocCartAddItemModelClass
+                                                        .data[index]
+                                                        .productDetails!
+                                                        .title,
+                                                    maxLines: 1,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        fontSize: 30),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 2,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0,
-                                                  right: 5.0,
-                                                  bottom: 8.0,
-                                                  top: 8.0),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      Align(
-                                                        alignment:
-                                                            Alignment.topRight,
-                                                        child: productController
-                                                                    .getProductAllAPI
-                                                                    .data[index]
-                                                                    .watchListItemId !=
-                                                                ''
-                                                            ? InkWell(
-                                                                onTap:
-                                                                    () async {
-                                                                  await favoriteController.getRemoveFavorite(productController
-                                                                      .getProductAllAPI
-                                                                      .data[
-                                                                          index]
-                                                                      .watchListItemId);
-                                                                  Future.delayed(
-                                                                      const Duration(
-                                                                          milliseconds:
-                                                                              0),
-                                                                      () async {
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .hideCurrentSnackBar();
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .showSnackBar(
-                                                                      const SnackBar(
-                                                                        content:
-                                                                            Text(
-                                                                          'Product Remove From Favorite!',
-                                                                          style:
-                                                                              TextStyle(fontSize: 16),
-                                                                        ),
-                                                                        backgroundColor:
-                                                                            Colors.indigo,
-                                                                        duration:
-                                                                            Duration(seconds: 1),
-                                                                      ),
-                                                                    );
-                                                                    await productController
-                                                                        .productAllAPI();
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    const Icon(
-                                                                  CupertinoIcons
-                                                                      .heart_solid,
-                                                                  size: 16,
-                                                                  color: Colors
-                                                                      .red,
-                                                                ),
-                                                              )
-                                                            : InkWell(
-                                                                onTap:
-                                                                    () async {
-                                                                  await favoriteController.getAddInFavorite(cartController
-                                                                      .blocCartAddItemModelClass
-                                                                      .data[
-                                                                          index]
-                                                                      .productDetails!
-                                                                      .id);
-                                                                  Future.delayed(
-                                                                      const Duration(
-                                                                          milliseconds:
-                                                                              0),
-                                                                      () async {
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .hideCurrentSnackBar();
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .showSnackBar(
-                                                                      const SnackBar(
-                                                                        content:
-                                                                            Text(
-                                                                          'Product Added To Favorite!',
-                                                                          style:
-                                                                              TextStyle(fontSize: 16),
-                                                                        ),
-                                                                        backgroundColor:
-                                                                            Colors.indigo,
-                                                                        duration:
-                                                                            Duration(seconds: 1),
-                                                                      ),
-                                                                    );
-                                                                    await productController
-                                                                        .productAllAPI();
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    const Icon(
-                                                                  CupertinoIcons
-                                                                      .heart,
-                                                                  size: 16,
-                                                                ),
-                                                              ),
-                                                      ),
-                                                    ],
+                                                SizedBox(
+                                                  height: size.height / 70,
+                                                ),
+                                                SizedBox(
+                                                  width: size.width,
+                                                  child: AutoSizeText(
+                                                    cartController
+                                                        .blocCartAddItemModelClass
+                                                        .data[index]
+                                                        .productDetails!
+                                                        .description,
+                                                    maxLines: 2,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        fontSize: 30),
                                                   ),
-                                                  SizedBox(
-                                                    width: size.width,
-                                                    child: AutoSizeText(
-                                                      cartController
-                                                          .blocCartAddItemModelClass
-                                                          .data[index]
-                                                          .productDetails!
-                                                          .title,
-                                                      maxLines: 1,
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                          fontSize: 30),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: size.height / 70,
-                                                  ),
-                                                  SizedBox(
-                                                    width: size.width,
-                                                    child: AutoSizeText(
-                                                      cartController
-                                                          .blocCartAddItemModelClass
-                                                          .data[index]
-                                                          .productDetails!
-                                                          .description,
-                                                      maxLines: 2,
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                          fontSize: 30),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: size.height / 70,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: SizedBox(
-                                                          width: size.width,
-                                                          child: Align(
-                                                            alignment: Alignment
-                                                                .topLeft,
-                                                            child: AutoSizeText(
-                                                              '\$${cartController.blocCartAddItemModelClass.data[index].productDetails!.price}',
-                                                              style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 25),
-                                                              maxLines: 1,
-                                                            ),
+                                                ),
+                                                SizedBox(
+                                                  height: size.height / 70,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: SizedBox(
+                                                        width: size.width,
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: AutoSizeText(
+                                                            '\$${cartController.blocCartAddItemModelClass.data[index].productDetails!.price}',
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 25),
+                                                            maxLines: 1,
                                                           ),
                                                         ),
                                                       ),
-                                                      BlocConsumer<
-                                                              BlocCartScreenCubit,
-                                                              BlocCartScreenState>(
-                                                          listener: (listener,
-                                                              state) {},
-                                                          builder:
-                                                              (builder, state) {
-                                                            if (state
-                                                                is BlocCartItemRemoveLoadingState) {
-                                                              if (cartController
-                                                                      .isLoadingList[
-                                                                  index]) {
-                                                                return Expanded(
-                                                                  child: LoadingAnimationWidget
-                                                                      .fourRotatingDots(
-                                                                    color: Colors
-                                                                        .indigo,
-                                                                    size: 40,
-                                                                  ),
-                                                                );
-                                                              }
+                                                    ),
+                                                    BlocConsumer<
+                                                            BlocCartScreenCubit,
+                                                            BlocCartScreenState>(
+                                                        listener: (listener,
+                                                            state) {},
+                                                        builder:
+                                                            (builder, state) {
+                                                          if (state
+                                                              is BlocCartItemRemoveLoadingState) {
+                                                            if (cartController
+                                                                    .isLoadingList[
+                                                                index]) {
+                                                              return Expanded(
+                                                                child: LoadingAnimationWidget
+                                                                    .fourRotatingDots(
+                                                                  color: Colors
+                                                                      .indigo,
+                                                                  size: 40,
+                                                                ),
+                                                              );
                                                             }
+                                                          }
 
-                                                            return Expanded(
-                                                              child: IconButton(
-                                                                  onPressed:
+                                                          return Expanded(
+                                                            child: IconButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  cartController
+                                                                      .updateButtonState(
+                                                                          index);
+                                                                  await cartController.removeProductFromCart(
+                                                                      cartController
+                                                                          .blocCartAddItemModelClass
+                                                                          .data[
+                                                                              index]
+                                                                          .id);
+
+                                                                  cartController
+                                                                      .getCartAllDataAPI();
+                                                                  cartController
+                                                                      .updateButtonDisableState(
+                                                                          index);
+                                                                },
+                                                                icon: const Icon(
+                                                                    CupertinoIcons
+                                                                        .delete)),
+                                                          );
+                                                        }),
+                                                    BlocConsumer<
+                                                            BlocCartScreenCubit,
+                                                            BlocCartScreenState>(
+                                                        listener: (listener,
+                                                            state) {},
+                                                        builder:
+                                                            (builder, state) {
+                                                          if (state
+                                                              is BlocCartItemLoadingState) {
+                                                            if (cartController
+                                                                    .isLoadingList[
+                                                                index]) {
+                                                              return Expanded(
+                                                                child: LoadingAnimationWidget
+                                                                    .fourRotatingDots(
+                                                                  color: Colors
+                                                                      .indigo,
+                                                                  size: 40,
+                                                                ),
+                                                              );
+                                                            }
+                                                          }
+
+                                                          return Expanded(
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                InkWell(
+                                                                  onTap:
                                                                       () async {
                                                                     cartController
                                                                         .updateButtonState(
                                                                             index);
-                                                                    await cartController.removeProductFromCart(cartController
+                                                                    await cartController.decreaseProductQuantity(cartController
                                                                         .blocCartAddItemModelClass
                                                                         .data[
                                                                             index]
                                                                         .id);
 
-                                                                    cartController
+                                                                    await cartController
                                                                         .getCartAllDataAPI();
                                                                     cartController
                                                                         .updateButtonDisableState(
                                                                             index);
                                                                   },
-                                                                  icon: const Icon(
-                                                                      CupertinoIcons
-                                                                          .delete)),
-                                                            );
-                                                          }),
-                                                      BlocConsumer<
-                                                              BlocCartScreenCubit,
-                                                              BlocCartScreenState>(
-                                                          listener: (listener,
-                                                              state) {},
-                                                          builder:
-                                                              (builder, state) {
-                                                            if (state
-                                                                is BlocCartItemLoadingState) {
-                                                              if (cartController
-                                                                      .isLoadingList[
-                                                                  index]) {
-                                                                return Expanded(
-                                                                  child: LoadingAnimationWidget
-                                                                      .fourRotatingDots(
-                                                                    color: Colors
-                                                                        .indigo,
-                                                                    size: 40,
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    backgroundColor:
+                                                                        Colors.grey[
+                                                                            200],
+                                                                    radius: 14,
+                                                                    child: const Center(
+                                                                        child: Icon(
+                                                                      Icons
+                                                                          .remove,
+                                                                      color: Colors
+                                                                          .black,
+                                                                    )),
                                                                   ),
-                                                                );
-                                                              }
-                                                            }
-
-                                                            return Expanded(
-                                                              child: Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      cartController
-                                                                          .updateButtonState(
-                                                                              index);
-                                                                      await cartController.decreaseProductQuantity(cartController
-                                                                          .blocCartAddItemModelClass
-                                                                          .data[
-                                                                              index]
-                                                                          .id);
-
-                                                                      await cartController
-                                                                          .getCartAllDataAPI();
-                                                                      cartController
-                                                                          .updateButtonDisableState(
-                                                                              index);
-                                                                    },
-                                                                    child:
-                                                                        CircleAvatar(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .grey[200],
-                                                                      radius:
-                                                                          14,
-                                                                      child: const Center(
-                                                                          child: Icon(
-                                                                        Icons
-                                                                            .remove,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      )),
-                                                                    ),
-                                                                  ),
-                                                                  Text(
+                                                                ),
+                                                                Text(
+                                                                  cartController
+                                                                      .blocCartAddItemModelClass
+                                                                      .data[
+                                                                          index]
+                                                                      .quantity
+                                                                      .toString(),
+                                                                  style: const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                                InkWell(
+                                                                  onTap:
+                                                                      () async {
                                                                     cartController
+                                                                        .updateButtonState(
+                                                                            index);
+                                                                    await cartController.increaseProductQuantity(cartController
                                                                         .blocCartAddItemModelClass
                                                                         .data[
                                                                             index]
-                                                                        .quantity
-                                                                        .toString(),
-                                                                    style: const TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.bold),
-                                                                  ),
-                                                                  InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      cartController
-                                                                          .updateButtonState(
-                                                                              index);
-                                                                      await cartController.increaseProductQuantity(cartController
-                                                                          .blocCartAddItemModelClass
-                                                                          .data[
-                                                                              index]
-                                                                          .id);
+                                                                        .id);
 
-                                                                      await cartController
-                                                                          .getCartAllDataAPI();
-                                                                      cartController
-                                                                          .updateButtonDisableState(
-                                                                              index);
-                                                                    },
-                                                                    child:
-                                                                        CircleAvatar(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .grey[200],
-                                                                      radius:
-                                                                          14,
-                                                                      child: const Center(
-                                                                          child: Icon(
-                                                                        Icons
-                                                                            .add,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      )),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            );
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
+                                                                    await cartController
+                                                                        .getCartAllDataAPI();
+                                                                    cartController
+                                                                        .updateButtonDisableState(
+                                                                            index);
+                                                                  },
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    backgroundColor:
+                                                                        Colors.grey[
+                                                                            200],
+                                                                    radius: 14,
+                                                                    child: const Center(
+                                                                        child: Icon(
+                                                                      Icons.add,
+                                                                      color: Colors
+                                                                          .black,
+                                                                    )),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          );
+                                                        }),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                );
-                              });
-                        },
-                        listener: (listener, state) {});
-                  },
-                  listener: (listener, state) {});
-            },
-            listener: (listener, state) {});
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              );
+                            });
+                      },
+                      listener: (listener, state) {});
+                },
+                listener: (listener, state) {});
+          }, listener: (listener, state) {
+            if (state is BlocCartJWTNotFoundState) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const BlocLoginScreen()),
+                (route) => false,
+              );
+            }
+          });
   }
 }

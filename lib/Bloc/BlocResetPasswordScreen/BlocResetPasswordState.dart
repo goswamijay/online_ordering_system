@@ -1,0 +1,21 @@
+abstract class BlocResetPasswordScreenState{}
+
+class BlocResetPasswordEmailInitialState extends BlocResetPasswordScreenState{}
+
+class BlocResetPasswordEmailLoadingState extends BlocResetPasswordScreenState{}
+
+class BlocResetPasswordEmailSentSuccessfullyState extends BlocResetPasswordScreenState{}
+
+class BlocResetPasswordEmailSentFailState extends BlocResetPasswordScreenState{}
+
+class BlocResetPasswordLoadingState extends BlocResetPasswordScreenState{}
+
+class BlocResetPasswordVerifiedSuccessfullyState extends BlocResetPasswordScreenState{}
+
+class BlocResetPasswordVerifiedFailState extends BlocResetPasswordScreenState{}
+
+class BlocResetPasswordResendOTPLoadingState extends BlocResetPasswordScreenState{}
+
+class BlocResetPasswordResendOTPSuccessfullyState extends BlocResetPasswordScreenState{}
+
+class BlocResetPasswordResendOTPFailState extends BlocResetPasswordScreenState{}

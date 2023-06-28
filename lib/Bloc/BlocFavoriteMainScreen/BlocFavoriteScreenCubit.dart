@@ -54,10 +54,10 @@ class BlocFavoriteScreenCubit extends Cubit<BlocFavoriteScreenState> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.clear();
       }
+      emit(BlocFavoriteInitial1State());
+
     } catch (error) {
       rethrow;
-    } finally {
-      emit(BlocFavoriteInitialState());
     }
   }
 
@@ -87,10 +87,10 @@ class BlocFavoriteScreenCubit extends Cubit<BlocFavoriteScreenState> {
         log(jsonData);
         emit(BlocFavoriteAddToFavoriteFailState());
       }
+      emit(BlocFavoriteInitial1State());
+
     } catch (error) {
       rethrow;
-    } finally {
-      emit(BlocFavoriteInitialState());
     }
   }
 
@@ -120,10 +120,10 @@ class BlocFavoriteScreenCubit extends Cubit<BlocFavoriteScreenState> {
         log(jsonData.toString());
         emit(BlocFavoriteRemoveToFavoriteFailState());
       }
+      emit(BlocFavoriteInitial1State());
+
     } catch (error) {
       rethrow;
-    } finally {
-      emit(BlocFavoriteInitialState());
     }
   }
 }

@@ -9,9 +9,12 @@ import 'package:online_ordering_system/Bloc/BlocCartMainScreen/BlocCartScreenSta
 import 'package:online_ordering_system/Bloc/BlocFavoriteMainScreen/BlocFavoriteScreenState.dart';
 import 'package:online_ordering_system/Bloc/BlocProductMainScreen/BlocProductMainScreenCubit.dart';
 import 'package:online_ordering_system/Bloc/BlocProductMainScreen/BlocProductMainScreenState.dart';
+import 'package:online_ordering_system/Bloc/Utils/BlocDrawer.dart';
 
 import '../BlocCartMainScreen/BlocCartScreenCubit.dart';
 import '../BlocFavoriteMainScreen/BlocFavoriteScreenCubit.dart';
+import '../BlocLoginScreen/BlocLoginScreen.dart';
+import '../BlocProductDetailsScreen/BlocProductDetailsScreen.dart';
 
 class BlocProductMainScreen extends StatefulWidget {
   const BlocProductMainScreen({super.key});
@@ -38,12 +41,6 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
     super.initState();
 
     searchItemChange();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    searchController.dispose();
   }
 
   searchItemChange() async {
@@ -118,7 +115,7 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
           },
           child: Scaffold(
             key: _scaffoldKey,
-            // drawer: const GetDrawerWidget(),
+            drawer: const BlocDrawerWidget(),
             // backgroundColor: const Color.fromRGBO(246, 244, 244, 1),
             appBar: AppBar(
                 iconTheme: const IconThemeData(color: Colors.black),
@@ -370,7 +367,10 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
           BlocProductMainScreenCubit productController =
               BlocProvider.of<BlocProductMainScreenCubit>(context);
           if (state is BlocProductMainLoadingScreenState) {
-            return const CircularProgressIndicator();
+            return LoadingAnimationWidget.fourRotatingDots(
+              color: Colors.indigo,
+              size: 40,
+            );
           }
           return ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
@@ -382,19 +382,14 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onTap: () {
-/* Get.toNamed(
-                                GetxRoutes_Name.GetxProductDetailsScreen,
-                                arguments: {
-                                  'Price': productController
-                                      .getProductAllAPI.data[index].price,
-                                  'Name': productController
-                                      .getProductAllAPI.data[index].title,
-                                  'ImageURL': productController
-                                      .getProductAllAPI.data[index].imageUrl,
-                                  'ShortDescription': productController
-                                      .getProductAllAPI.data[index].description,
-                                  'Index': index,
-                                });*/
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => BlocProductDetailsScreen(
+                              price: searchItems[index].price,
+                              name: searchItems[index].title,
+                              imageURL: searchItems[index].imageUrl,
+                              shortDescription: searchItems[index].description,
+                              index: index,
+                            )));
                   },
                   child: Card(
                     child: Column(
@@ -469,7 +464,8 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                               ),
                                             );
                                           }
-                                        }
+                                        } else if (state
+                                            is BlocFavoriteInitial1State) {}
 
                                         return Align(
                                           alignment: Alignment.topRight,
@@ -519,38 +515,7 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                                 ),
                                         );
                                       },
-                                      listener: (listener, state) {
-                                        if (state
-                                            is BlocFavoriteAddToFavoriteSuccessfullyState) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'Item will be Added in Favorite... Please Wait.....!!!!',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              duration: Duration(seconds: 4),
-                                            ),
-                                          );
-                                        } else if (state
-                                            is BlocFavoriteRemoveToFavoriteSuccessfullyState) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'Item will be Remove From Favorite... Please Wait.....!!!!',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      },
+                                      listener: (listener, state) {},
                                     ),
                                     SizedBox(
                                       width: size.width,
@@ -600,7 +565,7 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                             BlocProvider.of<
                                                 BlocCartScreenCubit>(context);
 
-                                        if (state is BlocCartLoadingState) {
+                                        if (state is BlocCartItemLoadingState) {
                                           if (productController
                                               .isLoadingList[index]) {
                                             return LoadingAnimationWidget
@@ -843,7 +808,10 @@ fullList1(BuildContext context) {
       BlocProductMainScreenCubit productController =
           BlocProvider.of<BlocProductMainScreenCubit>(context);
       if (state is BlocProductMainLoadingScreenState) {
-        return const Center(child: CircularProgressIndicator());
+        return LoadingAnimationWidget.fourRotatingDots(
+          color: Colors.indigo,
+          size: 40,
+        );
       }
 
       return ListView.builder(
@@ -856,19 +824,18 @@ fullList1(BuildContext context) {
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               onTap: () {
-/* Get.toNamed(
-                                    GetxRoutes_Name.GetxProductDetailsScreen,
-                                    arguments: {
-                                      'Price': productController
-                                          .getProductAllAPI.data[index].price,
-                                      'Name': productController
-                                          .getProductAllAPI.data[index].title,
-                                      'ImageURL': productController
-                                          .getProductAllAPI.data[index].imageUrl,
-                                      'ShortDescription': productController
-                                          .getProductAllAPI.data[index].description,
-                                      'Index': index,
-                                    });*/
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => BlocProductDetailsScreen(
+                          price: productController
+                              .getProductAllAPI.data[index].price,
+                          name: productController
+                              .getProductAllAPI.data[index].title,
+                          imageURL: productController
+                              .getProductAllAPI.data[index].imageUrl,
+                          shortDescription: productController
+                              .getProductAllAPI.data[index].description,
+                          index: index,
+                        )));
               },
               child: Card(
                 child: Column(
@@ -996,6 +963,7 @@ fullList1(BuildContext context) {
                                     );
                                   },
                                   listener: (listener, state) {
+                                    print(state);
                                     if (state
                                         is BlocFavoriteAddToFavoriteSuccessfullyState) {
                                       ScaffoldMessenger.of(context)
@@ -1007,7 +975,6 @@ fullList1(BuildContext context) {
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          duration: Duration(seconds: 4),
                                         ),
                                       );
                                     } else if (state
@@ -1023,7 +990,8 @@ fullList1(BuildContext context) {
                                           ),
                                         ),
                                       );
-                                    }
+                                    } else if (state
+                                        is BlocFavoriteInitial1State) {}
                                   },
                                 ),
                                 SizedBox(
@@ -1076,7 +1044,7 @@ fullList1(BuildContext context) {
                                         BlocProvider.of<BlocCartScreenCubit>(
                                             context);
 
-                                    if (state is BlocCartLoadingState) {
+                                    if (state is BlocCartItemLoadingState) {
                                       if (productController
                                           .isLoadingList[index]) {
                                         return LoadingAnimationWidget
@@ -1317,6 +1285,14 @@ fullList1(BuildContext context) {
             );
           });
     },
-    listener: (builder, state) {},
+    listener: (builder, state) {
+      if (state is BlocProductMainJWTNotFoundProductScreenState) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const BlocLoginScreen()),
+          (route) => false,
+        );
+      }
+    },
   );
 }

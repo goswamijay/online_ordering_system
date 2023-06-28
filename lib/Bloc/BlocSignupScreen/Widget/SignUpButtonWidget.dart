@@ -12,6 +12,8 @@ class SignUpButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocSignUpCubit blocSignupController = BlocProvider.of<BlocSignUpCubit>(context);
+
     return BlocConsumer<BlocSignUpCubit, SignUpState>(
       listener: (BuildContext context, state) {
         if (state is SignUpUserState) {
@@ -20,7 +22,7 @@ class SignUpButtonWidget extends StatelessWidget {
               .showSnackBar(SnackBar(content: Text(state.loginStateMessage)));
           Navigator.of(context).push(MaterialPageRoute(builder: (_) {
             return  BlocOTPScreen(
-              signUpEmail: signupEmailController.text, signUpId: '', signUpPassword: '',
+              signUpEmail: blocSignupController.blocSignupModelClass.data.emailId, signUpId: blocSignupController.blocSignupModelClass.data.id, signUpPassword: signupPasswordController.text,
             );
           }));
         } else if (state is SignUpUserFailState) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:online_ordering_system/Bloc/BlocAccountMainScreen/BlocAccountResetPasswordCubit.dart';
 import 'package:online_ordering_system/Bloc/BlocCartMainScreen/BlocCartScreenCubit.dart';
 import 'package:online_ordering_system/Bloc/BlocHomePage.dart';
 import 'package:online_ordering_system/Bloc/BlocLoginScreen/BlocLoginScreen.dart';
@@ -9,6 +10,9 @@ import 'package:online_ordering_system/Bloc/BlocSignupScreen/SignUpBloc/BlocSign
 import 'BlocFavoriteMainScreen/BlocFavoriteScreenCubit.dart';
 import 'BlocLoginScreen/LoginPageCubit.dart';
 import 'BlocOTPScreen/OtpScreenCubit.dart';
+import 'BlocOrderPlaceMainScreen/BlocOrderPlaceScreenCubit.dart';
+import 'BlocResetPasswordScreen/BlocResetPasswordCubit.dart';
+import 'BlocSparseScreen.dart';
 
 class BlocMainScreen extends StatefulWidget {
   const BlocMainScreen({super.key});
@@ -39,6 +43,12 @@ class _BlocMainScreenState extends State<BlocMainScreen> {
         ),
         BlocProvider(
             create: (BuildContext context) => BlocFavoriteScreenCubit()),
+        BlocProvider(
+            create: (BuildContext context) => BlocAccountResetPasswordCubit()),
+        BlocProvider(
+            create: (BuildContext context) => BlocOrderPlaceScreenCubit()),
+        BlocProvider(
+            create: (BuildContext context) => BlocResetPasswordCubit()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -47,7 +57,7 @@ class _BlocMainScreenState extends State<BlocMainScreen> {
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.indigo)
               .copyWith(background: const Color.fromRGBO(246, 244, 244, 1)),
         ),
-        home: const BlocHomePage(),
+        home: const BlocSparseScreen(),
       ),
     );
   }
