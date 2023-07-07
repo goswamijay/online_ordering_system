@@ -1,5 +1,4 @@
-
-import '../../Models/ProductListModelClass.dart';
+import '../../Provider/Models/ProductListModelClass.dart';
 
 class GetCartAddItemModelClass {
   int status;

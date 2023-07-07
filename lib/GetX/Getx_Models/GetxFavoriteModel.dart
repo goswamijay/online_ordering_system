@@ -1,4 +1,4 @@
-import '../../Models/ProductListModelClass.dart';
+import '../../Provider/Models/ProductListModelClass.dart';
 
 class GetxFavorite{
   int Price;

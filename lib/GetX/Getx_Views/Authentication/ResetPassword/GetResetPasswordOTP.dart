@@ -4,8 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:online_ordering_system/GetX/Getx_Utils/Getx_Routes_Name.dart';
-import 'package:online_ordering_system/Models/SignupModelClass.dart';
-
+import '../../../../Provider/Models/SignupModelClass.dart';
 import '../../../Getx_Controller/GetxAuthenticationController.dart';
 
 

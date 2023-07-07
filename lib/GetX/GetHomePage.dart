@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:get/get.dart';
 import 'package:online_ordering_system/GetX/Getx_Views/GetAccountMainScreen/GetAccountMainScreen.dart';
-import '../Utils/notificationservice/local_notification_service.dart';
+import '../BlocEvent/Utils/Local_Notification_Service.dart';
 import 'Getx_Views/GetCartMainScreen/GetCartMainScreen.dart';
 import 'Getx_Views/GetFavoriteMainScreen/GetFavoriteMainScreen.dart';
 import 'Getx_Views/GetOrderPlaceMainScreen/GetOrderPlaceMainScreen.dart';
