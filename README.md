@@ -6,6 +6,7 @@ A Simple and Beautiful App in Flutter
 
 - Provider
 - GetX
+- Bloc
 
 ## ✨ Features
 
@@ -14,6 +15,7 @@ A Simple and Beautiful App in Flutter
 - 😍 Beautiful UI
 - 📩 Simple click to Purchase
 - 🧑‍🤝‍🧑 Direct Share with others
+- 🧪🧪 Integration Testing
 
 ## 💙 Contribute :
 
