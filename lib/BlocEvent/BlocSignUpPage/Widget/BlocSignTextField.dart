@@ -14,6 +14,7 @@ class BlocSignUpTextFiled extends StatelessWidget {
     return Column(
       children: [
         CustomSignUpField(
+          key: const Key('Sign_up_user_name'),
           hintText: "User Name",
           labelText: "User Name",
           controller: signupNameController,
@@ -27,6 +28,7 @@ class BlocSignUpTextFiled extends StatelessWidget {
           },
         ),
         CustomSignUpField(
+          key: const Key('Sign_up_email_id'),
           hintText: "Email Id",
           labelText: "Email Id",
           controller: signupEmailController,
@@ -48,6 +50,7 @@ class BlocSignUpTextFiled extends StatelessWidget {
           },
         ),
         CustomSignUpField(
+          key: const Key('Sign_up_mobile_number'),
           hintText: "Mobile Number",
           labelText: "Mobile Number",
           controller: signupMobileController,
@@ -63,6 +66,7 @@ class BlocSignUpTextFiled extends StatelessWidget {
           },
         ),
         CustomSignUpField(
+          key: const Key('Sign_up_password'),
           hintText: "Enter Password",
           labelText: "Password",
           controller: signupPasswordController,
@@ -94,18 +98,12 @@ class BlocSignUpTextFiled extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.only(left: 12.0, right: 12.0),
               child: TextFormField(
+                key: const Key('Sign_up_Re_password'),
                 obscureText: passwordVisible,
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
                     onPressed: () {
                       context.read<SignUpBloc>().add(SignUpPasswordShowEvent(passwordVisible));
-                   /*   if (state is PasswordShowSignUpState) {
-                        BlocProvider.of<SignUpBloc>(context)
-                            .passwordHide(passwordVisible);
-                      } else if (state is PasswordHideSignUpState) {
-                        BlocProvider.of<SignUpBloc>(context)
-                            .passwordShowing(passwordVisible);
-                      }*/
                     },
                     icon: Icon(
                       passwordVisible ? Icons.visibility : Icons.visibility_off,

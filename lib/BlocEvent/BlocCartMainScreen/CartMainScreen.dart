@@ -248,6 +248,7 @@ class _BlocCartMainScreenState extends State<BlocCartMainScreen> {
                           padding: const EdgeInsets.only(
                               left: 12.0, right: 12.0, bottom: 6.0, top: 6.0),
                           child: InkWell(
+                            key:const Key('Cart_Screen_place_order_items'),
                             onTap: () {
                               cartController
                                       .blocCartAddItemModelClass.data.isNotEmpty
@@ -281,6 +282,7 @@ class _BlocCartMainScreenState extends State<BlocCartMainScreen> {
                                                   return const CircularProgressIndicator();
                                                 }
                                                 return TextButton(
+                                                  key:const Key('Cart_Screen_place_order_items_confirm_button'),
                                                   onPressed: () async {
                                                     BlocProvider.of<
                                                                 BlocOrderPlaceMainBloc>(

@@ -10,6 +10,8 @@ import 'BlocEvent/BlocEventMain.dart';
 import 'BlocEvent/Utils/Local_Notification_Service.dart';
 import 'GetX/Getx_Main.dart';
 import 'Provider/MyApp.dart';
+import 'package:flutter_driver/driver_extension.dart';
+
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   //print(message.data.toString());
@@ -17,6 +19,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+  enableFlutterDriverExtension();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 

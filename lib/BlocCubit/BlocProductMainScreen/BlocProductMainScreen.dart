@@ -444,7 +444,7 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                     top: 8.0),
                                 child: Column(
                                   children: [
-                                    BlocConsumer<BlocFavoriteScreenCubit,
+                                    BlocBuilder<BlocFavoriteScreenCubit,
                                         BlocFavoriteScreenState>(
                                       builder: (builder, state) {
                                         BlocFavoriteScreenCubit
@@ -515,7 +515,6 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                                 ),
                                         );
                                       },
-                                      listener: (listener, state) {},
                                     ),
                                     SizedBox(
                                       width: size.width,
@@ -558,7 +557,7 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                     SizedBox(
                                       height: size.height / 60,
                                     ),
-                                    BlocConsumer<BlocCartScreenCubit,
+                                    BlocBuilder<BlocCartScreenCubit,
                                         BlocCartScreenState>(
                                       builder: (builder, state) {
                                         BlocCartScreenCubit cartController =
@@ -733,53 +732,6 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                           ],
                                         );
                                       },
-                                      listener: (listener, state) {
-                                        if (state
-                                            is BlocCartAddToCartSuccessfullyState) {
-                                          ScaffoldMessenger.of(context)
-                                              .hideCurrentSnackBar();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'Item will be Added in Cart... Please Wait.....!!!!',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                          );
-                                        } else if (state
-                                            is BlocCartDecreaseSuccessfullyState) {
-                                          ScaffoldMessenger.of(context)
-                                              .hideCurrentSnackBar();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text(
-                                              'Item Quantity will be Decrease... Please Wait.....!!!!',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            backgroundColor: Colors.indigo,
-                                          ));
-                                        } else if (state
-                                            is BlocCartIncreaseSuccessfullyState) {
-                                          ScaffoldMessenger.of(context)
-                                              .hideCurrentSnackBar();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text(
-                                              'Item Quantity will be Increase... Please Wait.....!!!!',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            backgroundColor: Colors.indigo,
-                                          ));
-                                        }
-                                      },
                                     ),
                                   ],
                                 ),
@@ -887,7 +839,7 @@ fullList1(BuildContext context) {
                                 left: 8.0, right: 5.0, bottom: 8.0, top: 8.0),
                             child: Column(
                               children: [
-                                BlocConsumer<BlocFavoriteScreenCubit,
+                                BlocBuilder<BlocFavoriteScreenCubit,
                                     BlocFavoriteScreenState>(
                                   builder: (builder, state) {
                                     BlocFavoriteScreenCubit favoriteController =
@@ -962,37 +914,6 @@ fullList1(BuildContext context) {
                                             ),
                                     );
                                   },
-                                  listener: (listener, state) {
-                                    print(state);
-                                    if (state
-                                        is BlocFavoriteAddToFavoriteSuccessfullyState) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Item will be Added in Favorite... Please Wait.....!!!!',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      );
-                                    } else if (state
-                                        is BlocFavoriteRemoveToFavoriteSuccessfullyState) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Item will be Remove From Favorite... Please Wait.....!!!!',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      );
-                                    } else if (state
-                                        is BlocFavoriteInitial1State) {}
-                                  },
                                 ),
                                 SizedBox(
                                   width: size.width,
@@ -1037,7 +958,7 @@ fullList1(BuildContext context) {
                                 SizedBox(
                                   height: size.height / 60,
                                 ),
-                                BlocConsumer<BlocCartScreenCubit,
+                                BlocBuilder<BlocCartScreenCubit,
                                     BlocCartScreenState>(
                                   builder: (builder, state) {
                                     BlocCartScreenCubit cartController =
@@ -1225,52 +1146,6 @@ fullList1(BuildContext context) {
                                                   )),
                                       ],
                                     );
-                                  },
-                                  listener: (listener, state) {
-                                    if (state
-                                        is BlocCartAddToCartSuccessfullyState) {
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Item will be Added in Cart... Please Wait.....!!!!',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      );
-                                    } else if (state
-                                        is BlocCartDecreaseSuccessfullyState) {
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text(
-                                          'Item Quantity will be Decrease... Please Wait.....!!!!',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        backgroundColor: Colors.indigo,
-                                      ));
-                                    } else if (state
-                                        is BlocCartIncreaseSuccessfullyState) {
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text(
-                                          'Item Quantity will be Increase... Please Wait.....!!!!',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        backgroundColor: Colors.indigo,
-                                      ));
-                                    }
                                   },
                                 ),
                               ],

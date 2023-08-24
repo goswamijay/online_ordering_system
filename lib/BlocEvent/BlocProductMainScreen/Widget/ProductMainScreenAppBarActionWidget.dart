@@ -17,6 +17,7 @@ class ProductMainScreenAppBarActionWidget extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(top: 12.0, right: 12.0),
         child: InkWell(
+          key: const Key('Product_Screen_To_Cart_Screen_Button'),
           onTap: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const BlocCartMainScreen()));

@@ -130,6 +130,7 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                 children: [
                                   Expanded(
                                     child: CupertinoSearchTextField(
+                                      key: const Key('Product_search_textField'),
                                       backgroundColor: Colors.white,
                                       itemSize: size.height / 33,
                                       controller: searchController,
@@ -254,132 +255,348 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
           shrinkWrap: true,
           itemCount: searchItems.length,
           itemBuilder: (context, index) {
-            return InkWell(
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              onTap: () {
-                /*   Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => BlocProductDetailsScreen(
-                          price: searchItems[index].price,
-                          name: searchItems[index].title,
-                          imageURL: searchItems[index].imageUrl,
-                          shortDescription: searchItems[index].description,
-                          index: index,
-                        )));*/
-              },
-              child: Card(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                            child: searchItems[index].imageUrl.isNotEmpty
-                                ? Image(
-                                    loadingBuilder:
-                                        (context, child, loadingProgress) {
-                                      if (loadingProgress == null) {
-                                        return child;
-                                      }
-                                      return Center(
-                                          child: CircularProgressIndicator(
-                                        value: loadingProgress
-                                                    .expectedTotalBytes !=
-                                                null
-                                            ? loadingProgress
-                                                    .cumulativeBytesLoaded /
-                                                loadingProgress
-                                                    .expectedTotalBytes!
-                                                    .toInt()
-                                            : null,
-                                      ));
-                                    },
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return const SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: Icon(
-                                          Icons.error,
-                                          color: Colors.red,
+            return Card(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                          child: searchItems[index].imageUrl.isNotEmpty
+                              ? Image(
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    return Center(
+                                        child: CircularProgressIndicator(
+                                      value:
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                                      .toInt()
+                                              : null,
+                                    ));
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: Icon(
+                                        Icons.error,
+                                        color: Colors.red,
+                                      ),
+                                    );
+                                  },
+                                  image:
+                                      NetworkImage(searchItems[index].imageUrl),
+                                  width: size.width / 2,
+                                  height: size.height / 5,
+                                )
+                              : const CircularProgressIndicator()),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 5.0, bottom: 8.0, top: 8.0),
+                          child: Column(
+                            children: [
+                              BlocConsumer<FavouriteScreenBloc,
+                                      BlocFavoriteScreenState>(
+                                  builder: (builder, state) {
+                                ProductMainScreenBloc productController =
+                                    BlocProvider.of<ProductMainScreenBloc>(
+                                        context);
+                                if (state is BlocFavoriteLoadingState) {
+                                  if (productController.isLoadingList[index]) {
+                                    return Align(
+                                      alignment: Alignment.topRight,
+                                      child: LoadingAnimationWidget
+                                          .fourRotatingDots(
+                                        color: Colors.indigo,
+                                        size: 40,
+                                      ),
+                                    );
+                                  }
+                                }
+                                return Align(
+                                  alignment: Alignment.topRight,
+                                  child: searchItems[index].watchListItemId !=
+                                          ''
+                                      ? InkWell(
+                                          onTap: () async {
+                                            context
+                                                .read<ProductMainScreenBloc>()
+                                                .add(ProductUpdateButtonEvent(
+                                                    true, index));
+                                            context.read<FavouriteScreenBloc>().add(
+                                                BlocFavouriteRemoveProductEvent(
+                                                    searchItems[index]
+                                                        .watchListItemId));
+                                          },
+                                          child: const Icon(
+                                            CupertinoIcons.heart_solid,
+                                            color: Colors.red,
+                                            size: 16,
+                                          ),
+                                        )
+                                      : InkWell(
+                                          onTap: () async {
+                                            context
+                                                .read<ProductMainScreenBloc>()
+                                                .add(ProductUpdateButtonEvent(
+                                                    true, index));
+                                            context
+                                                .read<FavouriteScreenBloc>()
+                                                .add(
+                                                    BlocFavouriteAddProductEvent(
+                                                        searchItems[index].id));
+                                          },
+                                          child: const Icon(
+                                            CupertinoIcons.heart,
+                                            size: 16,
+                                          ),
                                         ),
-                                      );
-                                    },
-                                    image: NetworkImage(
-                                        searchItems[index].imageUrl),
-                                    width: size.width / 2,
-                                    height: size.height / 5,
-                                  )
-                                : const CircularProgressIndicator()),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 5.0, bottom: 8.0, top: 8.0),
-                            child: Column(
-                              children: [
-                                BlocConsumer<FavouriteScreenBloc,
-                                        BlocFavoriteScreenState>(
-                                    builder: (builder, state) {
-                                  ProductMainScreenBloc productController =
-                                      BlocProvider.of<ProductMainScreenBloc>(
-                                          context);
-                                  if (state is BlocFavoriteLoadingState) {
-                                    if (productController
+                                );
+                              }, listener: (listener, state) {
+                                if (state
+                                    is BlocFavoriteAddToFavoriteSuccessfullyState) {
+                                  context
+                                      .read<ProductMainScreenBloc>()
+                                      .add(ProductAllItemUpdateEvent());
+
+                                  context.read<ProductMainScreenBloc>().add(
+                                      ProductUpdateButton2Event(false, index));
+                                } else if (state
+                                    is BlocFavoriteRemoveToFavoriteSuccessfullyState) {
+                                  context
+                                      .read<ProductMainScreenBloc>()
+                                      .add(ProductAllItemUpdateEvent());
+
+                                  context.read<ProductMainScreenBloc>().add(
+                                      ProductUpdateButton2Event(false, index));
+                                }
+                              }),
+                              SizedBox(
+                                width: size.width,
+                                child: AutoSizeText(
+                                  searchItems[index].title,
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 30),
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.height / 90,
+                              ),
+                              SizedBox(
+                                width: size.width,
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    '\$${searchItems[index].price}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.height / 60,
+                              ),
+                              SizedBox(
+                                width: size.width,
+                                child: AutoSizeText(
+                                  searchItems[index].description,
+                                  maxLines: 2,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 30),
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.height / 60,
+                              ),
+                              BlocConsumer<CartMainScreenBloc,
+                                  BlocCartScreenState>(
+                                builder: (builder, state) {
+                                  if (state is BlocCartItemLoadingState) {
+                                    if (BlocProvider.of<ProductMainScreenBloc>(
+                                            context)
                                         .isLoadingList[index]) {
-                                      return Align(
-                                        alignment: Alignment.topRight,
-                                        child: LoadingAnimationWidget
-                                            .fourRotatingDots(
-                                          color: Colors.indigo,
-                                          size: 40,
-                                        ),
+                                      return LoadingAnimationWidget
+                                          .fourRotatingDots(
+                                        color: Colors.indigo,
+                                        size: 40,
                                       );
                                     }
                                   }
-                                  return Align(
-                                    alignment: Alignment.topRight,
-                                    child: searchItems[index].watchListItemId !=
-                                            ''
-                                        ? InkWell(
-                                            onTap: () async {
-                                              context
-                                                  .read<ProductMainScreenBloc>()
-                                                  .add(ProductUpdateButtonEvent(
-                                                      true, index));
-                                              context
-                                                  .read<FavouriteScreenBloc>()
-                                                  .add(BlocFavouriteRemoveProductEvent(
-                                                      searchItems[index]
-                                                          .watchListItemId));
-                                            },
-                                            child: const Icon(
-                                              CupertinoIcons.heart_solid,
-                                              color: Colors.red,
-                                              size: 16,
-                                            ),
-                                          )
-                                        : InkWell(
-                                            onTap: () async {
-                                              context
-                                                  .read<ProductMainScreenBloc>()
-                                                  .add(ProductUpdateButtonEvent(
-                                                      true, index));
-                                              context
-                                                  .read<FavouriteScreenBloc>()
-                                                  .add(
-                                                      BlocFavouriteAddProductEvent(
-                                                          searchItems[index]
-                                                              .id));
-                                            },
-                                            child: const Icon(
-                                              CupertinoIcons.heart,
-                                              size: 16,
-                                            ),
-                                          ),
+
+                                  return Row(
+                                    children: [
+                                      Expanded(
+                                          child: searchItems[index].quantity !=
+                                                  0
+                                              ? Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: InkWell(
+                                                        child: Container(
+                                                          width: size.width,
+                                                          height:
+                                                              size.height / 20,
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  Colors.pink,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0)),
+                                                          child: const Center(
+                                                              child: Text(
+                                                            'Added in Cart',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          )),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceAround,
+                                                        children: [
+                                                          InkWell(
+                                                            onTap: () async {
+                                                              context
+                                                                  .read<
+                                                                      ProductMainScreenBloc>()
+                                                                  .add(ProductUpdateButtonEvent(
+                                                                      true,
+                                                                      index));
+                                                              context
+                                                                  .read<
+                                                                      CartMainScreenBloc>()
+                                                                  .add(BlocCartDecreaseProductQuantityEvent(
+                                                                      searchItems[
+                                                                              index]
+                                                                          .cartItemId));
+                                                            },
+                                                            child: CircleAvatar(
+                                                              backgroundColor:
+                                                                  Colors.grey[
+                                                                      200],
+                                                              // Colors.pink[500],
+                                                              radius: 14,
+                                                              child:
+                                                                  const Center(
+                                                                      child:
+                                                                          Icon(
+                                                                Icons.remove,
+                                                                color: Colors
+                                                                    .black,
+                                                              )),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            searchItems[index]
+                                                                .quantity
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          InkWell(
+                                                            onTap: () async {
+                                                              context
+                                                                  .read<
+                                                                      ProductMainScreenBloc>()
+                                                                  .add(ProductUpdateButtonEvent(
+                                                                      true,
+                                                                      index));
+                                                              context
+                                                                  .read<
+                                                                      CartMainScreenBloc>()
+                                                                  .add(BlocCartIncreaseProductQuantityEvent(
+                                                                      searchItems[
+                                                                              index]
+                                                                          .cartItemId));
+                                                            },
+                                                            child: CircleAvatar(
+                                                              backgroundColor:
+                                                                  Colors.grey[
+                                                                      200],
+                                                              radius: 14,
+                                                              child:
+                                                                  const Center(
+                                                                      child:
+                                                                          Icon(
+                                                                Icons.add,
+                                                                color: Colors
+                                                                    .black,
+                                                              )),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              : InkWell(
+                                            key : Key('Search_product_add_to_cart:-$index'),
+                                                  onTap: () async {
+                                                    context
+                                                        .read<
+                                                            ProductMainScreenBloc>()
+                                                        .add(
+                                                            ProductUpdateButtonEvent(
+                                                                true, index));
+                                                    context
+                                                        .read<
+                                                            CartMainScreenBloc>()
+                                                        .add(
+                                                            BlocCartAddToCartEvent(
+                                                                searchItems[
+                                                                        index]
+                                                                    .id));
+                                                  },
+                                                  child: Container(
+                                                    width: size.width,
+                                                    height: size.height / 20,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.indigo,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5.0)),
+                                                    child: const Center(
+                                                        child: Text(
+                                                      'Add to Cart',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    )),
+                                                  ),
+                                                )),
+                                    ],
                                   );
-                                }, listener: (listener, state) {
+                                },
+                                listener: (listener, state) {
                                   if (state
-                                      is BlocFavoriteAddToFavoriteSuccessfullyState) {
+                                      is BlocCartAddToCartSuccessfullyState) {
                                     context
                                         .read<ProductMainScreenBloc>()
                                         .add(ProductAllItemUpdateEvent());
@@ -388,7 +605,16 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                         ProductUpdateButton2Event(
                                             false, index));
                                   } else if (state
-                                      is BlocFavoriteRemoveToFavoriteSuccessfullyState) {
+                                      is BlocCartDecreaseSuccessfullyState) {
+                                    context
+                                        .read<ProductMainScreenBloc>()
+                                        .add(ProductAllItemUpdateEvent());
+
+                                    context.read<ProductMainScreenBloc>().add(
+                                        ProductUpdateButton2Event(
+                                            false, index));
+                                  } else if (state
+                                      is BlocCartIncreaseSuccessfullyState) {
                                     context
                                         .read<ProductMainScreenBloc>()
                                         .add(ProductAllItemUpdateEvent());
@@ -397,263 +623,15 @@ class _BlocProductMainScreenState extends State<BlocProductMainScreen>
                                         ProductUpdateButton2Event(
                                             false, index));
                                   }
-                                }),
-                                SizedBox(
-                                  width: size.width,
-                                  child: AutoSizeText(
-                                    searchItems[index].title,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 30),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 90,
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      '\$${searchItems[index].price}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 60,
-                                ),
-                                SizedBox(
-                                  width: size.width,
-                                  child: AutoSizeText(
-                                    searchItems[index].description,
-                                    maxLines: 2,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 30),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height / 60,
-                                ),
-                                BlocConsumer<CartMainScreenBloc,
-                                    BlocCartScreenState>(
-                                  builder: (builder, state) {
-                                    if (state is BlocCartItemLoadingState) {
-                                      if (BlocProvider.of<
-                                              ProductMainScreenBloc>(context)
-                                          .isLoadingList[index]) {
-                                        return LoadingAnimationWidget
-                                            .fourRotatingDots(
-                                          color: Colors.indigo,
-                                          size: 40,
-                                        );
-                                      }
-                                    }
-
-                                    return Row(
-                                      children: [
-                                        Expanded(
-                                            child: searchItems[index]
-                                                        .quantity !=
-                                                    0
-                                                ? Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: InkWell(
-                                                          child: Container(
-                                                            width: size.width,
-                                                            height:
-                                                                size.height /
-                                                                    20,
-                                                            decoration: BoxDecoration(
-                                                                color:
-                                                                    Colors.pink,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5.0)),
-                                                            child: const Center(
-                                                                child: Text(
-                                                              'Added in Cart',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            )),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                          children: [
-                                                            InkWell(
-                                                              onTap: () async {
-                                                                context
-                                                                    .read<
-                                                                        ProductMainScreenBloc>()
-                                                                    .add(ProductUpdateButtonEvent(
-                                                                        true,
-                                                                        index));
-                                                                context
-                                                                    .read<
-                                                                        CartMainScreenBloc>()
-                                                                    .add(BlocCartDecreaseProductQuantityEvent(
-                                                                        searchItems[index]
-                                                                            .cartItemId));
-                                                              },
-                                                              child:
-                                                                  CircleAvatar(
-                                                                backgroundColor:
-                                                                    Colors.grey[
-                                                                        200],
-                                                                // Colors.pink[500],
-                                                                radius: 14,
-                                                                child:
-                                                                    const Center(
-                                                                        child:
-                                                                            Icon(
-                                                                  Icons.remove,
-                                                                  color: Colors
-                                                                      .black,
-                                                                )),
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              searchItems[index]
-                                                                  .quantity
-                                                                  .toString(),
-                                                              style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                            InkWell(
-                                                              onTap: () async {
-                                                                context
-                                                                    .read<
-                                                                        ProductMainScreenBloc>()
-                                                                    .add(ProductUpdateButtonEvent(
-                                                                        true,
-                                                                        index));
-                                                                context
-                                                                    .read<
-                                                                        CartMainScreenBloc>()
-                                                                    .add(BlocCartIncreaseProductQuantityEvent(
-                                                                        searchItems[index]
-                                                                            .cartItemId));
-                                                              },
-                                                              child:
-                                                                  CircleAvatar(
-                                                                backgroundColor:
-                                                                    Colors.grey[
-                                                                        200],
-                                                                radius: 14,
-                                                                child:
-                                                                    const Center(
-                                                                        child:
-                                                                            Icon(
-                                                                  Icons.add,
-                                                                  color: Colors
-                                                                      .black,
-                                                                )),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                : InkWell(
-                                                    onTap: () async {
-                                                      context
-                                                          .read<
-                                                              ProductMainScreenBloc>()
-                                                          .add(
-                                                              ProductUpdateButtonEvent(
-                                                                  true, index));
-                                                      context
-                                                          .read<
-                                                              CartMainScreenBloc>()
-                                                          .add(
-                                                              BlocCartAddToCartEvent(
-                                                                  searchItems[
-                                                                          index]
-                                                                      .id));
-                                                    },
-                                                    child: Container(
-                                                      width: size.width,
-                                                      height: size.height / 20,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.indigo,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      5.0)),
-                                                      child: const Center(
-                                                          child: Text(
-                                                        'Add to Cart',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      )),
-                                                    ),
-                                                  )),
-                                      ],
-                                    );
-                                  },
-                                  listener: (listener, state) {
-                                    if (state
-                                        is BlocCartAddToCartSuccessfullyState) {
-                                      context
-                                          .read<ProductMainScreenBloc>()
-                                          .add(ProductAllItemUpdateEvent());
-
-                                      context.read<ProductMainScreenBloc>().add(
-                                          ProductUpdateButton2Event(
-                                              false, index));
-                                    } else if (state
-                                        is BlocCartDecreaseSuccessfullyState) {
-                                      context
-                                          .read<ProductMainScreenBloc>()
-                                          .add(ProductAllItemUpdateEvent());
-
-                                      context.read<ProductMainScreenBloc>().add(
-                                          ProductUpdateButton2Event(
-                                              false, index));
-                                    } else if (state
-                                        is BlocCartIncreaseSuccessfullyState) {
-                                      context
-                                          .read<ProductMainScreenBloc>()
-                                          .add(ProductAllItemUpdateEvent());
-
-                                      context.read<ProductMainScreenBloc>().add(
-                                          ProductUpdateButton2Event(
-                                              false, index));
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
+                                },
+                              ),
+                            ],
                           ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
             );
           });

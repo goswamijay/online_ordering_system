@@ -190,6 +190,7 @@ class CartMainScreenListView extends StatelessWidget {
                                             ),
                                             Expanded(
                                               child: IconButton(
+                                                key:Key('Cart_Screen_delete_item:-$index'),
                                                   onPressed: () async {
                                                     context
                                                         .read<
@@ -216,6 +217,8 @@ class CartMainScreenListView extends StatelessWidget {
                                                   MainAxisAlignment.spaceAround,
                                               children: [
                                                 InkWell(
+                                                  key: Key('Cart_Screen_decrease_item_count:-$index'),
+
                                                   onTap: () async {
                                                     context
                                                         .read<
@@ -255,6 +258,7 @@ class CartMainScreenListView extends StatelessWidget {
                                                           FontWeight.bold),
                                                 ),
                                                 InkWell(
+                                                  key: Key('Cart_Screen_increase_item_count:-$index'),
                                                   onTap: () async {
                                                     context
                                                         .read<

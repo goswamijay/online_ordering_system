@@ -37,6 +37,7 @@ class SignUpButtonWidget extends StatelessWidget {
           return const CircularProgressIndicator();
         }
         return InkWell(
+          key: const Key('user_Signup_Button'),
           onTap: () {
             try {
               if (formKey.currentState!.validate()) {

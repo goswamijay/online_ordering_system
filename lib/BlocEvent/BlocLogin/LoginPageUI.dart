@@ -50,6 +50,7 @@ class _BlocLoginScreenState extends State<BlocLoginScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                       child: TextFormField(
+                        key:const Key('login_user_name_email'),
                         controller: loginEmailIdController,
                         decoration: const InputDecoration(
                           hintText: "User Name",
@@ -87,6 +88,7 @@ class _BlocLoginScreenState extends State<BlocLoginScreen> {
                           padding:
                               const EdgeInsets.only(left: 12.0, right: 12.0),
                           child: TextFormField(
+                            key:const Key('login_user_name_password'),
                             controller: loginPasswordIdController,
                             obscureText: passwordVisible,
                             decoration: InputDecoration(
@@ -160,6 +162,7 @@ class _BlocLoginScreenState extends State<BlocLoginScreen> {
                         }
 
                         return InkWell(
+                          key: const Key('Login_Button'),
                           onTap: () {
                             try {
                               if (loginKey.currentState!.validate()) {
@@ -201,6 +204,7 @@ class _BlocLoginScreenState extends State<BlocLoginScreen> {
                       children: [
                         const Text("Don't have an account? "),
                         InkWell(
+                          key: const Key('Login_To_Signup_page_Route'),
                           onTap: () {
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (_) {

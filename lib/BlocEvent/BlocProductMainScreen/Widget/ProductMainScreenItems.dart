@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:online_ordering_system/BlocEvent/BlocProductDetailsMainScreen/BlocProductDetailsMainScreen.dart';
 import 'package:online_ordering_system/BlocEvent/ModelClassBlocEvent/BlocProductMainScreenModel.dart';
 import 'package:online_ordering_system/BlocEvent/Utils/repo.dart';
 import '../../BlocCartMainScreen/Bloc/CartMainScreenBloc.dart';
@@ -55,18 +56,16 @@ class _ProductMainScreenItemsState extends State<ProductMainScreenItems> {
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent,
                 onTap: () {
-/*Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => BlocProductDetailsScreen(
-                      price: productController
-                          .getProductAllAPI.data[index].price,
-                      name: productController
-                          .getProductAllAPI.data[index].title,
-                      imageURL: productController
-                          .getProductAllAPI.data[index].imageUrl,
-                      shortDescription: productController
-                          .getProductAllAPI.data[index].description,
-                      index: index,
-                    )));*/
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => BlocProductDetailsScreen(
+                            price: Repo.getProductAllAPI.data[index].price,
+                            name: Repo.getProductAllAPI.data[index].title,
+                            imageURL:
+                                Repo.getProductAllAPI.data[index].imageUrl,
+                            shortDescription:
+                                Repo.getProductAllAPI.data[index].description,
+                            index: index,
+                          )));
                 },
                 child: Card(
                   child: Column(
@@ -144,6 +143,8 @@ class _ProductMainScreenItemsState extends State<ProductMainScreenItems> {
                                                   .watchListItemId !=
                                               ''
                                           ? InkWell(
+                                        key: Key(
+                                            'Home_Page_to_remove_favourite_button:-$index'),
                                               onTap: () async {
                                                 context
                                                     .read<
@@ -165,6 +166,8 @@ class _ProductMainScreenItemsState extends State<ProductMainScreenItems> {
                                               ),
                                             )
                                           : InkWell(
+                                              key: Key(
+                                                  'Home_Page_to_add_favourite_button:-$index'),
                                               onTap: () async {
                                                 context
                                                     .read<
@@ -311,6 +314,8 @@ class _ProductMainScreenItemsState extends State<ProductMainScreenItems> {
                                                                         .spaceAround,
                                                                 children: [
                                                                   InkWell(
+                                                                    key: Key(
+                                                                        'Home_Page_to_decreases_cart_item_button:-$index'),
                                                                     onTap:
                                                                         () async {
                                                                       context
@@ -354,6 +359,8 @@ class _ProductMainScreenItemsState extends State<ProductMainScreenItems> {
                                                                             FontWeight.bold),
                                                                   ),
                                                                   InkWell(
+                                                                    key: Key(
+                                                                        'Home_Page_to_increases_cart_item_button:-$index'),
                                                                     onTap:
                                                                         () async {
                                                                       context
@@ -391,6 +398,8 @@ class _ProductMainScreenItemsState extends State<ProductMainScreenItems> {
                                                           ],
                                                         )
                                                       : InkWell(
+                                                          key: Key(
+                                                              'Home_Page_add_to_cart_button:-$index'),
                                                           onTap: () async {
                                                             context
                                                                 .read<
